@@ -1,0 +1,32 @@
+{
+  "env": {
+    "development": {
+      "presets": [
+        ["@babel/preset-env", {
+          "modules": false,
+          "bugfixes": true,
+          "corejs": 3,
+          "useBuiltIns": "entry"
+        }],
+        ["solid"],
+        ["@babel/typescript"]
+      ],
+      "plugins": [
+        "solid-refresh/babel"
+      ]
+    },
+
+    "production": {
+      "presets": [
+        ["@babel/preset-env", {
+          "modules": false,
+          "bugfixes": true,
+          "corejs": 3,
+          "useBuiltIns": "entry"
+        }],
+        ["solid"],
+        ["@babel/typescript"]
+      ]
+    }
+  }
+}
