@@ -1,0 +1,43 @@
+:global
+  @font-face
+    font-family: "Segoe UI Light"
+    font-weight: 400
+    src: local("Segoe UI Semilight")
+
+light-theme()
+  --font-family-ui: -apple-system, BlinkMacSystemFont, "Roboto", "Arial", system-ui, sans-serif
+  --font-family-content: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Arial", system-ui, sans-serif
+  --font-weight-ui: 500
+  --font-weight-content: 400
+
+  --color-white: #ffffff
+  --color-black: #000000
+  --color-light-blue: #6191e6
+  --color-blue: #32425f
+  --color-red: #da5b4f
+  --color-dark: #212121
+
+  --default-font-color: var(--color-black)
+  --default-background-color: var(--color-white)
+
+dark-theme()
+  color-scheme: dark
+  --font-family-content: -apple-system, BlinkMacSystemFont, "Segoe UI Light", "Roboto", "Arial", system-ui, sans-serif
+
+  --color-white: #fafafa
+
+  --default-font-color: var(--color-white)
+  --default-background-color: #0d1117
+
+:root
+  light-theme()
+
+  @media $dark
+    dark-theme()
+
+:global
+  html[data-theme='light']
+    light-theme()
+
+  html[data-theme='dark']
+    dark-theme()
