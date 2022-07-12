@@ -1,0 +1,33 @@
+{
+  "position": { "absolute":"", "relative":"" },
+  "location": { "0":"" },
+  "zIndex": { "-1":"", "1":"", "2":"", "3":"", "4":"", "5":"", "6":"", "7":"", "8":"", "9":"", "10":"" },
+
+  "display": { "block":"", "inline-block":"", "flex":"" },
+  "flexDirection": { "column":"" },
+  "flexJustify": { "center":"", "flex-end":"" },
+  "flexAlign": { "center":"", "flex-end":"" },
+  "flexGrow": { "1":"", "2":"" },
+
+  "width": { "auto":"", "100%":"", "100vw":"" },
+  "height": { "auto":"", "100%":"", "100vh":"" },
+  "padding": { "0":"", "4px":"", "8px":"", "16px":"", "20px":"" },
+
+  "overflow": { "auto":"", "hidden":"" },
+  "scrollbar": { "none":"" },
+
+  "fontSize": { "14px":"", "16px":"", "18px":"", "56px":"" },
+  "fontWeight": { "normal":"", "500":"", "bold":"" },
+
+  "textAlign": { "center":"" },
+  "textTransform": { "capitalize":"", "uppercase":"" },
+  "textOverflow": { "ellipsis":"" },
+
+  "opacity": { "0":"", "1":"" },
+
+  "transitionP": { "opacity":"", "color":"", "transform":"" },
+  "transitionD": { "200ms":"", "400ms":"" },
+  "transitionTF": { "ease-in":"", "ease-out":"", "ease-in-out":"" },
+
+  "willChange": { "opacity":"", "transform":"", "opacity, transform":"" }
+}
