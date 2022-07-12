@@ -1,8 +1,7 @@
 vars = json('./vars.styles.json', { hash: true })
 
-$desktop = vars.desktop
-$mobile = vars.mobile
-$color-brand = vars.color-brand
+$desktop = vars.screenMQ.desktop
+$mobile = vars.screenMQ.mobile
 
 $dark = "(prefers-color-scheme: dark)"
 $standalone = "(display-mode: standalone)"

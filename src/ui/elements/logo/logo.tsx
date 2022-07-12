@@ -1,27 +1,34 @@
 import type { Component } from 'solid-js'
+import { Show } from 'solid-js'
 
-import { Block, Image } from '~/ui/elements'
+import { Image, Text } from '~/ui/elements'
 
 import logoUrl from './logo.svg'
 import classes from './logo.styl'
 
 type Props = {
-
+  icon?: boolean
+  title?: boolean
 }
 
-export const Logo: Component<Props> = () => {
+export const Logo: Component<Props> = (props) => {
   return (
-    <Block
-      class={classes.root}
-      flex
-      flexAlign='center'
-      height='100%'
-    >
-      <Image
-        class={classes.image}
-        src={logoUrl}
-      />
-      {process.env.APP_TITLE}
-    </Block>
+    <>
+      <Show when={props.icon}>
+        <Image
+          class={classes.icon}
+          src={logoUrl}
+        />
+      </Show>
+
+      <Show when={props.title}>
+        <Text
+          element="h1"
+          textAlign="center"
+        >
+          {process.env.APP_TITLE}
+        </Text>
+      </Show>
+    </>
   )
 }

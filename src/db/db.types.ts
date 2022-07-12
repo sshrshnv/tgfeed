@@ -13,9 +13,15 @@ export type Db = {
     params?: {
       safe?: boolean
       tmp?: boolean
-      fallback?: T
     }
   ) => Promise<T | undefined>
+
+  getAll: <T>(
+    params?: {
+      safe?: boolean
+      tmp?: boolean
+    }
+  ) => Promise<T>
 
   clear: (
     params?: {
@@ -29,14 +35,13 @@ export type LiteDb = {
   set: <T>(
     key: string,
     data: T
-  ) => Promise<void>
+  ) => void
 
   get: <T>(
-    key: string,
-    params?: {
-      fallback?: T
-    }
-  ) => Promise<T | undefined>
+    key: string
+  ) => T | undefined
 
-  clear: () => Promise<void>
+  getAll: <T>() => T | undefined
+
+  clear: () => void
 }

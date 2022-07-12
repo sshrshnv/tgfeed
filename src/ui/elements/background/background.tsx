@@ -1,6 +1,6 @@
 import type { VoidComponent } from 'solid-js'
 import { Index } from 'solid-js/web'
-import cl from 'clsx'
+import { clsx } from 'clsx'
 
 import { Image } from '~/ui/elements'
 
@@ -17,9 +17,15 @@ export const Background: VoidComponent = () => {
     <Index each={IMAGES}>
       {(image) => (
         <Image
-          class={cl(
+          class={clsx(
             classes.root,
             classes[`_${image().position}`]
+          )}
+          position="absolute"
+          zIndex="-1"
+          {...(image().position === 'left' ?
+            { left: '0', bottom: '0' } :
+            { right: '0', top: '0' }
           )}
           src={image().url}
         />

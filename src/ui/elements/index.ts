@@ -1,5 +1,7 @@
 export * from './background'
 export * from './block'
+export * from './content'
 export * from './header'
 export * from './image'
 export * from './logo'
+export * from './text'

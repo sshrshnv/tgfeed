@@ -1,8 +1,8 @@
 declare module '*.styl' {
-  const classes: {
+  const styles: {
     readonly [key: string]: string
   }
-  export default classes
+  export default styles
 }
 
 declare module '*.jpg' {

@@ -1,6 +1,6 @@
-import { FlowComponent } from 'solid-js'
-import { createContext, useContext, createEffect, createMemo } from "solid-js";
-import { createStore } from "solid-js/store"
+import type { FlowComponent } from 'solid-js'
+import { createContext, useContext, createEffect, createMemo } from 'solid-js'
+import { createStore } from 'solid-js/store'
 
 import { useSettings } from '~/store'
 
@@ -24,17 +24,29 @@ const INITIAL_STATE: Store = LANGS.reduce((obj, lang) => ({
 }), {})
 
 const [store, setStore] = createStore(INITIAL_STATE)
-const I18nContext = createContext<I18n>({ texts: INITIAL_TEXTS, t: templateText })
+const I18nContext = createContext<I18n>({
+  texts: INITIAL_TEXTS,
+  t: templateText
+})
 
 let resolveI18nPromise: (value?: unknown) => void
-const i18nPromise = new Promise(resolve => resolveI18nPromise = resolve)
+let i18nPromise: Promise<unknown> | null = new Promise(resolve =>
+  resolveI18nPromise = resolve
+)
 
 const loadTexts = async (lang: string) => {
   if (store[lang]) return
 
-  const { default: texts } = await import(`~/i18n/texts/${lang}/texts.json`)
+  const { default: texts } = await import(
+    /* webpackChunkName: 'texts.' */
+    `~/i18n/texts/${lang}/texts.json`
+  )
   setStore(lang, texts)
-  resolveI18nPromise()
+
+  if (!!i18nPromise) {
+    resolveI18nPromise()
+    i18nPromise = null
+  }
 }
 
 export const I18nProvider: FlowComponent = (props) => {

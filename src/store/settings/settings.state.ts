@@ -1,8 +1,7 @@
 import type { Lang } from '~/i18n'
+import { getDefaultLang } from '~/i18n'
 import type { Theme } from '~/ui/styles'
 import { DEFAULT_THEME } from '~/ui/styles'
-
-import { restoreSettings } from './settings.actions'
 
 export type Settings = {
   lang: Lang
@@ -10,8 +9,6 @@ export type Settings = {
 }
 
 export const INITIAL_SETTINGS: Settings = {
-  lang: '',
+  lang: getDefaultLang(),
   theme: DEFAULT_THEME
 }
-
-restoreSettings()
