@@ -1,10 +1,3 @@
-declare module '*.styl' {
-  const styles: {
-    readonly [key: string]: string
-  }
-  export default styles
-}
-
 declare module '*.jpg' {
   const url: string
   export default url
@@ -64,21 +57,18 @@ declare module '*.aac' {
 }
 
 declare module '*.svg' {
-  const url: string
-  export default url
+  const source: string
+  export default source
+}
+
+declare module '*.sass' {
+  const styles: Record<string, string>
+  export default styles
 }
 
 declare module '*.webmanifest' {
   const url: string
   export default url
-}
-
-declare module '*.worker.ts?source' {
-  class WebpackWorker extends Worker {
-    constructor()
-    [property: string]: any
-  }
-  export default WebpackWorker
 }
 
 declare module '*.worker.ts' {

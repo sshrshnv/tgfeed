@@ -19,7 +19,7 @@
     }
   },
   "rules": {
-    "@typescript-eslint/indent": ["warn", 2],
+    "@typescript-eslint/indent": ["warn", 2, { "flatTernaryExpressions": true }],
     "@typescript-eslint/quotes": ["warn", "single"],
     "@typescript-eslint/semi": ["warn", "never"],
     "@typescript-eslint/explicit-function-return-type": "off",

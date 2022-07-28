@@ -1,0 +1,18 @@
+@mixin scroll()
+  scroll-behavior: smooth
+  -webkit-overflow-scrolling: touch
+
+.customScroll
+  @include scroll()
+
+  overflow: scroll
+  overflow: overlay
+
+.hiddenScroll
+  @include scroll()
+
+  overflow: auto
+  scrollbar-width: none
+
+  &::-webkit-scrollbar
+    display: none

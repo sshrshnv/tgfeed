@@ -81,7 +81,7 @@ module.exports = [{
   entry: {
     app: './src/app.tsx',
     ...(isProd() ? {
-      inline: './src/ui/styles/global.styles.styl'
+      inline: './src/ui/css/styles/global.css.ts'
     } : {})
   },
 
@@ -109,7 +109,7 @@ module.exports = [{
           loader: 'babel-loader'
         }]
       }, {
-        test: /\.styl$/,
+        test: /\.sass$/i,
         use: [{
           loader: isDev() ? 'style-loader' : MiniCssExtractPlugin.loader,
           options: {
@@ -120,7 +120,7 @@ module.exports = [{
           options: {
             esModule: true,
             modules: {
-              localIdentName: isDev() ? '[name]_[local]--[hash:base64:4]' : '[hash:base64:8]',
+              localIdentName: isDev() ? '[name]__[local]--[hash:base64:8]' : '[hash:base64:8]',
               exportLocalsConvention: 'asIs'
             },
             sourceMap: isDev()
@@ -134,17 +134,18 @@ module.exports = [{
             sourceMap: isDev()
           }
         }, {
-          loader: 'stylus-loader',
+          loader: 'sass-loader',
           options: {
-            stylusOptions: {
-              import: [path.resolve('./src/ui/styles/vars.styles.styl')],
-            },
             sourceMap: isDev()
           }
         }]
       }, {
         test: /\.(svg|avif|webp|png)$/,
         type: 'asset/resource'
+      },{
+        test: /\.(svg)$/,
+        resourceQuery: /source/,
+        type: 'asset/source'
       }, {
         test: /\.webmanifest$/,
         use: 'webpack-webmanifest-loader',

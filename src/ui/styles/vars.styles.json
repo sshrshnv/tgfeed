@@ -1,6 +1,0 @@
-{
-  "screenMQ" : {
-    "desktop": "screen and (min-width: 641px)",
-    "mobile": "screen and (max-width: 640px)"
-  }
-}

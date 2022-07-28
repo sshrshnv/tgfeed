@@ -1,35 +1,40 @@
 import type { Component } from 'solid-js'
-import { createSignal, createMemo, splitProps } from 'solid-js'
+import { createSignal } from 'solid-js'
+import { clsx } from 'clsx'
 
-import type { ElementStyleProps } from '~/ui/styles'
-import { clsxElementStyles } from '~/ui/styles'
+import styles from './image.sass'
 
-type Props = ElementStyleProps & {
+type Props = {
+  class?: string
+  fadeIn?: boolean
   src: string
   onLoad?: () => void
 }
 
-export const Image: Component<Props> = (allProps) => {
-  const [props, styleProps] = splitProps(allProps, ['src', 'onLoad'])
+export const Image: Component<Props> = (props) => {
   const [isLoaded, setLoaded] = createSignal(false)
+  const [isReady, setReady] = createSignal(false)
 
   const handleLoad = () => {
-    setLoaded(true)
-  }
+    props.onLoad?.()
 
-  const generateClass = createMemo(() =>
-    clsxElementStyles({
-      display: 'block',
-      opacity: isLoaded() ? "1" : "0",
-      transition: "opacity 400ms ease-in",
-      willChange: "opacity",
-      ...styleProps
-    })
-  )
+    if (!props.fadeIn || props.onLoad) return
+
+    setLoaded(true)
+    setTimeout(() => {
+      setReady(true)
+    }, 400)
+  }
 
   return (
     <img
-      class={generateClass()}
+      class={clsx(
+        props.class,
+        styles.base,
+        props.fadeIn && styles._faded,
+        isLoaded() && styles._loaded,
+        isReady() && styles._ready
+      )}
       src={props.src}
       onLoad={handleLoad}
     />

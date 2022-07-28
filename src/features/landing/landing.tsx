@@ -1,15 +1,14 @@
 import type { Component } from 'solid-js'
 
-import { Page } from '~/ui/layouts'
+import { Main } from '~/ui/elements'
 
 const Landing: Component = () => {
   return (
-    <Page
-      headerLogo
-      contentLogo
-      scrollable
-    >
-    </Page>
+    <>
+      <Main scrollable>
+        <div/>
+      </Main>
+    </>
   )
 }
 
