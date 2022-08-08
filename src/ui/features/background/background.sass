@@ -1,16 +1,10 @@
 .base
   position: absolute
   z-index: -1
-  left: var(--backgroud-offset)
-  bottom: var(--backgroud-offset)
+  left: var(--background-offset)
+  bottom: var(--background-offset)
 
-  width: 75vw
-  height: auto
-  max-height: 75vh
+  width: var(--background-size)
+  height: var(--background-size)
 
   opacity: var(--bg-opacity)
-
-  @media screen and (min-aspect-ratio: 99/98)
-    width: auto
-    max-width: 75vw
-    height: 75vh

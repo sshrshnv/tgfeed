@@ -1,55 +1,21 @@
 import type { FlowComponent } from 'solid-js'
 import { createContext, useContext, createEffect, createMemo } from 'solid-js'
-import { createStore } from 'solid-js/store'
 
 import { useSettings } from '~/store'
 
-import type { Lang } from './lang'
-import { LANGS } from './lang'
+import { store } from './i18n.store'
+import { i18nPromise, loadTexts } from './i18n.actions'
 import type { Texts } from './texts'
 import { INITIAL_TEXTS, templateText } from './texts'
 
-type I18n = {
-  texts: Texts
-  t: typeof templateText
-}
-
-type Store = {
-  [key in Lang]: Texts | undefined
-}
-
-const INITIAL_STATE: Store = LANGS.reduce((obj, lang) => ({
-  ...obj,
-  [lang]: undefined
-}), {})
-
-const [store, setStore] = createStore(INITIAL_STATE)
-const I18nContext = createContext<I18n>({
-  texts: INITIAL_TEXTS,
+const I18nContext = createContext({
+  texts: INITIAL_TEXTS as Texts,
   t: templateText
 })
 
-let resolveI18nPromise: (value?: unknown) => void
-let i18nPromise: Promise<unknown> | null = new Promise(resolve =>
-  resolveI18nPromise = resolve
-)
+const htmlEl = self.document.documentElement
 
-const loadTexts = async (lang: string) => {
-  if (store[lang]) return
-
-  const { default: texts } = await import(
-    /* webpackChunkName: 'texts.' */
-    `~/i18n/texts/${lang}/texts.json`
-  )
-  setStore(lang, texts)
-
-  if (!!i18nPromise) {
-    resolveI18nPromise()
-    i18nPromise = null
-  }
-}
-
-export const I18nProvider: FlowComponent = (props) => {
+export const I18n: FlowComponent = (props) => {
   const { settings } = useSettings()
 
   const getI18n = createMemo(() => ({
@@ -59,7 +25,9 @@ export const I18nProvider: FlowComponent = (props) => {
 
   createEffect(() => {
     if (!settings.lang) return
+
     loadTexts(settings.lang)
+    htmlEl.setAttribute('lang', settings.lang)
   })
 
   return (

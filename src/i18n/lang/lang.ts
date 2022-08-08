@@ -1,7 +1,3 @@
-import { createEffect } from 'solid-js'
-
-import { useSettings } from '~/store'
-
 export type Langs = string[]
 export type Lang = Langs[number]
 export type LangName = Record<'name', string>
@@ -20,13 +16,4 @@ export const getDefaultLang = () => {
   }
 
   return LANGS.includes(lang) ? lang : FALLBACK_LANG
-}
-
-export const setLangAttribute = () => {
-  const htmlEl = self.document.documentElement
-  const { settings } = useSettings()
-
-  createEffect(() => {
-    htmlEl.setAttribute('lang', settings.lang)
-  })
 }

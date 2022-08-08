@@ -47,7 +47,8 @@ const call = async <T extends keyof MethodDeclMap>(
     attempt?: number
   } = {}
 ): Promise<MethodDeclMap[T]['res']> => {
-  let { dc, thread, timeout, attempt = 0 } = params
+  const { thread, timeout } = params
+  let { dc, attempt = 0 } = params
   dc = dc || migratedDC
 
   if (timeout) {

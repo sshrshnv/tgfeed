@@ -13,6 +13,7 @@ type Props = {
   flex?: boolean
   flexColumn?: boolean
   flexJustifyCenter?: boolean
+  flexJustifyBetween?: boolean
   flexAlignCenter?: boolean
 
   fullWidth?: boolean
@@ -31,6 +32,7 @@ export const Block: ParentComponent<Props> = (props) => {
       props.flex && styles._flex,
       props.flexColumn && styles._flexColumn,
       props.flexJustifyCenter && styles._flexJustifyCenter,
+      props.flexJustifyBetween && styles._flexJustifyBetween,
       props.flexAlignCenter && styles._flexAlignCenter,
 
       props.fullWidth && styles._fullWidth,

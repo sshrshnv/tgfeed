@@ -1,41 +1,79 @@
 import type { Component } from 'solid-js'
-import { render } from 'solid-js/web'
+import { render, Switch, Match } from 'solid-js/web'
 
 import { handleErrors } from '~/utils'
 handleErrors()
 
 if (process.env.NODE_ENV === 'development') {
-  require('~/ui/css/styles/global.styles.sass')
+  require('~/ui/styles/global.styles.sass')
 }
 
-import { StoreProvider } from '~/store'
-import { I18nProvider, setLangAttribute } from '~/i18n'
-//import { setThemeAttribute } from '~/ui/css'
-import { preventContextMenu, preventScale, preventDragAndDrop } from '~/ui/utils'
-import { Header, Background } from '~/ui/features'
-import { LandingLazy } from '~/features'
+import { Router, useRouter } from '~/router'
+import { Store } from '~/store'
+import { I18n } from '~/i18n'
+
+import {
+  preventContextMenu,
+  preventScale,
+  preventDragAndDrop
+} from '~/ui/utils'
+
+import { LogoTitle, Background } from '~/ui/features'
+import { Header, HeaderButton } from '~/ui/layout'
+import { UserSVG, SettingsSVG } from '~/ui/icons'
+
+import {
+  IntroPageLazy, FeedsPageLazy,
+  AuthPopupPageLazy, UserPopupPageLazy, SettingsPopupPageLazy
+} from '~/features'
 
 const App: Component = () => {
+  const { router, routes } = useRouter()
+
   return (
     <>
-      <Header/>
-      <LandingLazy/>
+      <Header>
+        <LogoTitle/>
+        <HeaderButton route={routes.user} icon={UserSVG}/>
+        <HeaderButton route={routes.settings} icon={SettingsSVG}/>
+      </Header>
+
+      <Switch>
+        <Match when={router.pageId === routes.intro.pageId}>
+          <IntroPageLazy/>
+        </Match>
+        <Match when={router.pageId === routes.feeds.pageId}>
+          <FeedsPageLazy/>
+        </Match>
+      </Switch>
+
+      <Switch>
+        <Match when={router.popupPageIds.includes(routes.auth.popupPageId)}>
+          <AuthPopupPageLazy/>
+        </Match>
+        <Match when={router.popupPageIds.includes(routes.user.popupPageId)}>
+          <UserPopupPageLazy/>
+        </Match>
+        <Match when={router.popupPageIds.includes(routes.settings.popupPageId)}>
+          <SettingsPopupPageLazy/>
+        </Match>
+      </Switch>
+
       <Background/>
     </>
   )
 }
-
-setLangAttribute()
-//setThemeAttribute()
 
 preventContextMenu()
 preventScale()
 preventDragAndDrop()
 
 render(() => (
-  <StoreProvider>
-    <I18nProvider>
-      <App/>
-    </I18nProvider>
-  </StoreProvider>
+  <Router>
+    <Store>
+      <I18n>
+        <App/>
+      </I18n>
+    </Store>
+  </Router>
 ), self.document.body)

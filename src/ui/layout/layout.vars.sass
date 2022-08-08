@@ -1,0 +1,34 @@
+@mixin layouts()
+  --header-icon-size: 16px
+
+@mixin mobileLayout()
+  --layout-padding: 16px
+
+  --header-height: 52px
+  --header-padding-size: 16px
+
+  --background-size: 320px
+  --background-offset: 8px
+  --logo-title-size: 24px
+
+@mixin desktopLayout()
+  --layout-padding: 24px
+
+  --header-height: 56px
+  --header-padding-size: 24px
+
+  --background-size: 480px
+  --background-offset: 12px
+  --logo-title-size: 28px
+
+@mixin mobileLayoutMQ()
+  @media screen and (max-width: 640px)
+    @content
+
+@mixin desktopLayoutMQ()
+  @media screen and (min-width: 641px)
+    @content
+
+@mixin landscapeLayoutMQ()
+  @media screen and (min-aspect-ratio: 99/98)
+    @content

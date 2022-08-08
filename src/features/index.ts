@@ -1,1 +1,5 @@
-export * from './landing'
+export * from './intro'
+export * from './feeds'
+export * from './auth'
+export * from './user'
+export * from './settings'

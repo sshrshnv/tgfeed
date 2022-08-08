@@ -1,9 +1,17 @@
 import type { Component } from 'solid-js'
 
-const Auth: Component = () => {
-  return (
-    <div></div>
-  )
+import {
+  AuthPhoneForm,
+  AuthCodeForm,
+  AuthPasswordForm
+} from './forms'
+
+type Props = {
+
 }
 
-export default Auth
+export const Auth: Component<Props> = () => {
+  return (
+    <></>
+  )
+}

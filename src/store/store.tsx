@@ -31,12 +31,15 @@ const INITIAL_STATE = {
   user: INITIAL_USER
 }
 
-const store = createStore(INITIAL_STATE)
-const StoreContext = createContext(store)
+const [store, setStore] = createStore(INITIAL_STATE)
 
-export const StoreProvider: FlowComponent = (props) => {
+const StoreContext = createContext([store, setStore])
+
+export const Store: FlowComponent = (props) => {
+  const value = [store, setStore]
+
   return (
-    <StoreContext.Provider value={store}>
+    <StoreContext.Provider value={value}>
       {props.children}
     </StoreContext.Provider>
   )
