@@ -1,19 +1,22 @@
 import type { Component } from 'solid-js'
-import { lazy } from 'solid-js'
-import { Suspense } from 'solid-js/web'
 
-const UserPopupPage = lazy(async () => {
-  const [module] = await Promise.all([
-    import('./user-popup-page')
-  ])
-  return module
-})
+import { PopupPage } from '~/ui/layout'
+
+import { lazyFeature, SuspenseFeature } from '../features'
+
+const PATH = './user-popup-page'
+
+const UserPopupPage = lazyFeature(
+  PATH,
+  () => import(`${PATH}`)
+)
 
 export const UserPopupPageLazy: Component = () => {
-  {console.log('yeeeeeeeeeeee lazy')}
   return (
-    <Suspense>
-      <UserPopupPage/>
-    </Suspense>
+    <PopupPage title="Settings">
+      <SuspenseFeature path={PATH}>
+        <UserPopupPage/>
+      </SuspenseFeature>
+    </PopupPage>
   )
 }

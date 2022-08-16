@@ -1,4 +1,4 @@
-import type { Route } from './router.routes'
+import type { RoutesItem } from './router.routes'
 import type { RouterStore } from './router.store'
 import { store, setStore } from './router.store'
 import { history } from './router.history'
@@ -6,7 +6,7 @@ import { history } from './router.history'
 let isNativePopEventListenerAdded = false
 let isNativePopEventHandled = false
 
-const setRoute = (route: Route) => setStore(state => {
+const setRoute = (route: RoutesItem) => setStore(state => {
   const newState: Partial<RouterStore> = {}
   Object.keys(route).forEach(key => {
     if (key === 'popupPageId') {
@@ -18,7 +18,7 @@ const setRoute = (route: Route) => setStore(state => {
   return newState
 })
 
-export const pushRoute = (route: Route) => {
+export const pushRoute = (route: RoutesItem) => {
   if (!isNativePopEventListenerAdded) {
     addNativePopEventListener()
   }
@@ -35,20 +35,20 @@ export const pushRoute = (route: Route) => {
   setRoute(route)
 }
 
-export const popRoute = (route: Route) => {
+export const popRoute = (route: RoutesItem) => {
   isNativePopEventHandled = true
 
   const keys = [...history.keys()]
   const historyKey = JSON.stringify(route)
-  const historyValue = history.get(historyKey)
+  const historyState = history.get(historyKey)
 
-  if (!historyValue) return
+  if (!historyState) return
 
   const redundantKeys = keys.slice(keys.lastIndexOf(historyKey))
   redundantKeys.forEach(key => history.delete(key))
 
   self.history.go(-redundantKeys.length)
-  setStore(JSON.parse(historyValue))
+  setStore(JSON.parse(historyState))
 }
 
 const handleNativePopEvent = () => {
@@ -59,12 +59,12 @@ const handleNativePopEvent = () => {
 
   const keys = [...history.keys()]
   const historyKey = keys[keys.length - 1]
-  const historyValue = history.get(historyKey)
+  const historyState = history.get(historyKey)
 
-  if (!historyValue) return
+  if (!historyState) return
 
   history.delete(historyKey)
-  setStore(JSON.parse(historyValue))
+  setStore(JSON.parse(historyState))
 }
 
 const addNativePopEventListener = () => {

@@ -13,12 +13,12 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const SentryPlugin = require('@sentry/webpack-plugin')
 const autoprefixer = require('autoprefixer')
 
-const i18n = require('./utils/i18n')
+const utils = require('./webpack.utils')
 
 const APP_TITLE = 'TgFeed'
 const APP_DESCRIPTION = ''
-const APP_LANG_NAMES = i18n.getLangNames()
-const APP_INITIAL_TEXTS = i18n.getInitialTexts()
+const APP_LANG_NAMES = utils.getLangNames()
+const APP_INITIAL_TEXTS = utils.getInitialTexts()
 
 const isProd = () => process.env.NODE_ENV === 'production'
 const isDev = () => !isProd()
@@ -241,7 +241,8 @@ module.exports = [{
 
   stats: {
     children: isBundleAnalyzer(),
-    modules: isBundleAnalyzer()
+    modules: isBundleAnalyzer(),
+    loggingDebug: ['sass-loader']
   }
 },/* {
   mode: isDev() ? 'development' : 'production',

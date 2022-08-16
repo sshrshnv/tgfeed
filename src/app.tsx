@@ -1,5 +1,5 @@
 import type { Component } from 'solid-js'
-import { render, Switch, Match } from 'solid-js/web'
+import { render } from 'solid-js/web'
 
 import { handleErrors } from '~/utils'
 handleErrors()
@@ -8,18 +8,17 @@ if (process.env.NODE_ENV === 'development') {
   require('~/ui/styles/global.styles.sass')
 }
 
-import { Router, useRouter } from '~/router'
+import { Router, Route, RouteButton, useRouter } from '~/router'
 import { Store } from '~/store'
 import { I18n } from '~/i18n'
-
 import {
   preventContextMenu,
   preventScale,
   preventDragAndDrop
-} from '~/ui/utils'
+} from '~/utils'
 
-import { LogoTitle, Background } from '~/ui/features'
-import { Header, HeaderButton } from '~/ui/layout'
+import { TitleIcon, BgImage } from '~/ui/brand'
+import { Header } from '~/ui/layout'
 import { UserSVG, SettingsSVG } from '~/ui/icons'
 
 import {
@@ -28,38 +27,24 @@ import {
 } from '~/features'
 
 const App: Component = () => {
-  const { router, routes } = useRouter()
+  const { routes } = useRouter()
 
   return (
     <>
       <Header>
-        <LogoTitle/>
-        <HeaderButton route={routes.user} icon={UserSVG}/>
-        <HeaderButton route={routes.settings} icon={SettingsSVG}/>
+        <TitleIcon/>
+        <RouteButton route={routes.user} icon={UserSVG} view="control"/>
+        <RouteButton route={routes.settings} icon={SettingsSVG} view="control"/>
       </Header>
 
-      <Switch>
-        <Match when={router.pageId === routes.intro.pageId}>
-          <IntroPageLazy/>
-        </Match>
-        <Match when={router.pageId === routes.feeds.pageId}>
-          <FeedsPageLazy/>
-        </Match>
-      </Switch>
+      <Route pageRoute={routes.intro} component={IntroPageLazy}/>
+      <Route pageRoute={routes.feeds} component={FeedsPageLazy}/>
 
-      <Switch>
-        <Match when={router.popupPageIds.includes(routes.auth.popupPageId)}>
-          <AuthPopupPageLazy/>
-        </Match>
-        <Match when={router.popupPageIds.includes(routes.user.popupPageId)}>
-          <UserPopupPageLazy/>
-        </Match>
-        <Match when={router.popupPageIds.includes(routes.settings.popupPageId)}>
-          <SettingsPopupPageLazy/>
-        </Match>
-      </Switch>
+      <Route popupPageRoute={routes.auth} component={AuthPopupPageLazy}/>
+      <Route popupPageRoute={routes.user} component={UserPopupPageLazy}/>
+      <Route popupPageRoute={routes.settings} component={SettingsPopupPageLazy}/>
 
-      <Background/>
+      <BgImage/>
     </>
   )
 }

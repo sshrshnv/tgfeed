@@ -1,0 +1,50 @@
+.base
+  top: var(--header-height)
+  margin-top: -1px
+  left: 0
+  z-index: var(--status-zindex)
+
+  &::before, &::after
+    position: absolute
+    display: block
+    width: 25%
+    height: 1px
+    background-color: var(--brand-color)
+    transform: translateX(0) scaleX(0)
+    opacity: 0.5
+    animation-duration: var(--status-duration)
+    animation-iteration-count: infinite
+    animation-fill-mode: forwards
+    animation-timing-function: ease-in
+    will-change: transform, opacity
+    content: ''
+
+  &::before
+    left: 50%
+    transform-origin: left
+    animation-name: pulse-left
+
+  &::after
+    right: 50%
+    transform-origin: right
+    animation-name: pulse-right
+
+@keyframes pulse-left
+  0%
+    transform: translateX(0) scaleX(0)
+    opacity: 0.5
+  75%
+    transform: translateX(-200%) scaleX(1)
+    opacity: 1
+  100%
+    transform: translateX(-300%) scaleX(1)
+
+@keyframes pulse-right
+  0%
+    transform: translateX(0) scaleX(0)
+    opacity: 0.5
+  75%
+    transform: translateX(200%) scaleX(1)
+    opacity: 1
+  100%
+    transform: translateX(300%) scaleX(1)

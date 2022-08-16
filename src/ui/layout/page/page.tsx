@@ -14,7 +14,7 @@ export const Page: ParentComponent<Props> = (props) => {
   return (
     <main class={clsx(
       styles.base,
-      props.scrollable && scrollStyles.hiddenScroll
+      props.scrollable && clsx(scrollStyles.base, scrollStyles._hidden)
     )}>
       {props.children}
     </main>

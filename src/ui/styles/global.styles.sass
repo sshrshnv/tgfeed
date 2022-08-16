@@ -1,27 +1,26 @@
-@use '../theme/theme.vars' as theme
-@use '../layout/layout.vars' as layout
+@use '../vars/index' as vars
 
 @font-face
   font-family: "Segoe UI Light"
   font-weight: 400
   src: local("Segoe UI Semilight")
 
-:root
-  @include theme.themes()
-  @include theme.lightTheme()
-  @include theme.darkThemeMQ()
-    @include theme.darkTheme()
+:root, ::before, ::after
+  @include vars.themes()
+  @include vars.lightTheme()
+  @include vars.darkThemeMQ()
+    @include vars.darkTheme()
 
-  @include layout.layouts()
-  @include layout.mobileLayout()
-  @include layout.desktopLayoutMQ()
-    @include layout.desktopLayout()
+  @include vars.layouts()
+  @include vars.mobileLayout()
+  @include vars.desktopLayoutMQ()
+    @include vars.desktopLayout()
 
 html[data-theme='light']
-  @include theme.lightTheme()
+  @include vars.lightTheme()
 
 html[data-theme='dark']
-  @include theme.darkTheme()
+  @include vars.darkTheme()
 
 html, body
   margin: 0
@@ -40,7 +39,7 @@ html, body
 body
   font-family: var(--font-family-ui)
   font-weight: var(--font-weight-ui)
-  font-size: var(--font-size)
+  font-size: var(--font-size-16)
   line-height: 1.5
   color: var(--text-color)
   background-color: var(--bg-color)

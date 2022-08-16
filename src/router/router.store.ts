@@ -1,10 +1,10 @@
 import { createStore } from 'solid-js/store'
 
-import type { Route } from './router.routes'
+import type { RoutesItem } from './router.routes'
 import { routes } from './router.routes'
 
-export type RouterStore = Omit<Route, 'popupPageId'> & {
-  popupPageIds: Route['popupPageId'][]
+export type RouterStore = Omit<RoutesItem, 'popupPageId'> & {
+  popupPageIds: RoutesItem['popupPageId'][]
 }
 
 const INITIAL_STATE: RouterStore = {

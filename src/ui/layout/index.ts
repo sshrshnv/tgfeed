@@ -1,3 +1,4 @@
+export * from './block'
 export * from './header'
 export * from './page'
-export * from './panel'
+export * from './popup-page'

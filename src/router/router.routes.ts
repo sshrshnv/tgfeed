@@ -1,6 +1,6 @@
 export type Routes = typeof routes
 
-export type Route = Partial<{
+export type RoutesItem = Partial<{
   pageId: string
   pageParams: Record<string, string>
   pagePath: string

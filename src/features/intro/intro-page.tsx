@@ -4,7 +4,7 @@ import { Page } from '~/ui/layout'
 
 const IntroPage: Component = () => {
   return (
-    <Page>
+    <Page scrollable>
 
     </Page>
   )

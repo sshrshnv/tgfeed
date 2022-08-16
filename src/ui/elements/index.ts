@@ -1,5 +1,5 @@
-export * from './block'
 export * from './button'
 export * from './icon'
 export * from './image'
+export * from './status'
 export * from './text'

@@ -1,0 +1,61 @@
+@mixin layouts()
+  --font-size-10: 10px
+  --font-size-11: 11px
+  --font-size-14: 14px
+  --font-size-16: 16px
+  --font-size-20: 20px
+  --font-size-24: 24px
+  --font-size-32: 32px
+
+  --button-icon-size: 18px
+
+  --header-zindex: 10
+  --footer-zindex: 10
+  --popup-page-zindex: 20
+  --status-zindex: 10
+
+@mixin mobileLayout()
+  --layout-padding: 16px
+
+  --header-height: 56px
+  --header-padding-size: 16px
+
+  --footer-height: 56px
+  --footer-padding-size: 16px
+
+  --bg-image-size: 160px
+  --bg-image-offset: 8px
+  --title-icon-size: 24px
+
+  --status-duration: 0.8s
+
+  --button-padding: 12px
+
+@mixin desktopLayout()
+  --layout-padding: 24px
+
+  --header-height: 60px
+  --header-padding-size: 24px
+
+  --footer-height: 0
+  --footer-padding-size: 0
+
+  --bg-image-size: 240px
+  --bg-image-offset: 12px
+  --title-icon-size: 28px
+
+  --status-duration: 1s
+
+  --button-padding: 20px
+
+@mixin mobileLayoutMQ()
+  @media screen and (max-width: 640px)
+    @content
+
+@mixin desktopLayoutMQ()
+  @media screen and (min-width: 641px)
+    @content
+
+@mixin landscapeLayoutMQ()
+  @media screen and (min-aspect-ratio: 99/98)
+    @content

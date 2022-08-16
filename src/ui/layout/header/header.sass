@@ -1,15 +1,7 @@
 .base
-  position: absolute
-  top: 0
-  left: 0
-  right: 0
-
-  display: flex
-  align-items: center
+  z-index: var(--header-zindex)
   height: var(--header-height)
-  padding: 0 0 0 var(--header-padding-size)
-
-  backdrop-filter: blur(8px)
+  border-bottom: 1px solid var(--header-border-color)
   background-color: var(--header-bg-color)
 
   > svg
