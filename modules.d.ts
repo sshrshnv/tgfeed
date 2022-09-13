@@ -57,12 +57,16 @@ declare module '*.aac' {
 }
 
 declare module '*.svg' {
-  const source: string
-  export default source
+  const svg: {
+    id: string
+  }
+  export default svg
 }
 
-declare module '*.sass' {
-  const styles: Record<string, string>
+declare module '*.sss' {
+  const styles: {
+    [style: string]: string
+  }
   export default styles
 }
 

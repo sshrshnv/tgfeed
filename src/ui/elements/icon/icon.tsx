@@ -1,30 +1,22 @@
 import type { Component } from 'solid-js'
-import { children, createEffect } from 'solid-js'
 import { clsx } from 'clsx'
 
-import styles from './icon.sass'
+import * as icons from '~/ui/assets/icons'
 
-type Props = {
+import styles from './icon.sss'
+
+export type IconProps = {
   class?: string
-  icon: Component
+  icon: keyof typeof icons
 }
 
-const EMPTY_PROPS = {}
-
-export const Icon: Component<Props> = (props) => {
-  const iconMemo = children(() => props.icon(EMPTY_PROPS))
-
-  createEffect(() => {
-    const icon = iconMemo()
-    if (!(icon instanceof SVGElement)) return
-
-    icon.setAttribute('class', clsx(
+export const Icon: Component<IconProps> = (props) => {
+  return (
+    <svg class={clsx(
       props.class,
       styles.base
-    ))
-  })
-
-  return (
-    <>{iconMemo()}</>
+    )}>
+      <use href={`#${icons[props.icon].id}`}/>
+    </svg>
   )
 }

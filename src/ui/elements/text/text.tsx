@@ -1,7 +1,7 @@
 import type { FlowComponent } from 'solid-js'
 import { clsx } from 'clsx'
 
-import styles from './text.sass'
+import styles from './text.sss'
 
 type Props = {
   class?: string

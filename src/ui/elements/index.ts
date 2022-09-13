@@ -1,5 +1,6 @@
 export * from './button'
 export * from './icon'
 export * from './image'
-export * from './status'
+export * from './overlay'
+export * from './progress'
 export * from './text'

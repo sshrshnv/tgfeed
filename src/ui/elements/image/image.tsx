@@ -2,7 +2,7 @@ import type { Component } from 'solid-js'
 import { createSignal } from 'solid-js'
 import { clsx } from 'clsx'
 
-import styles from './image.sass'
+import styles from './image.sss'
 
 type Props = {
   class?: string

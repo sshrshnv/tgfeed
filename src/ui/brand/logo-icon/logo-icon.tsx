@@ -2,7 +2,7 @@ import type { Component } from 'solid-js'
 import { clsx } from 'clsx'
 
 import { LogoIconPaths } from './logo-icon-paths'
-import styles from './logo-icon.sass'
+import styles from './logo-icon.sss'
 
 type Props = {
   class?: string

@@ -1,21 +1,19 @@
 import type { Component } from 'solid-js'
-import { lazy } from 'solid-js'
-import { Suspense } from 'solid-js/web'
 
-import { waitI18n } from '~/i18n'
+import { lazyFeature } from '../feature'
+import { PageFeature } from '../page-feature'
 
-const FeedsPage = lazy(async () => {
-  const [module] = await Promise.all([
-    import('./feeds-page'),
-    waitI18n()
-  ])
-  return module
-})
+const PATH = './feeds-page'
 
-export const FeedsPageLazy: Component = () => {
+const FeedsPage = lazyFeature(
+  PATH,
+  () => import(`${PATH}`)
+)
+
+export const FeedsPageLazy: Component = (props) => {
   return (
-    <Suspense>
-      <FeedsPage/>
-    </Suspense>
+    <PageFeature path={PATH}>
+      <FeedsPage {...props}/>
+    </PageFeature>
   )
 }

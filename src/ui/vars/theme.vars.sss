@@ -1,0 +1,37 @@
+$fontFamilyUI:           -apple-system,                   "Roboto", "Arial", system-ui, sans-serif
+$fontFamilyContentLight: -apple-system, "Segoe UI",       "Roboto", "Arial", system-ui, sans-serif
+$fontFamilyContentDark:  -apple-system, "Segoe UI Light", "Roboto", "Arial", system-ui, sans-serif
+
+:root
+  --font-family-ui:      $fontFamilyUI
+  --font-weight-ui:      500
+  --font-weight-content: 400
+
+  --logo-title-color: var(--brand-color)
+  --logo-icon-color:  var(--brand-color)
+
+  --header-br-color: var(--c-gray-9)
+
+@define-mixin theme $i
+  --font-family-content: i($i, $fontFamilyContentLight, $fontFamilyContentDark)
+
+  --brand-color:          i($i, var(--c-blue-5),    var(--c-blue-4))
+  --brand-color-05:       i($i, var(--c-blue-5-05), var(--c-blue-4-05))
+
+  --text-color:           i($i, var(--c-black),     var(--c-gray-0))
+  --bg-color:             i($i, var(--c-gray-0),    var(--c-gray-8))
+  --overlay-bg-color:     i($i, var(--c-gray-0-08), var(--c-gray-8-08))
+  --bg-image-color:       i($i, var(--c-blue-2),    var(--c-gray-9))
+  --header-bg-color:      i($i, var(--c-gray-0-05), var(--c-gray-8-05))
+
+  --pane-bg-color:        i($i, var(--c-white),     var(--c-slate-9))
+  --pane-header-bg-color: i($i, var(--c-white-05),  var(--c-slate-9-05))
+  --pane-header-br-color: i($i, var(--c-gray-9),    var(--c-gray-8))
+
+:root
+  color-scheme: light
+  @mixin theme 1
+
+  @media (prefers-color-scheme: dark)
+    color-scheme: dark
+    @mixin theme 2

@@ -1,22 +1,22 @@
-import type { ParentComponent, Component } from 'solid-js'
+import type { ParentComponent } from 'solid-js'
 import { Show } from 'solid-js/web'
 import { clsx } from 'clsx'
 
+import type { IconProps } from '~/ui/elements'
 import { Icon } from '~/ui/elements'
 
-import styles from './button.sass'
+import styles from './button.sss'
 
-export type Props = {
+export type ButtonProps = {
   class?: string
   type?: 'button' | 'submit'
   disabled?: boolean
   error?: boolean
-  view?: 'control'
-  icon?: Component
+  icon?: IconProps['icon']
   onClick?: () => void
 }
 
-export const Button: ParentComponent<Props> = (props) => {
+export const Button: ParentComponent<ButtonProps> = (props) => {
   const handleClick = () => {
     props.onClick?.()
   }
@@ -27,8 +27,7 @@ export const Button: ParentComponent<Props> = (props) => {
         props.class,
         styles.base,
         props.disabled && styles._disabled,
-        props.error && styles._error,
-        props.view && styles[`_view-${props.view}`]
+        props.error && styles._error
       )}
       type={props.type || 'button'}
       disabled={props.disabled}

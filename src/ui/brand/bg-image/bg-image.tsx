@@ -2,7 +2,7 @@ import type { Component } from 'solid-js'
 
 import { LogoIconPaths } from '~/ui/brand'
 
-import styles from './bg-image.sass'
+import styles from './bg-image.sss'
 
 export const BgImage: Component = () => {
   return (

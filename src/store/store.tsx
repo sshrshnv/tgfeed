@@ -31,15 +31,14 @@ const INITIAL_STATE = {
   user: INITIAL_USER
 }
 
-const [store, setStore] = createStore(INITIAL_STATE)
+/* eslint-disable-next-line solid/reactivity */
+const store = createStore(INITIAL_STATE)
 
-const StoreContext = createContext([store, setStore])
+const StoreContext = createContext(store)
 
 export const Store: FlowComponent = (props) => {
-  const value = [store, setStore]
-
   return (
-    <StoreContext.Provider value={value}>
+    <StoreContext.Provider value={store}>
       {props.children}
     </StoreContext.Provider>
   )

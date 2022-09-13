@@ -2,25 +2,26 @@ import type { Component, Setter, Accessor } from 'solid-js'
 import { createContext, createSignal, createMemo, useContext } from 'solid-js'
 import { Show } from 'solid-js/web'
 
-import type { RoutesItem } from './router.routes'
+import type { RouteState } from './router.routes'
 import { useRouter } from './router'
 
 type Props = {
   component: Component
 } & (
   | {
-    pageRoute: RoutesItem
-    popupPageRoute?: never
+    pageRoute: RouteState
+    paneRoute?: never
   }
   | {
     pageRoute?: never
-    popupPageRoute: RoutesItem
+    paneRoute: RouteState
   }
 )
 
 const INITIAL_STATE = {
-  route: {} as RoutesItem,
+  route: {} as RouteState,
   isMatch: (() => true) as Accessor<boolean>,
+  hasOverlay: (() => false) as Accessor<boolean>,
   setTransition: ((value) => value) as Setter<boolean>
 }
 
@@ -28,19 +29,24 @@ const RouteContext = createContext(INITIAL_STATE)
 
 export const Route: Component<Props> = (props) => {
   /* eslint-disable solid/reactivity */
-  const { pageRoute, popupPageRoute } = props
-  const route = pageRoute || popupPageRoute
+  const { pageRoute, paneRoute } = props
+  const route = pageRoute || paneRoute
 
   const { router } = useRouter()
   const [isTransition, setTransition] = createSignal(false)
 
   const isMatch = pageRoute ?
     createMemo(() => router.pageId === pageRoute.pageId) :
-    createMemo(() => router.popupPageIds.includes(popupPageRoute.popupPageId))
+    createMemo(() => router.paneIds.includes(paneRoute.paneId))
+
+  const hasOverlay = pageRoute ?
+    () => false :
+    createMemo(() => router.paneIds[0] === paneRoute.paneId)
 
   const getRoute = createMemo(() => ({
     route,
     isMatch,
+    hasOverlay,
     setTransition
   }))
 

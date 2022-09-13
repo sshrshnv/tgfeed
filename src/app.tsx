@@ -4,26 +4,17 @@ import { render } from 'solid-js/web'
 import { handleErrors } from '~/utils'
 handleErrors()
 
-if (process.env.NODE_ENV === 'development') {
-  require('~/ui/styles/global.styles.sass')
-}
-
 import { Router, Route, RouteButton, useRouter } from '~/router'
 import { Store } from '~/store'
 import { I18n } from '~/i18n'
-import {
-  preventContextMenu,
-  preventScale,
-  preventDragAndDrop
-} from '~/utils'
 
-import { TitleIcon, BgImage } from '~/ui/brand'
+import { UIPreset } from '~/ui/preset'
+import { LogoTitle, BgImage } from '~/ui/brand'
 import { Header } from '~/ui/layout'
-import { UserSVG, SettingsSVG } from '~/ui/icons'
 
 import {
   IntroPageLazy, FeedsPageLazy,
-  AuthPopupPageLazy, UserPopupPageLazy, SettingsPopupPageLazy
+  AuthPaneLazy, UserPaneLazy, SettingsPaneLazy
 } from '~/features'
 
 const App: Component = () => {
@@ -32,26 +23,22 @@ const App: Component = () => {
   return (
     <>
       <Header>
-        <TitleIcon/>
-        <RouteButton route={routes.user} icon={UserSVG} view="control"/>
-        <RouteButton route={routes.settings} icon={SettingsSVG} view="control"/>
+        <LogoTitle/>
+        <RouteButton route={routes.user} icon="user"/>
+        <RouteButton route={routes.settings} icon="settings"/>
       </Header>
+
+      <BgImage/>
 
       <Route pageRoute={routes.intro} component={IntroPageLazy}/>
       <Route pageRoute={routes.feeds} component={FeedsPageLazy}/>
 
-      <Route popupPageRoute={routes.auth} component={AuthPopupPageLazy}/>
-      <Route popupPageRoute={routes.user} component={UserPopupPageLazy}/>
-      <Route popupPageRoute={routes.settings} component={SettingsPopupPageLazy}/>
-
-      <BgImage/>
+      <Route paneRoute={routes.auth} component={AuthPaneLazy}/>
+      <Route paneRoute={routes.user} component={UserPaneLazy}/>
+      <Route paneRoute={routes.settings} component={SettingsPaneLazy}/>
     </>
   )
 }
-
-preventContextMenu()
-preventScale()
-preventDragAndDrop()
 
 render(() => (
   <Router>
@@ -59,6 +46,7 @@ render(() => (
       <I18n>
         <App/>
       </I18n>
+      <UIPreset/>
     </Store>
   </Router>
 ), self.document.body)

@@ -1,1 +1,1 @@
-export * from './auth-popup-page.lazy'
+export * from './auth-pane.lazy'

@@ -23,7 +23,14 @@
     "baseUrl": "./",
     "paths": {
       "~/*": ["./src/*/index.ts", "./src/*"],
-    }
+    },
+    "plugins": [{
+      "name": "typescript-plugin-css-modules",
+      "options": {
+        "customMatcher": "\\.sss$",
+        "customRenderer": "./postcss.intellisense.js"
+      }
+    }]
   },
   "include": ["./src", "*.d.ts"],
   "exclude": ["./node_modules", "./build"]

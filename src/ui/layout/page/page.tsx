@@ -3,7 +3,7 @@ import { clsx } from 'clsx'
 
 import { scrollStyles } from '~/ui/styles'
 
-import styles from './page.sass'
+import styles from './page.sss'
 
 type Props = {
   scrollable?: boolean

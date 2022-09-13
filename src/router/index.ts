@@ -1,4 +1,5 @@
-export type { RoutesItem } from './router.routes'
+export type { RouteState } from './router.routes'
 export * from './router'
 export * from './route-button'
+export * from './route-overlay'
 export * from './route'

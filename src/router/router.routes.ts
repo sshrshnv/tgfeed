@@ -1,10 +1,10 @@
 export type Routes = typeof routes
 
-export type RoutesItem = Partial<{
+export type RouteState = Partial<{
   pageId: string
   pageParams: Record<string, string>
   pagePath: string
-  popupPageId: string
+  paneId: string
 }>
 
 export const routes = {
@@ -23,12 +23,12 @@ export const routes = {
   }),
 
   auth: {
-    popupPageId: 'auth'
+    paneId: 'auth'
   },
   user: {
-    popupPageId: 'user'
+    paneId: 'user'
   },
   settings: {
-    popupPageId: 'settings'
+    paneId: 'settings'
   },
 }

@@ -1,96 +1,97 @@
-/* eslint-disable */
-const path = require('path')
 const webpack = require('webpack')
+const path = require('path')
 const dotenv = require('dotenv')
+const SVGSymbolSprite = require('svg-symbol-sprite-loader')
 const CopyPlugin = require('copy-webpack-plugin')
 const HtmlPlugin = require('html-webpack-plugin')
+const HtmlSkipAssetsPlugin = require('html-webpack-skip-assets-plugin').HtmlWebpackSkipAssetsPlugin
+const HtmlInlineScriptPlugin = require('html-inline-script-webpack-plugin')
+const HTMLInlineCSSPlugin = require("html-inline-css-webpack-plugin").default
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
-const HtmlSkipAssetsPlugin = require('html-webpack-skip-assets-plugin').HtmlWebpackSkipAssetsPlugin
-const HTMLInlineCSSPlugin = require("html-inline-css-webpack-plugin").default
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const SentryPlugin = require('@sentry/webpack-plugin')
-const autoprefixer = require('autoprefixer')
 
-const utils = require('./webpack.utils')
+const utils = require('./build.utils')
 
-const APP_TITLE = 'TgFeed'
-const APP_DESCRIPTION = ''
-const APP_LANG_NAMES = utils.getLangNames()
-const APP_INITIAL_TEXTS = utils.getInitialTexts()
+const appData = {
+  APP_TITLE: 'TgFeed',
+  APP_DESCRIPTION: '',
+  APP_LANG_NAMES: utils.getLangNames(),
+  APP_INITIAL_TEXTS: utils.getInitialTexts()
+}
 
 const isProd = () => process.env.NODE_ENV === 'production'
 const isDev = () => !isProd()
-const isDevEnv = () => process.env.BUILD_ENV === 'dev'
-const isBundleAnalyzer = () => !!process.env.BUNDLE_ANALYZER
+const isDevEnvVars = () => process.env.ENV_VARS === 'dev'
 
-const appEnv = isDevEnv() ? dotenv.config({
-  path: `./.env.${process.env.BUILD_ENV}`
-})?.parsed : process.env
+const appEnv = !isDevEnvVars() ?
+  dotenv.config({ path: `./.env.${process.env.ENV_VARS}` })?.parsed :
+  process.env
 
-const isSentryAvailable = () =>
-  isProd() && !(isBundleAnalyzer() || isDevEnv()) && !!appEnv.SENTRY_AUTH_TOKEN
-
-const defineEnvConfig = {
-  'process.env.APP_TITLE': JSON.stringify(APP_TITLE),
-  'process.env.APP_DESCRIPTION': JSON.stringify(APP_DESCRIPTION),
-  'process.env.APP_LANG_NAMES': JSON.stringify(APP_LANG_NAMES),
-  'process.env.APP_INITIAL_TEXTS': JSON.stringify(APP_INITIAL_TEXTS),
-  'process.env.BUILD_ENV': JSON.stringify(process.env.BUILD_ENV),
-  'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-  'process.env.DOMAIN': JSON.stringify(appEnv.DOMAIN),
-  'process.env.API_ID': JSON.stringify(appEnv.API_ID),
-  'process.env.API_HASH': JSON.stringify(appEnv.API_HASH),
-  'process.env.API_TEST': JSON.stringify(appEnv.API_TEST),
-  'process.env.NEWS_CHANNEL_INVITE': JSON.stringify(appEnv.NEWS_CHANNEL_INVITE),
-  'process.env.SENTRY_DSN': JSON.stringify(appEnv.SENTRY_DSN),
-  'process.env.SENTRY_AUTH_TOKEN': JSON.stringify(appEnv.SENTRY_AUTH_TOKEN),
-  'process.env.GOOGLE_ANALYTICS_ID': JSON.stringify(appEnv.GOOGLE_ANALYTICS_ID)
-}
+const defineEnvConfig = [
+  ...Object.keys(appData),
+  ...Object.keys(dotenv.config({ path: './.env.example' }).parsed)
+].reduce((config, key) => {
+  config[`process.env.${key}`] = JSON.stringify(
+    appData[key] ?? appEnv[key] ?? process.env[key]
+  )
+  return config
+}, {})
 
 const resolveOptions = {
   extensions: [
     '.mjs', '.js', '.jsx', '.tsx', '.ts', '.js', '.json',
-    '.wasm', '.css', '.styl', '.html', '.svg', '.jpg', '.png'
+    '.wasm', '.css', '.sss', '.html', '.svg', '.jpg', '.png'
   ],
   alias: {
     '~': path.resolve('./src')
   }
 }
 
-const mainFields = ['esm2017', 'module', 'jsnext:main', 'browser', 'main']
+const mainFields = [
+  'esm2017', 'module', 'jsnext:main', 'browser', 'main'
+]
 
 const terserOptions = {
   compress: {
-    ecma: 2019
+    ecma: 2020
   },
   output: {
-    ecma: 2019,
+    ecma: 2020,
     beautify: false,
     comments: false,
     ascii_only: true
   }
 }
 
+const isBundleAnalyzer = () => !!process.env.BUNDLE_ANALYZER
+const isSentryAvailable = () =>
+  isProd() && !(isBundleAnalyzer() || isDevEnvVars()) && !!appEnv.SENTRY_AUTH_TOKEN
+
 module.exports = [{
   mode: isDev() ? 'development' : 'production',
 
   target: 'web',
 
-  entry: {
-    app: './src/app.tsx',
-    ...(isProd() ? {
-      inline: './src/ui/css/styles/global.css.ts'
-    } : {})
+  entry: isDev() ? {
+    app: [
+      './src/ui/styles/global.styles.sss',
+      './src/app.tsx'
+    ],
+  } : {
+    inline: './src/ui/styles/global.styles.sss',
+    app: ['./src/app.tsx']
   },
 
   output: {
     path: path.resolve('./build'),
-    filename: isDev() ? `[name].js` : `[name].[contenthash:8].js`,
-    chunkFilename: isDev() ? `[name].js` : '[name].[contenthash:8].js',
-    assetModuleFilename: '[name].[hash:8][ext]',
-    publicPath: process.env.ASSETS_HOST || '/'
+    filename: isDev() ? '[name].js' : '[name].[contenthash].js',
+    chunkFilename: isDev() ? '[name].js' : '[name].[contenthash].js',
+    assetModuleFilename: '[name].[hash][ext]',
+    publicPath: process.env.ASSETS_HOST || '/',
+    hashDigestLength: 8
   },
 
   experiments: {
@@ -109,43 +110,31 @@ module.exports = [{
           loader: 'babel-loader'
         }]
       }, {
-        test: /\.sass$/i,
+        test: /\.sss$/i,
         use: [{
           loader: isDev() ? 'style-loader' : MiniCssExtractPlugin.loader,
           options: {
-            esModule: true,
+            esModule: isDev(),
           }
         }, {
           loader: 'css-loader',
           options: {
-            esModule: true,
+            esModule: isDev(),
             modules: {
-              localIdentName: isDev() ? '[name]__[local]--[hash:base64:8]' : '[hash:base64:8]',
+              localIdentName: isDev() ? '[name]__[local]' : '[hash:base64]',
               exportLocalsConvention: 'asIs'
             },
             sourceMap: isDev()
           }
         }, {
-          loader: 'postcss-loader',
-          options: {
-            postcssOptions: {
-              plugins: [autoprefixer],
-            },
-            sourceMap: isDev()
-          }
-        }, {
-          loader: 'sass-loader',
-          options: {
-            sourceMap: isDev()
-          }
+          loader: 'postcss-loader'
         }]
       }, {
-        test: /\.(svg|avif|webp|png)$/,
+        test: /\.svg$/,
+        use: 'svg-symbol-sprite-loader'
+      }, {
+        test: /\.(avif|webp|png)$/,
         type: 'asset/resource'
-      },{
-        test: /\.(svg)$/,
-        resourceQuery: /source/,
-        type: 'asset/source'
       }, {
         test: /\.webmanifest$/,
         use: 'webpack-webmanifest-loader',
@@ -161,35 +150,56 @@ module.exports = [{
     new webpack.DefinePlugin(defineEnvConfig),
 
     isProd() ? new MiniCssExtractPlugin({
-      filename: '[name].[contenthash:8].css',
-      chunkFilename: '[name].[contenthash:8].css'
+      filename: '[name].[contenthash].css',
+      chunkFilename: '[name].[contenthash].css'
     }) : () => {},
 
     new HtmlPlugin({
       template: './src/app.html',
       filename: 'index.html',
-      inject: true,
-      minify: {
-        collapseWhitespace: true,
-        keepClosingSlash: true,
-        minifyCSS: true,
-        minifyJS: true,
-        removeComments: false
-      }
+      inject: false,
+      templateParameters: (compilation, assets, assetTags, options) => {
+        const params = {}
+        assetTags = assetTags.headTags.filter(tag => {
+          const iconsFileMatch = tag.innerHTML?.match(/icons\..*\.svg/)
+          if (!iconsFileMatch) return true
+          params.iconsFileHash = iconsFileMatch[0].split('.')[1]
+          return false
+        })
+        return {
+          compilation,
+          webpackConfig: compilation.options,
+          htmlWebpackPlugin: {
+            tags: assetTags,
+            files: assets,
+            options
+          },
+          params
+        }
+      },
+      minify: isProd()
     }),
+
+    isProd() ? new HtmlSkipAssetsPlugin({
+      skipAssets: [asset => /\/*inline.*.js/.test(asset.attributes?.src || '')],
+    }) : () => {},
 
     isProd() ? new HTMLInlineCSSPlugin({
       filter: (filename) => filename.includes('inline') || filename.includes('index')
     }) : () => {},
 
-    isProd() ? new HtmlSkipAssetsPlugin({
-      skipAssets: [asset => /\/inline.*.js/.test(asset.attributes?.src || '')],
+    isProd() ? new HtmlInlineScriptPlugin({
+      scriptMatchPattern: [/runtime~.+[.]js$/]
     }) : () => {},
+
+    new SVGSymbolSprite.Plugin({
+      filename: isDev() ? 'icons.[contenthash].svg' : 'icons.[contenthash].svg',
+    }),
 
     /*isProd() ? new CopyPlugin({
       patterns: [{
         from: './src/ui/images/manifest-splash-icon-512.png',
-        to: './manifest-splash-icon-512.[contenthash:8].png'
+        to: './manifest-splash-icon-512.[contenthash].png'
       }]
     }) : () => {},*/
 
@@ -199,7 +209,7 @@ module.exports = [{
       project: 'tinst',
       include: './build',
       deploy: {
-        env: process.env.BUILD_ENV
+        env: process.env.ENV_VARS
       }
     }) : () => {},
 
@@ -214,11 +224,18 @@ module.exports = [{
     splitChunks: {
       chunks: 'all'
     },
+    providedExports: true,
+    sideEffects: false,
     concatenateModules: false,
+    runtimeChunk: isProd(),
     minimize: isProd(),
     minimizer: isProd() ? [
       new TerserPlugin({ terserOptions }),
-      new CssMinimizerPlugin()
+      new CssMinimizerPlugin({ minimizerOptions: {
+        preset: ['default', {
+          colormin: false
+        }]
+      } })
     ] : []
   },
 
@@ -242,7 +259,7 @@ module.exports = [{
   stats: {
     children: isBundleAnalyzer(),
     modules: isBundleAnalyzer(),
-    loggingDebug: ['sass-loader']
+    errorDetails: true
   }
 },/* {
   mode: isDev() ? 'development' : 'production',
@@ -255,8 +272,8 @@ module.exports = [{
 
   output: {
     path: path.resolve('./build'),
-    filename: isDev() ? `sw.[name].js` : `sw.[name].[contenthash:8].js`,
-    chunkFilename: isDev() ? `sw.[name].js` : `sw.[name].[contenthash:8].js`,
+    filename: isDev() ? `sw.[name].js` : `sw.[name].[contenthash].js`,
+    chunkFilename: isDev() ? `sw.[name].js` : `sw.[name].[contenthash].js`,
     publicPath: process.env.ASSETS_HOST || '/'
   },
 
@@ -296,6 +313,7 @@ module.exports = [{
 
   stats: {
     children: isBundleAnalyzer(),
-    modules: isBundleAnalyzer()
+    modules: isBundleAnalyzer(),
+    errorDetails: true
   }
 }*/]

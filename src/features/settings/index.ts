@@ -1,1 +1,1 @@
-export * from './settings-popup-page.lazy'
+export * from './settings-pane.lazy'

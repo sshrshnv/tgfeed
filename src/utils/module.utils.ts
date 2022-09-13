@@ -1,7 +1,8 @@
 const cachedModules = {}
+
 export const cacheModule = async <T>(
   path: string,
-  importFactory: () => Promise<any>
+  importFactory: () => Promise<T>
 ): Promise<T> => {
   if (cachedModules[path]) {
     return cachedModules[path]

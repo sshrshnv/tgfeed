@@ -1,0 +1,42 @@
+:root
+  --font-size-10: 10px
+  --font-size-11: 11px
+  --font-size-14: 14px
+  --font-size-16: 16px
+  --font-size-20: 20px
+  --font-size-24: 24px
+  --font-size-32: 32px
+
+  --button-icon-size: 18px
+
+  --header-zindex:    10
+  --footer-zindex:    10
+  --progress-zindex:  10
+  --overlay-zindex:   15
+  --pane-zindex:      20
+  --safe-area-zindex: 30
+
+@define-mixin responsive $i
+  --platform-mobile: i($i, block, none)
+  --platform-desktop: i($i, none, block)
+
+  --layout-padding: i($i, 16px, 24px)
+
+  --header-height:       i($i, 56px, 60px)
+  --header-padding-size: i($i, 16px, 24px)
+  --footer-height:       i($i, 56px, 0)
+  --footer-padding-size: i($i, 16px, 0)
+
+  --button-padding: i($i, 12px, 20px)
+
+  --logo-title-size: i($i, 24px, 28px)
+  --bg-image-size:   i($i, 160px, 240px)
+  --bg-image-offset: i($i, 8px, 12px)
+
+  --progress-duration: i($i, 0.8s, 1.0s)
+
+:root
+  @mixin responsive 1
+
+  @media screen and (min-width: 641px)
+    @mixin responsive 2

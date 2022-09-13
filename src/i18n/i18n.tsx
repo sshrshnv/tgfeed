@@ -1,12 +1,12 @@
 import type { FlowComponent } from 'solid-js'
-import { createContext, useContext, createEffect, createMemo } from 'solid-js'
+import { createContext, useContext, createEffect } from 'solid-js'
 
 import { useSettings } from '~/store'
 
+import type { Texts } from './i18n.texts'
+import { INITIAL_TEXTS, templateText } from './i18n.texts'
 import { store } from './i18n.store'
-import { i18nPromise, loadTexts } from './i18n.actions'
-import type { Texts } from './texts'
-import { INITIAL_TEXTS, templateText } from './texts'
+import { i18nPromise, loadLangTexts } from './i18n.actions'
 
 const I18nContext = createContext({
   texts: INITIAL_TEXTS as Texts,
@@ -18,20 +18,15 @@ const htmlEl = self.document.documentElement
 export const I18n: FlowComponent = (props) => {
   const { settings } = useSettings()
 
-  const getI18n = createMemo(() => ({
-    texts: store[settings.lang] || INITIAL_TEXTS,
-    t: templateText
-  }))
-
   createEffect(() => {
     if (!settings.lang) return
 
-    loadTexts(settings.lang)
+    loadLangTexts(settings.lang)
     htmlEl.setAttribute('lang', settings.lang)
   })
 
   return (
-    <I18nContext.Provider value={getI18n()}>
+    <I18nContext.Provider value={store}>
       {props.children}
     </I18nContext.Provider>
   )

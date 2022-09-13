@@ -1,0 +1,45 @@
+.base
+  display: flex
+  justify-content: center
+  align-items: center
+  flex-shrink: 0
+  margin: 0
+  height: 100%
+  padding: 0 var(--button-padding)
+  border: none
+  box-shadow: none
+  color: var(--text-color)
+  background-color: transparent
+  font-family: inherit
+  font-weight: normal
+  font-size: var(--font-size-16)
+  line-height: 1
+  cursor: pointer
+  user-select: none
+  transition: opacity 200ms ease-in-out
+
+  &:focus
+    outline: none
+
+  &:active
+    opacity: 0.5
+
+.icon
+  width: var(--button-icon-size)
+  height: var(--button-icon-size)
+
+._outline
+  height: var(--button-height)
+
+._disabled
+  opacity: 0.5
+  cursor: not-allowed
+
+._error
+  color: var(--c-red)
+
+  &:active
+    opacity: .75
+
+  &._outline
+    border: 1px solid var(--c-red)

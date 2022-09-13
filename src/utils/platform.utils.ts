@@ -15,76 +15,76 @@ userAgent = userAgent.toLocaleLowerCase()
 platform = platform?.toLowerCase() || userAgent
 maxTouchPoints = maxTouchPoints || 1
 
-let isIOS
-export const checkIsIOS = () =>
-  isIOS ??= (/ipad|iphone|ipod/i.test(platform) || (/mac/i.test(platform) && maxTouchPoints > 1)) && !(self as any).MSStream
+let IOS
+export const isIOS = () =>
+  IOS ??= (/ipad|iphone|ipod/i.test(platform) || (/mac/i.test(platform) && maxTouchPoints > 1)) && !(self as any).MSStream
 
-let isSafari
-export const checkIsSafari = () =>
-  isSafari ??= !checkIsChromium() && /safari|mac/i.test(userAgent)
+let Safari
+export const isSafari = () =>
+  Safari ??= !isChromium() && /safari|mac/i.test(userAgent)
 
-let isIOSSafari
-export const checkIsIOSSafari = () =>
-  isIOSSafari ??= checkIsIOS() && !checkIsIOSChrome() && /safari|mac/i.test(userAgent)
+let IOSSafari
+export const isIOSSafari = () =>
+  IOSSafari ??= isIOS() && !isIOSChrome() && /safari|mac/i.test(userAgent)
 
-let isIOSChrome
-export const checkIsIOSChrome = () =>
-  isIOSChrome ??= checkIsIOS() && /crios/i.test(userAgent)
+let IOSChrome
+export const isIOSChrome = () =>
+  IOSChrome ??= isIOS() && /crios/i.test(userAgent)
 
-let isAndroid
-export const checkIsAndroid = () =>
-  isAndroid ??= (/android/i.test(platform) || /android/i.test(userAgent)) && !(self as any).MSStream
+let Android
+export const isAndroid = () =>
+  Android ??= (/android/i.test(platform) || /android/i.test(userAgent)) && !(self as any).MSStream
 
-let isMicrosoftEdge
-export const checkIsMicrosoftEdge = () =>
-  isMicrosoftEdge ??= brands ?
+let MicrosoftEdge
+export const isMicrosoftEdge = () =>
+  MicrosoftEdge ??= brands ?
     brands.some(({ brand }) => brand.toLocaleLowerCase() === 'microsoft edge') :
     /edg/i.test(userAgent)
 
-let isYandex
-export const checkIsYandex = () =>
-  isYandex ??= /yabrowser/i.test(userAgent)
+let Yandex
+export const isYandex = () =>
+  Yandex ??= /yabrowser/i.test(userAgent)
 
-let isSamsung
-export const checkIsSamsung = () =>
-  isSamsung ??= /samsung/i.test(userAgent)
+let Samsung
+export const isSamsung = () =>
+  Samsung ??= /samsung/i.test(userAgent)
 
-let isChromium
-export const checkIsChromium = () =>
-  isChromium ??= brands ?
+let Chromium
+export const isChromium = () =>
+  Chromium ??= brands ?
     brands.some(({ brand }) => brand.toLocaleLowerCase() === 'chromium') :
     !!(window as any).chrome && /chrome/i.test(userAgent)
 
-let isChrome
-export const checkIsChrome = () =>
-  isChrome ??= !checkIsMicrosoftEdge() && !checkIsYandex() && !checkIsSamsung() && checkIsChromium()
+let Chrome
+export const isChrome = () =>
+  Chrome ??= !isMicrosoftEdge() && !isYandex() && !isSamsung() && isChromium()
 
-let isFirefox
-export const checkIsFirefox = () =>
-  isFirefox ??= /firefox/i.test(userAgent)
+let Firefox
+export const isFirefox = () =>
+  Firefox ??= /firefox/i.test(userAgent)
 
-let isAndroidChrome
-export const checkIsAndroidChrome = () =>
-  isAndroidChrome ??= checkIsAndroid() && checkIsChrome()
+let AndroidChrome
+export const isAndroidChrome = () =>
+  AndroidChrome ??= isAndroid() && isChrome()
 
-let isWindows
-export const checkIsWindows = () =>
-  isWindows ??= (
+let Windows
+export const isWindows = () =>
+  Windows ??= (
     userAgentData.platform?.toLocaleLowerCase() === 'windows' ||
     /win/i.test(platform) || /windows/i.test(userAgent)
   )
 
-let isMac
-export const checkIsMac = () =>
-  isMac ??= /mac/i.test(platform) || /mac/i.test(userAgent)
+let Mac
+export const isMac = () =>
+  Mac ??= /mac/i.test(platform) || /mac/i.test(userAgent)
 
-let isDesktop
-export const checkIsDesktop = () =>
-  isDesktop ??= !checkIsIOS() && !checkIsAndroid()
+let Desktop
+export const isDesktop = () =>
+  Desktop ??= !isIOS() && !isAndroid()
 
-let isDesktopChrome
-export const checkIsDesktopChrome = () =>
-  isDesktopChrome ??= checkIsDesktop() && checkIsChrome()
+let DesktopChrome
+export const isDesktopChrome = () =>
+  DesktopChrome ??= isDesktop() && isChrome()
 
 let iosVersion
 export const getIOSVersion = () =>
@@ -98,13 +98,13 @@ let os
 export const getOS = () => {
   if (os) {
     return os
-  } else if (checkIsIOS()) {
+  } else if (isIOS()) {
     os = 'ios'
-  } else if (checkIsAndroid()) {
+  } else if (isAndroid()) {
     os = 'android'
-  } else if (checkIsMac()) {
+  } else if (isMac()) {
     os = 'mac'
-  } else if (checkIsWindows()) {
+  } else if (isWindows()) {
     os = 'windows'
   } else {
     os = 'unknown'
@@ -116,19 +116,19 @@ let browser
 export const getBrowser = () => {
   if (browser) {
     return browser
-  } else if (checkIsChrome()) {
+  } else if (isChrome()) {
     browser = 'chrome'
-  } else if (checkIsSafari()) {
+  } else if (isSafari()) {
     browser = 'safari'
-  } else if (checkIsMicrosoftEdge()) {
+  } else if (isMicrosoftEdge()) {
     browser = 'edge'
-  } else if (checkIsYandex()) {
+  } else if (isYandex()) {
     browser = 'yandex'
-  } else if (checkIsSamsung()) {
+  } else if (isSamsung()) {
     browser = 'samsung'
-  } else if (checkIsChromium()) {
+  } else if (isChromium()) {
     browser = 'chromium'
-  } else if (checkIsFirefox()) {
+  } else if (isFirefox()) {
     browser = 'firefox'
   } else {
     browser = 'unknown'

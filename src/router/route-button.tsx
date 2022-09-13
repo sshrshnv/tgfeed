@@ -1,14 +1,14 @@
 import type { Component } from 'solid-js'
 import { splitProps } from 'solid-js'
 
-import type { Props as ButtonProps } from '~/ui/elements'
+import type { ButtonProps } from '~/ui/elements'
 import { Button } from '~/ui/elements'
 
-import type { RoutesItem } from './router.routes'
+import type { RouteState } from './router.routes'
 import { pushRoute, popRoute } from './router.actions'
 
 type Props = {
-  route: RoutesItem
+  route: RouteState
   back?: boolean
 } & ButtonProps
 

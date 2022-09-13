@@ -1,16 +1,17 @@
 import type { ParentComponent } from 'solid-js'
 import { clsx } from 'clsx'
 
-import { overlayStyles } from '~/ui/styles'
+import { actionBarStyles, animationStyles } from '~/ui/styles'
 
-import styles from './header.sass'
+import styles from './header.sss'
 
 export const Header: ParentComponent = (props) => {
   return (
     <header class={clsx(
       styles.base,
-      overlayStyles.base,
-      overlayStyles._top
+      actionBarStyles.base,
+      actionBarStyles._top,
+      animationStyles.performance
     )}>
       {props.children}
     </header>

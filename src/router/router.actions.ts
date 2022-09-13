@@ -1,4 +1,4 @@
-import type { RoutesItem } from './router.routes'
+import type { RouteState } from './router.routes'
 import type { RouterStore } from './router.store'
 import { store, setStore } from './router.store'
 import { history } from './router.history'
@@ -6,11 +6,11 @@ import { history } from './router.history'
 let isNativePopEventListenerAdded = false
 let isNativePopEventHandled = false
 
-const setRoute = (route: RoutesItem) => setStore(state => {
+const setRoute = (route: RouteState) => setStore(state => {
   const newState: Partial<RouterStore> = {}
   Object.keys(route).forEach(key => {
-    if (key === 'popupPageId') {
-      newState.popupPageIds = [...state.popupPageIds, route.popupPageId]
+    if (key === 'paneId') {
+      newState.paneIds = [...state.paneIds, route.paneId]
     } else {
       newState[key] = route[key]
     }
@@ -18,7 +18,7 @@ const setRoute = (route: RoutesItem) => setStore(state => {
   return newState
 })
 
-export const pushRoute = (route: RoutesItem) => {
+export const pushRoute = (route: RouteState) => {
   if (!isNativePopEventListenerAdded) {
     addNativePopEventListener()
   }
@@ -35,7 +35,7 @@ export const pushRoute = (route: RoutesItem) => {
   setRoute(route)
 }
 
-export const popRoute = (route: RoutesItem) => {
+export const popRoute = (route: RouteState) => {
   isNativePopEventHandled = true
 
   const keys = [...history.keys()]

@@ -1,16 +1,16 @@
 import { createStore } from 'solid-js/store'
 
-import type { Texts } from './texts'
-import type { Lang } from './lang'
-import { LANGS } from './lang'
+import type { Texts } from './i18n.texts'
+import { INITIAL_TEXTS, templateText } from './i18n.texts'
 
 type I18nStore = {
-  [key in Lang]: Texts | undefined
+  texts: Texts
+  t: typeof templateText
 }
 
-const INITIAL_STATE: I18nStore = LANGS.reduce((obj, lang) => ({
-  ...obj,
-  [lang]: undefined
-}), {})
+const INITIAL_STATE = {
+  texts: INITIAL_TEXTS,
+  t: templateText
+} as I18nStore
 
 export const [store, setStore] = createStore(INITIAL_STATE)

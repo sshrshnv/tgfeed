@@ -6,7 +6,7 @@ export const ungzip = async (buffer: ArrayBuffer) => {
   if (!(self as any).DecompressionStream) {
     const { inflate } = await cacheModule(
       'pako/lib/inflate',
-      () => import(/* webpackChunkName: 'polyfill' */ 'pako/lib/inflate')
+      () => import(/* webpackChunkName: 'polyfill.ungzip' */ 'pako/lib/inflate')
     )
     return inflate(new Uint8Array(buffer)).buffer as ArrayBuffer
   }

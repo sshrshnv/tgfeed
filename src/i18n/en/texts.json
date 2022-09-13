@@ -1,0 +1,21 @@
+{
+  "intro": {
+
+  },
+
+  "auth": {
+    "title": "Sign in"
+  },
+
+  "user": {
+    "title": "Profile"
+  },
+
+  "settings": {
+    "title": "Settings"
+  },
+
+  "feed": {
+
+  }
+}

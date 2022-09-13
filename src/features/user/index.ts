@@ -1,1 +1,1 @@
-export * from './user-popup-page.lazy'
+export * from './user-pane.lazy'

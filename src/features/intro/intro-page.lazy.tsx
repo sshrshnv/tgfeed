@@ -1,6 +1,7 @@
 import type { Component } from 'solid-js'
 
-import { lazyFeature, SuspenseFeature } from '../features'
+import { lazyFeature } from '../feature'
+import { PageFeature } from '../page-feature'
 
 const PATH = './intro-page'
 
@@ -11,8 +12,8 @@ const IntroPage = lazyFeature(
 
 export const IntroPageLazy: Component = (props) => {
   return (
-    <SuspenseFeature path={PATH}>
+    <PageFeature path={PATH}>
       <IntroPage {...props}/>
-    </SuspenseFeature>
+    </PageFeature>
   )
 }
