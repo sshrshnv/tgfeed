@@ -1,6 +1,6 @@
 const pkg = require('./package.json')
 
-module.exports = {
+const utils = {
   getAppVerion: () => {
     return pkg.version
   },
@@ -12,16 +12,22 @@ module.exports = {
   getLangNames: () => {
     const glob = require('glob')
     const path = require('path')
-    const langsPath = path.resolve('./src/i18n/**/lang.json')
+    const langPacksPath = path.resolve('./src/lang/packs/**/lang.json')
 
-    return glob.sync(langsPath).reduce((obj, file) => {
+    return glob.sync(langPacksPath).reduce((obj, file) => {
       obj[file.split('/').slice(-2)[0]] = require(file)
       return obj
     }, {})
   },
 
   getInitialTexts: () => {
-    const texts = require('./src/i18n/en/texts.json')
+    const glob = require('glob')
+    const path = require('path')
+    const textsPath = path.resolve('./src/lang/packs/en/*.texts.json')
+
+    const texts = glob.sync(textsPath).reduce((obj, file) => {
+      return { ...obj, ...require(file) }
+    }, {})
 
     const deepMapTexts = (filledTexts, cleanedTexts = {}) => {
       Object.keys(filledTexts).forEach(key => {
@@ -38,11 +44,42 @@ module.exports = {
     return values[+index - 1] || values[0]
   },
 
-  getCSSSafeAreaEnvValueBySide: (side, additionalValue) => {
-    const env = `env(safe-area-inset-${side}, 0)`
-    return additionalValue ? `calc(${env} + ${additionalValue})` : env
+  getCSSSafeAreaEnvValueBySide: (side, additionalValue = 0) => {
+    let env = `env(safe-area-inset-${side}, 0)`
+
+    if (additionalValue && parseInt(additionalValue))
+      env = `calc(${env} + ${additionalValue})`
+
+    return env
+  },
+
+  templateParameters: (compilation, assets, assetTags, options) => {
+    const params = {}
+    Object.keys(compilation.assets).forEach(key => {
+      if (!key.startsWith('icons.')) return
+      const attributes = ' xmlns:xlink="http://www.w3.org/1999/xlink" style="position: absolute; width: 0; height: 0"'
+      compilation.assets[key]._value = compilation.assets[key]._value.replace(attributes, '')
+    })
+    assetTags = assetTags.headTags.filter(tag => {
+      const iconsFileMatch = tag.innerHTML?.match(utils.isDev() ? /icons\.svg/ : /icons\..*\.svg/)
+      if (!iconsFileMatch) return true
+      params.iconsFileHash = utils.isDev() ? '' : iconsFileMatch[0].split('.')[1]
+      return false
+    })
+    return {
+      compilation,
+      webpackConfig: compilation.options,
+      htmlWebpackPlugin: {
+        tags: assetTags,
+        files: assets,
+        options
+      },
+      params
+    }
   },
 
   isDev: () => process.env.NODE_ENV === 'development',
   isProd: () => process.env.NODE_ENV === 'production'
 }
+
+module.exports = utils

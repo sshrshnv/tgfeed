@@ -1,0 +1,19 @@
+.base
+  position: relative
+  display: flex
+  flex-shrink: 0
+  height: 100%
+  padding: 2px
+
+  &::after
+    inset: -2px
+    border: var(--lt-bar-border) solid var(--tm-surface-0)
+    border-left: none
+    border-radius: 0 var(--lt-bar-radius) var(--lt-bar-radius) 0
+    display: none
+
+  > div, > img
+    width: 36px
+    height: 36px
+    border: var(--lt-bar-item-border) solid var(--tm-surface-5)
+    border-radius: 18px

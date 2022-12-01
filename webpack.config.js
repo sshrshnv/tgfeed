@@ -1,12 +1,12 @@
 const webpack = require('webpack')
 const path = require('path')
 const dotenv = require('dotenv')
-const SVGSymbolSprite = require('svg-symbol-sprite-loader')
+const SvgSymbolSprite = require('svg-symbol-sprite-loader')
 const CopyPlugin = require('copy-webpack-plugin')
 const HtmlPlugin = require('html-webpack-plugin')
 const HtmlSkipAssetsPlugin = require('html-webpack-skip-assets-plugin').HtmlWebpackSkipAssetsPlugin
 const HtmlInlineScriptPlugin = require('html-inline-script-webpack-plugin')
-const HTMLInlineCSSPlugin = require("html-inline-css-webpack-plugin").default
+const HtmlInlineCSSPlugin = require("html-inline-css-webpack-plugin").default
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
@@ -26,7 +26,7 @@ const isProd = () => process.env.NODE_ENV === 'production'
 const isDev = () => !isProd()
 const isDevEnvVars = () => process.env.ENV_VARS === 'dev'
 
-const appEnv = !isDevEnvVars() ?
+const appEnv = isDevEnvVars() ?
   dotenv.config({ path: `./.env.${process.env.ENV_VARS}` })?.parsed :
   process.env
 
@@ -77,11 +77,11 @@ module.exports = [{
 
   entry: isDev() ? {
     app: [
-      './src/ui/styles/global.styles.sss',
+      './src/app.sss',
       './src/app.tsx'
     ],
   } : {
-    inline: './src/ui/styles/global.styles.sss',
+    inline: './src/app.sss',
     app: ['./src/app.tsx']
   },
 
@@ -92,10 +92,6 @@ module.exports = [{
     assetModuleFilename: '[name].[hash][ext]',
     publicPath: process.env.ASSETS_HOST || '/',
     hashDigestLength: 8
-  },
-
-  experiments: {
-    topLevelAwait: true
   },
 
   resolve: resolveOptions,
@@ -158,25 +154,7 @@ module.exports = [{
       template: './src/app.html',
       filename: 'index.html',
       inject: false,
-      templateParameters: (compilation, assets, assetTags, options) => {
-        const params = {}
-        assetTags = assetTags.headTags.filter(tag => {
-          const iconsFileMatch = tag.innerHTML?.match(/icons\..*\.svg/)
-          if (!iconsFileMatch) return true
-          params.iconsFileHash = iconsFileMatch[0].split('.')[1]
-          return false
-        })
-        return {
-          compilation,
-          webpackConfig: compilation.options,
-          htmlWebpackPlugin: {
-            tags: assetTags,
-            files: assets,
-            options
-          },
-          params
-        }
-      },
+      templateParameters: utils.templateParameters,
       minify: isProd()
     }),
 
@@ -184,7 +162,7 @@ module.exports = [{
       skipAssets: [asset => /\/*inline.*.js/.test(asset.attributes?.src || '')],
     }) : () => {},
 
-    isProd() ? new HTMLInlineCSSPlugin({
+    isProd() ? new HtmlInlineCSSPlugin({
       filter: (filename) => filename.includes('inline') || filename.includes('index')
     }) : () => {},
 
@@ -192,8 +170,8 @@ module.exports = [{
       scriptMatchPattern: [/runtime~.+[.]js$/]
     }) : () => {},
 
-    new SVGSymbolSprite.Plugin({
-      filename: isDev() ? 'icons.[contenthash].svg' : 'icons.[contenthash].svg',
+    new SvgSymbolSprite.Plugin({
+      filename: isDev() ? 'icons.svg' : 'icons.[contenthash].svg',
     }),
 
     /*isProd() ? new CopyPlugin({
@@ -206,7 +184,7 @@ module.exports = [{
     isSentryAvailable() ? new SentryPlugin({
       authToken: appEnv.SENTRY_AUTH_TOKEN,
       org: 'alexander-shershnev',
-      project: 'tinst',
+      project: 'tgfeed',
       include: './build',
       deploy: {
         env: process.env.ENV_VARS

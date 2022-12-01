@@ -10,7 +10,7 @@ module.exports = {
     ['postcss-functions', {
       functions: {
         i: utils.getCSSVarValueByIndex,
-        s: utils.getCSSSafeAreaEnvValueBySide,
+        safe: utils.getCSSSafeAreaEnvValueBySide
       }
     }],
     ['postcss-nested'],
@@ -20,6 +20,6 @@ module.exports = {
       darkSelector: '[data-theme="dark"]',
       lightSelector: '[data-theme="light"]'
     }],
-    ['autoprefixer']
+    ['postcss-preset-env']
   ],
 }

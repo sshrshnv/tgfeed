@@ -1,2 +1,4 @@
-export const setTimeout = (value: number) =>
-  new Promise(resolve => self.setTimeout(resolve, value))
+export const asyncTimeout = (value: number) =>
+  new self.Promise(resolve => self.setTimeout(resolve, value))
+
+//export const debounce = ()

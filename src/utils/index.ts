@@ -1,5 +1,6 @@
-export * from './compression.utils'
 export * from './error.utils'
 export * from './module.utils'
 export * from './platform.utils'
+export * from './promise.utils'
 export * from './timeout.utils'
+export * from './transition.utils'

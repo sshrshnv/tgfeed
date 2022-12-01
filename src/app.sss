@@ -1,0 +1,54 @@
+@import './ui/vars/font.vars.sss'
+@import './ui/vars/layout.vars.sss'
+@import './ui/vars/theme.vars.sss'
+
+@font-face
+  font-family: "Arial"
+  font-weight: 400
+  src: local("Arial")
+
+@font-face
+  font-family: "Arial"
+  font-weight: 500
+  src: local("Arial Bold")
+
+html, body
+  margin: 0
+  width: 100%
+  height: 100%
+  user-select: none
+  overflow: hidden
+  text-rendering: optimizeLegibility
+  text-size-adjust: none
+  -moz-osx-font-smoothing: grayscale
+  -webkit-font-smoothing: antialiased
+  -webkit-tap-highlight-color: transparent
+  -webkit-touch-callout: none
+
+html
+  padding: safe(top)
+           safe(right)
+           0
+           safe(left)
+  background-color: var(--tm-manifest-color)
+
+  &::after
+    position: absolute
+    z-index: var(--lt-safe-area-zindex)
+    inset: auto 0 0
+    height: safe(bottom)
+    pointer-events: none
+    content: ''
+
+body
+  position: relative
+  padding: var(--lt-body-padding)
+  font: normal 16px/1 var(--ft-family)
+
+  > svg
+    position: absolute
+    width: 0
+    height: 0
+
+html, body, main, header, nav, div, button, input
+  box-sizing: border-box
