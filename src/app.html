@@ -3,7 +3,9 @@
   <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no, shrink-to-fit=no"/>
+    <meta name="theme-color" content="#22242a">
     <title>TgFeed</title>
+    <link rel="manifest" href="<%= require('~/app.webmanifest') %>">
     <%= htmlWebpackPlugin.tags.filter((tag) => tag.tagName !== 'script') %>
     <%= htmlWebpackPlugin.tags.filter((tag) => tag.tagName === 'script') %>
   </head>

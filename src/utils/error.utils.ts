@@ -1,6 +1,6 @@
 import type { ApiError, ApiErrorHandler } from '~/api'
 import { db } from '~/db'
-import { cacheModule } from '~/utils'
+import { loadModule } from '~/utils'
 
 const HANDLED_ERRORS = [
   'PHONE_NUMBER_BANNED',
@@ -77,7 +77,7 @@ let Sentry: typeof import('@sentry/browser')
 const loadSentry = async () => {
   if (Sentry) return Sentry
 
-  Sentry = await cacheModule(
+  Sentry = await loadModule(
     '@sentry/browser',
     () => import(/* webpackChunkName: 'sentry' */ '@sentry/browser')
   )

@@ -1,40 +1,38 @@
-import { wrap, proxy } from 'comlink'
+import { proxy } from 'comlink'
 
 import { db } from '~/db'
-import { handleApiErrors } from '~/utils'
+import { loadWorkerModule, handleApiErrors } from '~/utils'
 
 import type { ClientConfig, ClientMetaData } from './mtproto'
-import type { ApiWrapper, Api } from './api.types'
+import type { Api } from './api.types'
+
+const API_WORKER_PATH = './api.worker'
 
 const API_ID = +(process.env.API_ID || '')
 const API_HASH = `${process.env.API_HASH || ''}`
 const API_LAYER = 143
 const IS_TEST = `${process.env.API_TEST || ''}` !== 'false'
-const META_KEY = IS_TEST ? 'metatest' : 'meta'
 
-export let api: Api
-
-let meta: ClientMetaData
-const INITIAL_META: ClientMetaData = {
-  pfs: false,
-  baseDC: 2,
-  dcs: {},
-  userID: ''
+export const api: Pick<Api, 'call'> = {
+  call: async (...args) => {
+    const apiWorker = await loadApiWorker()
+    return apiWorker.call(...args)
+  }
 }
 
-export const initApi = async () => {
-  if (api) return api
+export const loadApiWorker = (): Promise<Api> => loadWorkerModule(
+  API_WORKER_PATH,
+  createApiWorker,
+  initApiWorker
+)
 
-  const apiWrapper = wrap<ApiWrapper>(new Worker(new URL(
-    /* webpackChunkName: 'api.worker' */
-    './api.worker',
-    import.meta.url
-  )));
+const createApiWorker = () => new Worker(new URL(
+  './api.worker' /* webpackChunkName: 'api.worker' */,
+  import.meta.url
+))
 
-  [api, meta = INITIAL_META] = await Promise.all([
-    apiWrapper.api,
-    db.get<ClientMetaData>(META_KEY)
-  ])
+const initApiWorker = async (apiWorker: Api) => {
+  const meta = await getInitialMeta()
 
   const config: Partial<ClientConfig> = {
     APIID: API_ID,
@@ -49,11 +47,29 @@ export const initApi = async () => {
     meta
   }
 
-  await apiWrapper.init(
+  apiWorker.init(
     config,
-    proxy(() => {}),
+    proxy(handleMetaUpdate),
+    proxy(() => {/**/}),
     proxy(handleApiErrors)
   )
+}
 
-  return api
+const META_DB_KEY = IS_TEST ? 'metatest' : 'meta'
+const INITIAL_META: ClientMetaData = {
+  pfs: false,
+  baseDC: 2,
+  dcs: {},
+  userID: ''
+}
+let cachedMeta: ClientMetaData
+
+const getInitialMeta = async () => {
+  cachedMeta = (await db.get<ClientMetaData>(META_DB_KEY)) || INITIAL_META
+  return cachedMeta
+}
+
+const handleMetaUpdate = (updatedMeta: Partial<ClientMetaData>) => {
+  cachedMeta = { ...cachedMeta, ...updatedMeta }
+  db.set(META_DB_KEY, cachedMeta)
 }

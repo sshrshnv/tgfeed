@@ -1,5 +1,4 @@
-import { ungzip } from '~/utils'
-
+import { ungzip } from '../utils/ungzip'
 import { logs } from '../utils/log'
 import { Message, PlainMessage } from '../message'
 import { ab2i, Reader32 } from '../serialization'
