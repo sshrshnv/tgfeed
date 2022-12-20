@@ -4,7 +4,7 @@ import { splitProps } from 'solid-js'
 import type { ButtonProps } from '~/ui/components'
 import { Button } from '~/ui/components'
 
-import type { Route } from '../routing.state'
+import type { Route } from '../routing.types'
 import { pushRoute, popRoute } from '../routing.actions'
 
 type Props = {

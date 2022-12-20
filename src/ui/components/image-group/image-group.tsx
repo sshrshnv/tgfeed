@@ -1,9 +1,9 @@
 import type { ParentComponent } from 'solid-js'
 import { clsx } from 'clsx'
 
-import layoutStyles from '~/ui/styles/layout.styles.sss'
+import { layoutCSS } from '~/ui/css'
 
-import styles from './image-group.sss'
+import CSS from './image-group.sss'
 
 type Props = {
 
@@ -12,8 +12,8 @@ type Props = {
 export const ImageGroup: ParentComponent<Props> = (props) => {
   return (
     <div class={clsx(
-      layoutStyles.after,
-      styles.base
+      layoutCSS.after,
+      CSS.base
     )}>
       {props.children}
     </div>

@@ -1,19 +1,19 @@
 import type { FlowComponent } from 'solid-js'
 import { clsx } from 'clsx'
 
-import styles from './text.sss'
+import CSS from './text.sss'
 
-type Props = {
-  type: 'title' | 'label' | 'body'
+export type TextProps = {
+  variant: 'title' | 'label' | 'body'
   size: 'large' | 'medium' | 'small'
 }
 
-export const Text: FlowComponent<Props> = (props) => {
+export const Text: FlowComponent<TextProps> = (props) => {
   return (
     <span class={clsx(
-      styles.base,
-      styles[`_${props.type}`],
-      styles[`_${props.size}`],
+      CSS.base,
+      CSS[`_${props.variant}`],
+      CSS[`_${props.size}`],
     )}>
       {props.children}
     </span>

@@ -1,7 +1,7 @@
 import type { Component } from 'solid-js'
 import { createEffect } from 'solid-js'
 
-import styles from './linear-progress.sss'
+import CSS from './linear-progress.sss'
 
 export type LinearProgressProps = {
   active: boolean
@@ -23,7 +23,7 @@ export const LinearProgress: Component<LinearProgressProps> = (props) => {
   return (
     <div
       ref={element!}
-      class={styles.base}
+      class={CSS.base}
     />
   )
 }

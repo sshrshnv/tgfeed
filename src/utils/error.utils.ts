@@ -1,6 +1,6 @@
 import type { ApiError, ApiErrorHandler } from '~/api'
-import { db } from '~/db'
 import { loadModule } from '~/utils'
+import { loadDbWorker } from '~/db'
 
 const HANDLED_ERRORS = [
   'PHONE_NUMBER_BANNED',
@@ -30,7 +30,7 @@ export const handleApiErrors: ApiErrorHandler = async (error: ApiError) => {
 
   if (CONNECTION_ERRORS.includes(message)) {
     await Promise.all([
-      db.clear(),
+      loadDbWorker().then(db => db.clear()),
       //unregisterSW()
     ])
     self.location.reload()

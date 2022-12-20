@@ -5,17 +5,17 @@ import { render } from 'solid-js/web'
 import { handleErrors } from '~/utils'
 handleErrors()
 
-import { prefetchIcons } from '~/ui'
-prefetchIcons()
+import { preloadIcons } from '~/ui'
+preloadIcons()
 
 import { useUserState } from '~/entities'
-import { ROUTES, useRoutingState } from '~/routing'
+import { ROUTES } from '~/routing'
 import { RouteButton, RouteContainer } from '~/routing/components'
-//import { AuthPane } from '~/features/auth/components'
+import { AuthPopup } from '~/features/auth'
 import { Header, Main, Nav, ImageGroup, Logo } from '~/ui/components'
 
 const App: Component = () => {
-  const routingState = useRoutingState()
+  //const routingState = useRoutingState()
   const userState = useUserState()
 
   return (
@@ -26,12 +26,13 @@ const App: Component = () => {
         </ImageGroup>
 
         <Show when={!userState.authed}>
-          <RouteButton route={ROUTES.auth} icon="user"/>
+          <RouteButton route={ROUTES.authPopup} icon='user'/>
         </Show>
-        <RouteButton route={ROUTES.settings} icon="settings"/>
+        <RouteButton route={ROUTES.settingsPopup} icon='settings'/>
       </Header>
 
       <Nav>
+        <RouteButton route={ROUTES.feedPage('')} variant='nav' text='TgFeed'/>
       </Nav>
 
       <Main>

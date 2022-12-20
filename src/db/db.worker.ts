@@ -1,5 +1,5 @@
 import { expose } from 'comlink'
-import { createStore, get, set, entries, clear } from 'idb-keyval'
+import { createStore, get, getMany, set, setMany, clear } from 'idb-keyval'
 
 import type { Db } from './db.types'
 
@@ -18,11 +18,8 @@ const db: Db = ({
     return get(key, getStore(params))
   },
 
-  getAll: async <T>(params) => {
-    return (await entries(getStore(params))).reduce((obj, [key, value]) => ({
-      ...obj,
-      [`${key}`]: value
-    }), {} as T)
+  getMany: (keys, params) => {
+    return getMany(keys, getStore(params))
   },
 
   clear: (params) => {

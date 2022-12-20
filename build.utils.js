@@ -12,7 +12,7 @@ const utils = {
   getLangNames: () => {
     const glob = require('glob')
     const path = require('path')
-    const langPacksPath = path.resolve('./src/lang/packs/**/lang.json')
+    const langPacksPath = path.resolve('./src/i18n/lang-packs/**/lang.json')
 
     return glob.sync(langPacksPath).reduce((obj, file) => {
       obj[file.split('/').slice(-2)[0]] = require(file)
@@ -23,7 +23,7 @@ const utils = {
   getInitialTexts: () => {
     const glob = require('glob')
     const path = require('path')
-    const textsPath = path.resolve('./src/lang/packs/en/*.texts.json')
+    const textsPath = path.resolve('./src/i18n/lang-packs/en/*.texts.json')
 
     const texts = glob.sync(textsPath).reduce((obj, file) => {
       return { ...obj, ...require(file) }
@@ -38,19 +38,6 @@ const utils = {
     }
 
     return deepMapTexts(texts)
-  },
-
-  getCSSVarValueByIndex: (index, ...values) => {
-    return values[+index - 1] || values[0]
-  },
-
-  getCSSSafeAreaEnvValueBySide: (side, additionalValue = 0) => {
-    let env = `env(safe-area-inset-${side}, 0)`
-
-    if (additionalValue && parseInt(additionalValue))
-      env = `calc(${env} + ${additionalValue})`
-
-    return env
   },
 
   templateParameters: (compilation, assets, assetTags, options) => {

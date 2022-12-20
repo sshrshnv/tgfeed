@@ -1,9 +1,9 @@
 import type { ParentComponent } from 'solid-js'
 import { clsx } from 'clsx'
 
-import barStyles from '~/ui/styles/bar.styles.sss'
+import { barCSS } from '~/ui/css'
 
-import styles from './nav.sss'
+import CSS from './nav.sss'
 
 type Props = {
   //active?: boolean
@@ -12,8 +12,8 @@ type Props = {
 export const Nav: ParentComponent<Props> = (props) => {
   return (
     <nav class={clsx(
-      barStyles.base,
-      styles.base
+      barCSS.base,
+      CSS.base
     )}>
       {props.children}
     </nav>

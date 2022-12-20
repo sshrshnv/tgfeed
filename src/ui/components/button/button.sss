@@ -1,23 +1,21 @@
 .base
   margin: 0
-  height: var(--lt-button-height)
-  padding: 0
+  height: 40px
+  padding: 0 12px
   border: none
-  border-radius: calc(var(--lt-button-height) / 2)
+  border-radius: 20px
   box-shadow: none
-  color: var(--ft-color-ui)
+  color: var(--fnt-color-ui)
   background-color: transparent
   font-family: inherit
-  font-weight: normal
-  font-size: var(--ft-size-16)
   line-height: 1
   cursor: pointer
   user-select: none
   transition: opacity 200ms ease-in-out
 
   > svg
-    width: 20px
-    height: 20px
+    width: 18px
+    height: 18px
 
   &:focus
     outline: none
@@ -25,12 +23,14 @@
   &:active
     opacity: 0.5
 
-._outline
-  height: var(--lt-button-height)
+  ._disabled
+    opacity: 0.5
+    cursor: not-allowed
 
-._disabled
-  opacity: 0.5
-  cursor: not-allowed
+  ._error
+    //
 
-._error
-  //
+._nav
+  height: 32px
+  border-radius: 16px
+  color: var(--tm-primary)

@@ -1,7 +1,7 @@
 import type { ParentComponent } from 'solid-js'
 import { onMount } from 'solid-js'
 
-import styles from './dropdown.sss'
+import CSS from './dropdown.sss'
 
 type Props = {
 
@@ -33,7 +33,7 @@ export const Dropdown: ParentComponent<Props> = (props) => {
   return (
     <div
       ref={element}
-      class={styles.base}
+      class={CSS.base}
     >
       {props.children}
     </div>

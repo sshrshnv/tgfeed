@@ -1,0 +1,40 @@
+:root
+  --lt-safe-area-zindex: 30
+
+  --lt-html-padding-top: max(4px, safe(top))
+  --lt-main-radius: 0
+
+  --lt-bar-zindex: 20
+  --lt-bar-top:    0px
+  --lt-bar-bottom: 0px
+  --lt-bar-height: 44px
+  --lt-bar-radius: 22px
+  --lt-bar-border: 2px
+
+  --lt-dropdown-zindex:    10
+  --lt-dropdown-min-width: 140px
+  --lt-dropdown-radius:    20px
+
+  --lt-button-height: 40px
+
+@define-mixin size $i
+  --lt-html-padding-bottom: i($i, max(4px, safe(bottom)), 0px)
+  --lt-body-padding: i($i, 22px 0, 22px 0 0)
+  --lt-header-width: i($i, 100%, min(960px, 100%))
+
+  --lt-nav-top:    i($i, auto, 0px)
+  --lt-nav-bottom: i($i, max(safe(bottom), 0px), auto)
+  --lt-nav-width:  i($i, 100%, min(480px, 50%))
+
+:root
+  @mixin size 1
+
+  @media (min-width: 640px)
+    @mixin size 2
+
+  @media (min-width: 960px)
+    --lt-html-padding-top: max(0px, safe(top))
+    --lt-main-radius: 22px 22px 0 0
+
+  @media (display-mode: standalone)
+    --lt-html-padding-top: max(0px, safe(top))

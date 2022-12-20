@@ -7,9 +7,9 @@ const HtmlPlugin = require('html-webpack-plugin')
 const HtmlSkipAssetsPlugin = require('html-webpack-skip-assets-plugin').HtmlWebpackSkipAssetsPlugin
 const HtmlInlineScriptPlugin = require('html-inline-script-webpack-plugin')
 const HtmlInlineCSSPlugin = require("html-inline-css-webpack-plugin").default
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const MiniCSSExtractPlugin = require('mini-css-extract-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
+const CSSMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const SentryPlugin = require('@sentry/webpack-plugin')
 
@@ -108,16 +108,12 @@ module.exports = [{
       }, {
         test: /\.sss$/i,
         use: [{
-          loader: isDev() ? 'style-loader' : MiniCssExtractPlugin.loader,
-          options: {
-            esModule: isDev(),
-          }
+          loader: isDev() ? 'style-loader' : MiniCSSExtractPlugin.loader
         }, {
           loader: 'css-loader',
           options: {
-            esModule: isDev(),
             modules: {
-              localIdentName: isDev() ? '[name]__[local]' : '[hash:base64]',
+              localIdentName: isDev() ? '[name]__[local]' : '[hash:base64:5]',
               exportLocalsConvention: 'asIs'
             },
             sourceMap: isDev()
@@ -145,7 +141,7 @@ module.exports = [{
   plugins: [
     new webpack.DefinePlugin(defineEnvConfig),
 
-    isProd() ? new MiniCssExtractPlugin({
+    isProd() ? new MiniCSSExtractPlugin({
       filename: '[name].[contenthash].css',
       chunkFilename: '[name].[contenthash].css'
     }) : () => {},
@@ -209,7 +205,7 @@ module.exports = [{
     minimize: isProd(),
     minimizer: isProd() ? [
       new TerserPlugin({ terserOptions }),
-      new CssMinimizerPlugin({ minimizerOptions: {
+      new CSSMinimizerPlugin({ minimizerOptions: {
         preset: ['default', {
           colormin: false
         }]

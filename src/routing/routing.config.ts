@@ -1,19 +1,24 @@
+import type { Routes } from './routing.types'
+
 export const ROUTES = {
-  root: {
-    id: 'root',
-    type: 'page',
-    path: '/',
+  feedPage: (feedId: string) => ({
+    pageId: 'feed',
+    pageParams: { feedId }
+  }),
+  channelPage: (channelId: string) => ({
+    pageId: 'channel',
+    pageParams: { channelId }
+  }),
+  authPopup: {
+    popupId: 'auth'
   },
-  auth: {
-    id: 'auth',
-    type: 'pane',
+  settingsPopup: {
+    popupId: 'settings'
   },
-  settings: {
-    id: 'settings',
-    type: 'pane',
+  profilePopup: {
+    popupId: 'profile'
   },
-  user: {
-    id: 'user',
-    type: 'pane',
-  },
-} as const
+  menu: {
+    dropdown: true
+  }
+} satisfies Routes

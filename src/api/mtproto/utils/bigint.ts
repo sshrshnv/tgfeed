@@ -124,15 +124,15 @@ const bitLength = (a: bigint) => {
 
 const fromBuffer = (buf: Uint8Array | Buffer) => {
   let ret = 0n
-  for (let i of buf.values()) {
-    let b = bi(i)
+  for (const i of buf.values()) {
+    const b = bi(i)
     ret = (ret << 8n) + b
   }
   return ret
 }
 
 const randomBytes = (byteLength: number, forceLength = false) => {
-  let buf = new Uint8Array(byteLength)
+  const buf = new Uint8Array(byteLength)
   self.crypto.getRandomValues(buf)
   if (forceLength) buf[0] = buf[0] | 128
   return buf

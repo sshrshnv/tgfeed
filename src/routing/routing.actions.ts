@@ -1,4 +1,6 @@
-import type { RoutingState, Route } from './routing.state'
+import { produce } from 'solid-js/store'
+
+import type { Route } from './routing.types'
 import { routingState, setRoutingState } from './routing.state'
 
 const history = new Map<string, string>()
@@ -19,7 +21,12 @@ export const pushRoute = (route: Route) => {
   }
 
   history.set(historyKey, JSON.stringify(routingState))
-  setCurrentRoute(route)
+  setRoutingState(produce(state => {
+    
+    const { path, pageId, pageParams, popupId, dropdown } = route
+    path && (state.path = path)
+    pageId && (sta)
+  }))
 }
 
 export const popRoute = (route: Route) => {
@@ -37,13 +44,6 @@ export const popRoute = (route: Route) => {
   self.history.go(-redundantKeys.length)
   setRoutingState(JSON.parse(historyState))
 }
-
-const setCurrentRoute = (route: Route) => setRoutingState(state => ({
-  currentActiveRoute: route,
-  activeRouteIds: {
-    [route.type]: [...state.activeRouteIds[route.type], route.id]
-  }
-}) as RoutingState)
 
 const handleNativePopEvent = () => {
   if (isNativePopEventHandled) {

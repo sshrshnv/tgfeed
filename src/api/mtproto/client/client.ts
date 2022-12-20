@@ -321,8 +321,8 @@ export default class Client {
   }
 
   /** Create plain message and send it to the server */
-  public plainCall<K extends keyof MethodDeclMap>(method: K, data: MethodDeclMap[K]['req'], cb?: PlainCallback<K>): void;
-  public plainCall<K extends keyof MethodDeclMap>(method: K, data: MethodDeclMap[K]['req'], headers: CallHeaders, cb?: PlainCallback<K>): void;
+  public plainCall<K extends keyof MethodDeclMap>(method: K, data: MethodDeclMap[K]['req'], cb?: PlainCallback<K>): void
+  public plainCall<K extends keyof MethodDeclMap>(method: K, data: MethodDeclMap[K]['req'], headers: CallHeaders, cb?: PlainCallback<K>): void
   public plainCall<K extends keyof MethodDeclMap>(method: K, data: MethodDeclMap[K]['req'], ...args: unknown[]): void {
     let cb: PlainCallback<K> | undefined
     let headers: CallHeaders = {}
@@ -353,7 +353,6 @@ export default class Client {
       }
     }
 
-    debug(this.cfg.debug, transport, dc, thread, '<-', msg)
     this.getInstance(transport, dc, thread).send(msg)
   }
 
@@ -370,8 +369,8 @@ export default class Client {
   }
 
   /** Create message, encrypt it and send it to the server */
-  public call<K extends keyof MethodDeclMap>(method: K, data: MethodDeclMap[K]['req'], cb?: PlainCallback<K>): void;
-  public call<K extends keyof MethodDeclMap>(method: K, data: MethodDeclMap[K]['req'], headers: CallHeaders, cb?: PlainCallback<K>): void;
+  public call<K extends keyof MethodDeclMap>(method: K, data: MethodDeclMap[K]['req'], cb?: PlainCallback<K>): void
+  public call<K extends keyof MethodDeclMap>(method: K, data: MethodDeclMap[K]['req'], headers: CallHeaders, cb?: PlainCallback<K>): void
   public call<K extends keyof MethodDeclMap>(method: K, data: MethodDeclMap[K]['req'], ...args: unknown[]): void {
     let cb: PlainCallback<K> | undefined
     let headers: CallHeaders = {}
@@ -420,7 +419,6 @@ export default class Client {
 
       instance.send(this.encrypt(msg, headers.dc))
 
-      debug(this.cfg.debug && headers.method !== 'msgs_ack', Date.now(), msg.id, 'seq:', msg.seqNo, 'call', headers.method)
       debug(this.cfg.debug, headers.transport, headers.dc, headers.thread, '<-', msg)
     } else {
       this.addPendingMsg(headers.transport, headers.dc, headers.thread, msg)
@@ -452,16 +450,16 @@ export default class Client {
   }
 
   /** Subscription for client event */
-  on(eventName: 'networkChanged', cb: (state: TransportState) => void): void;
-  on(eventName: 'metaChanged', cb: (meta: ClientMetaData) => void): void;
+  on(eventName: 'networkChanged', cb: (state: TransportState) => void): void
+  on(eventName: 'metaChanged', cb: (meta: ClientMetaData) => void): void
   on(eventName: string, cb: ClientEventListener): void {
     if (!this.listeners[eventName]) this.listeners[eventName] = []
     this.listeners[eventName].push(cb)
   }
 
   /** emit client event */
-  emit(eventName: 'networkChanged', state: TransportState): void;
-  emit(eventName: 'metaChanged', meta: Record<number, any>): void;
+  emit(eventName: 'networkChanged', state: TransportState): void
+  emit(eventName: 'metaChanged', meta: Record<number, any>): void
   emit(eventName: string, ...args: unknown[]) {
     if (!this.listeners[eventName]) this.listeners[eventName] = []
     for (let i = 0; i < this.listeners[eventName].length; i += 1) {

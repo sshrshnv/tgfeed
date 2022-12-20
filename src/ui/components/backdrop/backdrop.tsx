@@ -1,8 +1,7 @@
 import type { Component } from 'solid-js'
 import { onMount, createEffect } from 'solid-js'
-import { clsx } from 'clsx'
 
-import styles from './backdrop.sss'
+import CSS from './backdrop.sss'
 
 export type BackdropProps = {
   active?: boolean
@@ -44,9 +43,7 @@ export const Backdrop: Component<BackdropProps> = (props) => {
   return (
     <div
       ref={element!}
-      class={clsx(
-        styles.base
-      )}
+      class={CSS.base}
       onClick={handleClick}
     />
   )

@@ -1,0 +1,169 @@
+@define-mixin theme $i
+  --tm-primary:              i($i, var(--clr-primary-40),  var(--clr-primary-80))
+  --tm-primary-container:    i($i, var(--clr-primary-90),  var(--clr-primary-30))
+  --tm-on-primary:           i($i, var(--clr-primary-100), var(--clr-primary-20))
+  --tm-on-primary-container: i($i, var(--clr-primary-10),  var(--clr-primary-90))
+
+  --tm-secondary:              i($i, var(--clr-secondary-40),  var(--clr-secondary-80))
+  --tm-secondary-container:    i($i, var(--clr-secondary-90),  var(--clr-secondary-30))
+  --tm-on-secondary:           i($i, var(--clr-secondary-100), var(--clr-secondary-20))
+  --tm-on-secondary-container: i($i, var(--clr-secondary-10),  var(--clr-secondary-90))
+
+  --tm-tertiary:              i($i, var(--clr-tertiary-40),  var(--clr-tertiary-80))
+  --tm-tertiary-container:    i($i, var(--clr-tertiary-90),  var(--clr-tertiary-30))
+  --tm-on-tertiary:           i($i, var(--clr-tertiary-100), var(--clr-tertiary-20))
+  --tm-on-tertiary-container: i($i, var(--clr-tertiary-10),  var(--clr-tertiary-90))
+
+  --tm-error:              i($i, var(--clr-error-40),  var(--clr-error-80))
+  --tm-error-container:    i($i, var(--clr-error-90),  var(--clr-error-30))
+  --tm-on-error:           i($i, var(--clr-error-100), var(--clr-error-20))
+  --tm-on-error-container: i($i, var(--clr-error-10),  var(--clr-error-90))
+
+  --tm-background:    i($i, var(--clr-neutral-variant-99), var(--clr-neutral-variant-5))
+  --tm-on-background: i($i, var(--clr-neutral-variant-10), var(--clr-neutral-variant-90))
+
+  --tm-surface-0:  i($i, var(--clr-neutral-variant-95), var(--clr-neutral-variant-10))
+  --tm-surface-1:  i($i, var(--clr-neutral-variant-90), var(--clr-neutral-variant-15))
+  --tm-surface-2:  i($i, var(--clr-neutral-variant-80), var(--clr-neutral-variant-20))
+  --tm-surface-3:  i($i, var(--clr-neutral-variant-70), var(--clr-neutral-variant-25))
+  --tm-surface-4:  i($i, var(--clr-neutral-variant-60), var(--clr-neutral-variant-30))
+  --tm-surface-5:  i($i, var(--clr-neutral-variant-50), var(--clr-neutral-variant-35))
+  --tm-on-surface: i($i, var(--clr-neutral-variant-10), var(--clr-neutral-variant-80))
+
+  --tm-outline:         i($i, var(--clr-neutral-variant-50), var(--clr-neutral-variant-60))
+  --tm-outline-variant: i($i, var(--clr-neutral-variant-80), var(--clr-neutral-variant-30))
+
+  --tm-shadow: i($i, var(--clr-neutral-0), var(--clr-neutral-0))
+  --tm-scrim:  i($i, var(--clr-neutral-0), var(--clr-neutral-0))
+
+  --tm-inverse-primary:    i($i, var(--clr-primary-80), var(--clr-primary-40))
+  --tm-inverse-surface:    i($i, var(--clr-neutral-20), var(--clr-neutral-90))
+  --tm-inverse-on-surface: i($i, var(--clr-neutral-95), var(--clr-neutral-20))
+
+:root
+  color-scheme: light
+  @mixin theme 1
+
+  @media (prefers-color-scheme: dark)
+    color-scheme: dark
+    @mixin theme 2
+
+  --tm-platform-theme-color: var(--tm-surface-0)
+
+  @media (display-mode: standalone)
+    //--tm-platform-theme-color: var(--tm-surface-0)
+
+:root
+  --clr-primary-0:   #000000
+  --clr-primary-5:   #00102D
+  --clr-primary-10:  #001A41
+  --clr-primary-15:  #002455
+  --clr-primary-20:  #002E69
+  --clr-primary-25:  #00397E
+  --clr-primary-30:  #004494
+  --clr-primary-35:  #004FAA
+  --clr-primary-40:  #005AC1
+  --clr-primary-50:  #2B74E2
+  --clr-primary-60:  #4D8EFE
+  --clr-primary-70:  #80AAFF
+  --clr-primary-80:  #ADC6FF
+  --clr-primary-90:  #D8E2FF
+  --clr-primary-95:  #EDF0FF
+  --clr-primary-98:  #F9F9FF
+  --clr-primary-99:  #FEFBFF
+  --clr-primary-100: #FFFFFF
+
+  --clr-secondary-0:   #000000
+  --clr-secondary-5:   #091120
+  --clr-secondary-10:  #141B2C
+  --clr-secondary-15:  #1E2636
+  --clr-secondary-20:  #293041
+  --clr-secondary-25:  #343B4D
+  --clr-secondary-30:  #3F4759
+  --clr-secondary-35:  #4B5265
+  --clr-secondary-40:  #575E71
+  --clr-secondary-50:  #6F778B
+  --clr-secondary-60:  #8991A5
+  --clr-secondary-70:  #A3ABC0
+  --clr-secondary-80:  #BFC6DC
+  --clr-secondary-90:  #DBE2F9
+  --clr-secondary-95:  #EDF0FF
+  --clr-secondary-98:  #F9F9FF
+  --clr-secondary-99:  #FEFBFF
+  --clr-secondary-100: #FFFFFF
+
+  --clr-tertiary-0:   #000000
+  --clr-tertiary-5:   #1D0822
+  --clr-tertiary-10:  #29132D
+  --clr-tertiary-15:  #341D38
+  --clr-tertiary-20:  #402843
+  --clr-tertiary-25:  #4C334F
+  --clr-tertiary-30:  #583E5B
+  --clr-tertiary-35:  #644967
+  --clr-tertiary-40:  #715573
+  --clr-tertiary-50:  #8B6D8D
+  --clr-tertiary-60:  #A687A8
+  --clr-tertiary-70:  #C2A1C3
+  --clr-tertiary-80:  #DEBCDF
+  --clr-tertiary-90:  #FBD7FC
+  --clr-tertiary-95:  #FFEBFC
+  --clr-tertiary-98:  #FFF7FA
+  --clr-tertiary-99:  #FFFBFF
+  --clr-tertiary-100: #FFFFFF
+
+  --clr-neutral-0:   #000000
+  --clr-neutral-5:   #101114
+  --clr-neutral-10:  #1B1B1F
+  --clr-neutral-15:  #252629
+  --clr-neutral-20:  #303033
+  --clr-neutral-25:  #3B3B3F
+  --clr-neutral-30:  #46464A
+  --clr-neutral-35:  #525256
+  --clr-neutral-40:  #5E5E62
+  --clr-neutral-50:  #77777A
+  --clr-neutral-60:  #919094
+  --clr-neutral-70:  #ABABAF
+  --clr-neutral-80:  #C7C6CA
+  --clr-neutral-90:  #E3E2E6
+  --clr-neutral-95:  #F2F0F4
+  --clr-neutral-98:  #FAF9FD
+  --clr-neutral-99:  #FEFBFF
+  --clr-neutral-100: #FFFFFF
+
+  --clr-neutral-variant-0:   #000000
+  --clr-neutral-variant-5:   #0f1115
+  --clr-neutral-variant-10:  #16191f
+  --clr-neutral-variant-15:  #1d2129
+  --clr-neutral-variant-20:  #242933
+  --clr-neutral-variant-25:  #2b313d
+  --clr-neutral-variant-30:  #323947
+  --clr-neutral-variant-35:  #3e4759
+  --clr-neutral-variant-40:  #475266
+  --clr-neutral-variant-50:  #D5E0F4
+  --clr-neutral-variant-60:  #D5E0F4
+  --clr-neutral-variant-70:  #D5E0F4
+  --clr-neutral-variant-80:  #DCE4F5
+  --clr-neutral-variant-90:  #E3E9F7
+  --clr-neutral-variant-95:  #EFF0FA
+  --clr-neutral-variant-98:  #F9F9FF
+  --clr-neutral-variant-99:  #FEFBFF
+  --clr-neutral-variant-100: #FFFFFF
+
+  --clr-error-0:   #000000
+  --clr-error-5:   #2D0001
+  --clr-error-10:  #410002
+  --clr-error-15:  #540003
+  --clr-error-20:  #690005
+  --clr-error-25:  #7E0007
+  --clr-error-30:  #93000A
+  --clr-error-35:  #A80710
+  --clr-error-40:  #BA1A1A
+  --clr-error-50:  #DE3730
+  --clr-error-60:  #FF5449
+  --clr-error-70:  #FF897D
+  --clr-error-80:  #FFB4AB
+  --clr-error-90:  #FFDAD6
+  --clr-error-95:  #FFEDEA
+  --clr-error-98:  #FFF8F7
+  --clr-error-99:  #FFFBFF
+  --clr-error-100: #FFFFFF

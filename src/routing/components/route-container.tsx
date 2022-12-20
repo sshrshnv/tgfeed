@@ -1,27 +1,32 @@
 import type { Component } from 'solid-js'
-import { Show, createMemo } from 'solid-js'
+import { Show, createMemo, createSignal, untrack } from 'solid-js'
 
-import { createTransition } from '~/utils'
-
-import type { Route } from '../routing.state'
+import type { Route } from '../routing.types'
 import { useRoutingState } from '../routing.hooks'
 
-type Props = {
+export type RouteContainerProps = {
   route: Route
-  component: Component
+  component: Component<{
+    active: boolean
+  }>
 }
 
-export const RouteContainer: Component<Props> = (props) => {
-  const { routingState } = useRoutingState()
-  const { onStart, onEnd, isPending } = createTransition()
+export const RouteContainer: Component<RouteContainerProps> = (props) => {
+  const routingState = useRoutingState()
 
-  const isMatch = createMemo(() => {
-    return routingState.routeIds.pane.includes(props.route.id)
-  })
+  const isMatch = createMemo(() => (
+    (props.route.pageId === routingState.pageId) ||
+    (props.route.dropdown && routingState.dropdown) ||
+    (!!props.route.popupId && routingState.popupIds.includes(props.route.popupId))
+  ))
+
+  const [isActive, setActive] = createSignal(untrack(isMatch))
 
   return (
-    <Show when={isMatch() || isPending()}>
-      <props.component/>
+    <Show when={isMatch()}>
+      <props.component
+        active={isActive()}
+      />
     </Show>
   )
 }

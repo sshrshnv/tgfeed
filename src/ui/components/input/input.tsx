@@ -1,6 +1,6 @@
 import type { Component } from 'solid-js'
 
-import styles from './input.sss'
+import CSS from './input.sss'
 
 type Props = {
   class?: string
@@ -31,7 +31,7 @@ export const Input: Component<Props> = (props) => {
   return null /*(
     <Block>
       <input
-        class={styles.field}
+        class={CSS.field}
         onInput={handleInput}
       />
     </Block>

@@ -1,13 +1,13 @@
 import type { Component } from 'solid-js'
 import { clsx } from 'clsx'
 
-import * as icons from '~/ui/assets/icons'
+import * as ICONS from '~/ui/assets/icons'
 
-import styles from './icon.sss'
+import CSS from './icon.sss'
 
 export type IconProps = {
   class?: string
-  icon: keyof typeof icons
+  icon: keyof typeof ICONS
   viewBox?: string
 }
 
@@ -16,11 +16,11 @@ export const Icon: Component<IconProps> = (props) => {
     <svg
       class={clsx(
         props.class,
-        styles.base
+        CSS.base
       )}
       viewBox={props.viewBox}
     >
-      <use href={`#${icons[props.icon].id}`}/>
+      <use href={`#${ICONS[props.icon].id}`}/>
     </svg>
   )
 }

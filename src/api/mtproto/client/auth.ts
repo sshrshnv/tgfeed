@@ -166,8 +166,6 @@ export function createClientDHParams(ctx: KeyExchangeContext, rand?: Uint8Array,
  * Ref: https://core.telegram.org/mtproto/auth_key
  */
 export function createAuthKey(client: ClientInterface, dc: number, thread: number, expiresAfter: number, cb: KeyExchangeCallback) {
-  log(dc, `creating ${expiresAfter > 0 ? 'temporary' : 'permanent'} key`)
-
   const ctx: KeyExchangeContext = {
     nonce: new Uint32Array(4),
     newNonce: new Uint32Array(8),
@@ -258,8 +256,6 @@ export function createAuthKey(client: ClientInterface, dc: number, thread: numbe
         if (expiresAfter > 0) client.dc.setTemporaryKey(dc, authKey)
         else client.dc.setPermanentKey(dc, authKey)
 
-        log(dc, `${expiresAfter > 0 ? 'temporary' : 'permanent'} key created (thread: ${thread})`)
-
         if (cb) cb(null, authKey)
       })
     })
@@ -311,8 +307,6 @@ export function bindTempAuthKey(client: ClientInterface, dc: number, permKey: Au
     return
   }
 
-  log(dc, 'binding temporary key')
-
   const msgID = PlainMessage.GenerateID()
   const rand = new Uint32Array(10)
   randomize(rand)
@@ -321,7 +315,6 @@ export function bindTempAuthKey(client: ClientInterface, dc: number, permKey: Au
 
   client.call('auth.bindTempAuthKey', createBindingEncryptedPayload(permKey, tempKey, msgID, rand), { msgID, dc, force: true }, (err, res) => {
     if (!err && res === true) {
-      log(dc, 'temporary key successfuly binded')
       client.dc.setKeyBinding(dc)
       if (cb) cb(true)
     } else {
@@ -356,7 +349,6 @@ export function initConnection(client: ClientInterface, dc: number, cb?: (result
       if (cb) cb(false)
     } else {
       client.dc.setLayer(dc, client.cfg.APILayer)
-      log('session successfuly inited')
       if (cb) cb(true)
     }
   })

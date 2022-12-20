@@ -14,11 +14,12 @@ export type Db = {
     }
   ) => Promise<T | undefined>
 
-  getAll: <T>(
+  getMany: <T>(
+    keys: string[],
     params?: {
       tmp?: boolean
     }
-  ) => Promise<T>
+  ) => Promise<(T | undefined)[]>
 
   clear: (
     params?: {

@@ -1,4 +1,5 @@
 const utils = require('./build.utils')
+const functions = require('./postcss.functions')
 
 module.exports = {
   parser: 'sugarss',
@@ -7,12 +8,7 @@ module.exports = {
       extensions: '.sss'
     }],
     ['postcss-mixins'],
-    ['postcss-functions', {
-      functions: {
-        i: utils.getCSSVarValueByIndex,
-        safe: utils.getCSSSafeAreaEnvValueBySide
-      }
-    }],
+    ['postcss-functions', { functions }],
     ['postcss-nested'],
     ['postcss-simple-vars'],
     ...(utils.isProd() ? ['postcss-variable-compress/splitFiles.js'] : []),

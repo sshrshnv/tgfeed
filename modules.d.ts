@@ -64,10 +64,10 @@ declare module '*.svg' {
 }
 
 declare module '*.sss' {
-  const styles: {
+  const css: {
     [style: string]: string
   }
-  export default styles
+  export default css
 }
 
 declare module '*.webmanifest' {

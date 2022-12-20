@@ -1,6 +1,6 @@
-@import './ui/vars/font.vars.sss'
-@import './ui/vars/layout.vars.sss'
-@import './ui/vars/theme.vars.sss'
+@import './ui/css/vars/font.vars.sss'
+@import './ui/css/vars/layout.vars.sss'
+@import './ui/css/vars/theme.vars.sss'
 
 @font-face
   font-family: "Arial"
@@ -26,24 +26,29 @@ html, body
   -webkit-touch-callout: none
 
 html
-  padding: safe(top)
-           safe(right)
-           0
-           safe(left)
-  background-color: var(--tm-manifest-color)
+  padding: var(--lt-html-padding-top) safe(right) var(--lt-html-padding-bottom) safe(left)
+  background-color: var(--tm-surface-0)
 
-  &::after
+  &::before, &::after
     position: absolute
     z-index: var(--lt-safe-area-zindex)
-    inset: auto 0 0
-    height: safe(bottom)
+    left: 0
+    right: 0
     pointer-events: none
     content: ''
+
+  &::before
+    top: 0
+    height: safe(top)
+
+  &::after
+    bottom: 0
+    height: safe(bottom)
 
 body
   position: relative
   padding: var(--lt-body-padding)
-  font: normal 16px/1 var(--ft-family)
+  font: normal 16px/1 var(--fnt-family)
 
   > svg
     position: absolute

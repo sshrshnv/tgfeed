@@ -15,9 +15,9 @@ export const db: Db = {
     return dbWorker.get(...args)
   },
 
-  getAll: async (...args) => {
+  getMany: async (...args) => {
     const dbWorker = await loadDbWorker()
-    return dbWorker.getAll(...args)
+    return dbWorker.getMany(...args)
   },
 
   clear: async (...args) => {
@@ -26,12 +26,12 @@ export const db: Db = {
   }
 }
 
-export const loadDbWorker = (): Promise<Db> => loadWorkerModule(
+const createDbWorker = () => new Worker(new URL(
+  `${DB_WORKER_PATH}` /* webpackChunkName: 'db.worker' */,
+  import.meta.url
+))
+
+const loadDbWorker = (): Promise<Db> => loadWorkerModule(
   DB_WORKER_PATH,
   createDbWorker
 )
-
-const createDbWorker = () => new Worker(new URL(
-  './db.worker' /* webpackChunkName: 'db.worker' */,
-  import.meta.url
-))

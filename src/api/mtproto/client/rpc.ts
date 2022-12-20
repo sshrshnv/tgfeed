@@ -95,7 +95,6 @@ export default class RPCService {
    */
   middleware = (request: RequestRPC, result: any) => {
     if (result._ === 'auth.authorization') {
-      debug(this.client.cfg, 'middleware', result._)
       this.client.dc.setAuthorization(request.headers.dc!, result.user.id)
       this.client.authorize(2)
     }
@@ -116,8 +115,6 @@ export default class RPCService {
     if (forceChangeSeq) request.message.seqNo = this.client.dc.nextSeqNo(request.headers.dc, true)
 
     this.client.send(request.message, request.headers)
-
-    debug(this.client.cfg, request.headers.dc, '<- re-sent', id)
   }
 
   /**
@@ -156,29 +153,27 @@ export default class RPCService {
     debug(this.client.cfg, headers.dc, '->', result._)
 
     switch (result._) {
-      case 'msg_container': await this.processMessageContainer(result, headers); break
-      case 'new_session_created': this.processSessionCreated(result, headers); break
-      case 'bad_server_salt': this.processBadServerSalt(result, headers); break
-      case 'bad_msg_notification': this.processBadMsgNotification(result, headers); break
-      case 'msgs_ack': break
-      case 'gzip_packed': await this.processGzipped(result, headers); break
-      case 'rpc_result': await this.processRPCResult(result, headers); break
-      case 'msg_detailed_info': break
+    case 'msg_container': await this.processMessageContainer(result, headers); break
+    case 'new_session_created': this.processSessionCreated(result, headers); break
+    case 'bad_server_salt': this.processBadServerSalt(result, headers); break
+    case 'bad_msg_notification': this.processBadMsgNotification(result, headers); break
+    case 'msgs_ack': break
+    case 'gzip_packed': await this.processGzipped(result, headers); break
+    case 'rpc_result': await this.processRPCResult(result, headers); break
+    case 'msg_detailed_info': break
 
-      default:
-        // send acknowlegment
-        if (headers.id) this.ackMsg(headers.transport, headers.dc, headers.thread, headers.id)
+    default:
+      // send acknowlegment
+      if (headers.id) this.ackMsg(headers.transport, headers.dc, headers.thread, headers.id)
 
-        // updates
-        if (result._update) {
-          this.client.updates.process(result)
-          return
-        }
+      // updates
+      if (result._update) {
+        this.client.updates.process(result)
+        return
+      }
 
-        console.warn('unknown', result._, result) // eslint-disable-line no-console
-        debug(this.client.cfg, headers.dc, '-> unknown %s', result._, result)
-
-        break
+      console.warn('unknown', result._, result) // eslint-disable-line no-console
+      break
     }
 
     if (ack) this.sendAcks(headers.transport, headers.dc, headers.thread)
@@ -217,8 +212,6 @@ export default class RPCService {
    * Process: bad_server_salt
    */
   processBadServerSalt(result: BadMsgNotification.bad_server_salt, headers: RPCHeaders) {
-    debug(this.client.cfg, headers.dc, '-> bad_server_salt', `(${headers.transport}, thread: ${headers.thread})`)
-
     if (headers.id) this.ackMsg(headers.transport, headers.dc, headers.thread, headers.id)
 
     this.client.dc.setSalt(headers.dc, result.new_server_salt)
@@ -229,8 +222,6 @@ export default class RPCService {
    * Processes: new_session_created
    */
   processSessionCreated(result: NewSession.new_session_created, headers: RPCHeaders) {
-    debug(this.client.cfg, headers.dc, '-> new_session_created', `(${headers.transport}, thread: ${headers.thread})`)
-
     if (headers.id) this.ackMsg(headers.transport, headers.dc, headers.thread, headers.id)
 
     this.client.dc.setSalt(headers.dc, result.server_salt)
@@ -240,8 +231,6 @@ export default class RPCService {
    * Processes: bad_msg_notification
    */
   processBadMsgNotification(result: BadMsgNotification.bad_msg_notification, headers: RPCHeaders) {
-    debug(this.client.cfg, headers.dc, '-> bad_msg_notification', result.bad_msg_id, result.error_code, 'sec:', result.bad_msg_seqno)
-
     if ([16, 17].includes(result.error_code)) {
       PlainMessage.SyncServerTime(headers.id)
       this.resend(result.bad_msg_id, false)
@@ -271,18 +260,16 @@ export default class RPCService {
     }
 
     switch (result._) {
-      case 'rpc_error':
-        this.emit(reqID, {
-          type: 'rpc',
-          code: result.error_code,
-          message: result.error_message,
-        }, result)
+    case 'rpc_error':
+      this.emit(reqID, {
+        type: 'rpc',
+        code: result.error_code,
+        message: result.error_message,
+      }, result)
+      break
 
-        debug(this.client.cfg, headers.dc, '-> rpc_error', reqID, `(${headers.transport}, thread: ${headers.thread})`, result)
-        break
-
-      default:
-        this.emit(reqID, null, result)
+    default:
+      this.emit(reqID, null, result)
     }
   }
 }

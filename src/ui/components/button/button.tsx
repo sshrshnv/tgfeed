@@ -1,23 +1,33 @@
 import type { ParentComponent } from 'solid-js'
-import { Show } from 'solid-js'
+import { createMemo, Show } from 'solid-js'
 import { clsx } from 'clsx'
 
-import type { IconProps } from '~/ui/components'
-import { Icon } from '~/ui/components'
-import layoutStyles from '~/ui/styles/layout.styles.sss'
+import type { TextProps, IconProps } from '~/ui/components'
+import { Text, Icon } from '~/ui/components'
+import { layoutCSS } from '~/ui/css'
 
-import styles from './button.sss'
+import CSS from './button.sss'
 
 export type ButtonProps = {
-  class?: string
+  variant?: 'nav'
+  text?: string
+  icon?: IconProps['icon']
   type?: 'button' | 'submit'
   disabled?: boolean
   error?: boolean
-  icon?: IconProps['icon']
   onClick?: () => void
 }
 
 export const Button: ParentComponent<ButtonProps> = (props) => {
+  const getTextProps = createMemo<TextProps>(() => {
+    switch (props.variant) {
+    case 'nav':
+      return { variant: 'title', size: 'small' }
+    default:
+      return { variant: 'label', size: 'medium' }
+    }
+  })
+
   const handleClick = () => {
     props.onClick?.()
   }
@@ -25,17 +35,21 @@ export const Button: ParentComponent<ButtonProps> = (props) => {
   return (
     <button
       class={clsx(
-        layoutStyles.flexCenter,
-        props.class,
-        styles.base,
-        props.disabled && styles._disabled,
-        props.error && styles._error
+        layoutCSS.flexCenter,
+        CSS.base,
+        CSS[`_${props.variant}`],
+        props.disabled && CSS._disabled,
+        props.error && CSS._error
       )}
       type={props.type || 'button'}
       disabled={props.disabled}
       onClick={handleClick}
     >
-      {props.children}
+      <Show when={!!props.text}>
+        <Text {...getTextProps()}>
+          {props.text}
+        </Text>
+      </Show>
 
       <Show when={!!props.icon}>
         <Icon icon={props.icon!}/>

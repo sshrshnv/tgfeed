@@ -9,7 +9,7 @@
       "sugarss": ["sss"]
     },
     "cssvar.files": [
-      "./src/ui/vars/*.vars.sss"
+      "./src/ui/css/vars/*.vars.sss"
     ],
     "files.associations": {
       "*.sss": "sass"
