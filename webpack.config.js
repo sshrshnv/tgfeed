@@ -4,7 +4,6 @@ const dotenv = require('dotenv')
 const SvgSymbolSprite = require('svg-symbol-sprite-loader')
 const CopyPlugin = require('copy-webpack-plugin')
 const HtmlPlugin = require('html-webpack-plugin')
-const HtmlSkipAssetsPlugin = require('html-webpack-skip-assets-plugin').HtmlWebpackSkipAssetsPlugin
 const HtmlInlineScriptPlugin = require('html-inline-script-webpack-plugin')
 const HtmlInlineCSSPlugin = require("html-inline-css-webpack-plugin").default
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin')
@@ -13,13 +12,14 @@ const CSSMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const SentryPlugin = require('@sentry/webpack-plugin')
 
-const utils = require('./build.utils')
+const utils = require('./webpack.utils')
 
 const appData = {
+  APP_VERSION: utils.getAppVersion(),
   APP_TITLE: 'TgFeed',
   APP_DESCRIPTION: '',
-  APP_LANG_NAMES: utils.getLangNames(),
-  APP_INITIAL_TEXTS: utils.getInitialTexts()
+  APP_LOCALE_LANGS: utils.getLocaleLangs(),
+  APP_LOCALE_TEXTS: utils.getLocaleTexts()
 }
 
 const isProd = () => process.env.NODE_ENV === 'production'
@@ -68,7 +68,7 @@ const terserOptions = {
 
 const isBundleAnalyzer = () => !!process.env.BUNDLE_ANALYZER
 const isSentryAvailable = () =>
-  isProd() && !(isBundleAnalyzer() || isDevEnvVars()) && !!appEnv.SENTRY_AUTH_TOKEN
+  false //isProd() && !(isBundleAnalyzer() || isDevEnvVars()) && !!appEnv.SENTRY_AUTH_TOKEN
 
 module.exports = [{
   mode: isDev() ? 'development' : 'production',
@@ -77,12 +77,19 @@ module.exports = [{
 
   entry: isDev() ? {
     app: [
-      './src/app.sss',
-      './src/app.tsx'
+      './src/app.inline.sss',
+      './src/app.inline.ts',
+      './src/app.tsx',
     ],
   } : {
-    inline: './src/app.sss',
-    app: ['./src/app.tsx']
+    'inline': [
+      './src/app.inline.css',
+      './src/app.inline.ts',
+    ],
+    'app': {
+      import: './src/app.tsx',
+      dependOn: 'inline',
+    }
   },
 
   output: {
@@ -151,19 +158,18 @@ module.exports = [{
       filename: 'index.html',
       inject: false,
       templateParameters: utils.templateParameters,
-      minify: isProd()
+      minify: false// isProd()
     }),
-
-    isProd() ? new HtmlSkipAssetsPlugin({
-      skipAssets: [asset => /\/*inline.*.js/.test(asset.attributes?.src || '')],
-    }) : () => {},
 
     isProd() ? new HtmlInlineCSSPlugin({
       filter: (filename) => filename.includes('inline') || filename.includes('index')
     }) : () => {},
 
     isProd() ? new HtmlInlineScriptPlugin({
-      scriptMatchPattern: [/runtime~.+[.]js$/]
+      scriptMatchPattern: [
+        /runtime.+[.]js$/,
+        /inline.+[.]js$/
+      ]
     }) : () => {},
 
     new SvgSymbolSprite.Plugin({
@@ -201,8 +207,8 @@ module.exports = [{
     providedExports: true,
     sideEffects: false,
     concatenateModules: false,
-    runtimeChunk: isProd(),
-    minimize: isProd(),
+    runtimeChunk: 'single',
+    minimize: false,// isProd(),
     minimizer: isProd() ? [
       new TerserPlugin({ terserOptions }),
       new CSSMinimizerPlugin({ minimizerOptions: {
@@ -218,7 +224,7 @@ module.exports = [{
   devServer: {
     //https: true,
     host: '0.0.0.0',
-    port: 5000,
+    port: 3000,
     hot: true,
     historyApiFallback: true,
     compress: true,

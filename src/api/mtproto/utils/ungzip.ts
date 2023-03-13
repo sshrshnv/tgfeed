@@ -1,13 +1,6 @@
-import { loadModule } from '~/utils'
-
-const POLYFILL_PATH = 'pako/lib/inflate'
-
 export const ungzip = async (buffer: ArrayBuffer) => {
   if (!(self as any).DecompressionStream) {
-    const { inflate } = await loadModule(
-      POLYFILL_PATH,
-      () => import(/* webpackChunkName: 'polyfill.ungzip' */ `${POLYFILL_PATH}`)
-    )
+    const { inflate } = await import('pako/lib/inflate' /* webpackChunkName: 'polyfill.ungzip' */)
     return inflate(new Uint8Array(buffer)).buffer as ArrayBuffer
   }
 

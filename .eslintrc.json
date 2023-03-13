@@ -4,8 +4,12 @@
     "browser": true,
     "node": true
   },
-  "plugins": ["solid"],
+  "plugins": [
+    "jsx-a11y",
+    "solid"
+  ],
   "extends": [
+    "plugin:jsx-a11y/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:solid/typescript"
   ],
