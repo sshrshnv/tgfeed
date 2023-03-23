@@ -1,5 +1,5 @@
-import { handleGlobalErrors } from '~/utils/errors'
-handleGlobalErrors()
+import { captureGlobalErrors } from '~/shared/errors-tracker'
+captureGlobalErrors()
 
-import { deferInstallation } from '~/management/installation'
-deferInstallation()
+import { captureInstallPrompt } from '~/settings/install'
+captureInstallPrompt()

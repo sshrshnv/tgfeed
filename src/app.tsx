@@ -1,10 +1,11 @@
 import { render } from 'solid-js/web'
 
-import { Page } from '~/page/page'
+import { createWorkers } from '~/shared/workers'
+createWorkers()
 
 const App = () => {
   return (
-    <Page/>
+    <div/>
   )
 }
 

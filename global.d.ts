@@ -7,11 +7,16 @@ export type BeforeInstallPromptEvent = Event & {
   prompt(): Promise<void>
 }
 
-export type ExperimentalNavigator = Navigator & {
-  userAgentData?: {
-    brands?: { brand: string, version: string }[]
-    platform?: string
-    mobile?: boolean
+export type UserAgentData = {
+  brands?: { brand: string, version: string }[]
+  platform?: string
+  mobile?: boolean
+}
+
+export type WorkerInitialEvent = {
+  data: {
+    initial: true
+    port: MessagePort
   }
 }
 
@@ -22,10 +27,6 @@ declare global {
 
   interface Navigator {
     standalone?: boolean
-    userAgentData?: {
-      brands?: { brand: string, version: string }[]
-      platform?: string
-      mobile?: boolean
-    }
+    userAgentData?: UserAgentData
   }
 }

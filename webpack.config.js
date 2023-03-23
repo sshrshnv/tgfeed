@@ -14,6 +14,9 @@ const SentryPlugin = require('@sentry/webpack-plugin')
 
 const utils = require('./webpack.utils')
 
+const isProd = () => process.env.NODE_ENV === 'production'
+const isDev = () => !isProd()
+
 const appData = {
   APP_VERSION: utils.getAppVersion(),
   APP_TITLE: 'TgFeed',
@@ -22,13 +25,12 @@ const appData = {
   APP_LOCALE_TEXTS: utils.getLocaleTexts()
 }
 
-const isProd = () => process.env.NODE_ENV === 'production'
-const isDev = () => !isProd()
-const isDevEnvVars = () => process.env.ENV_VARS === 'dev'
-
-const appEnv = isDevEnvVars() ?
-  dotenv.config({ path: `./.env.${process.env.ENV_VARS}` })?.parsed :
-  process.env
+let appEnv
+try {
+  appEnv = dotenv.config({ path: './.env' }).parsed
+} catch {
+  appEnv = process.env
+}
 
 const defineEnvConfig = [
   ...Object.keys(appData),
