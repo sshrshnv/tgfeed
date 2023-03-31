@@ -1,0 +1,31 @@
+:root
+  --layout-zindex-1: 1
+  --layout-zindex-2: 2
+  --layout-zindex-3: 3
+  --layout-zindex-4: 4
+  --layout-zindex-5: 5
+  --layout-zindex-max: 10
+
+  --layout-offset-top: 8px
+  --layout-offset-side: 12px
+
+  --layout-height-s: 32px
+  --layout-height-xl: 56px
+
+  --layout-padding-s: 8px
+  --layout-padding-m: 12px
+  --layout-padding-l: 16px
+
+  --layout-radius-s: 8px
+  --layout-radius-m: 12px
+  --layout-radius-l: 16px
+
+  @media (--max-width-s)
+    --layout-offset-side: 4px
+
+    --layout-padding-s: 4px
+    --layout-padding-m: 6px
+    --layout-padding-l: 8px
+
+  @media (--display-mode-standalone)
+    --layout-offset-top: 0

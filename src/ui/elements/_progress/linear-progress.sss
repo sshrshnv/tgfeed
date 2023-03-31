@@ -1,0 +1,40 @@
+.base
+  z-index: var(--progress-zindex)
+  top: safe(top, var(--header-height))
+  margin: -1px 0 0 0
+  left: 0
+  right: 0
+
+  &::before, &::after
+    width: 25%
+    height: 1px
+    background-color: var(--brand-color-05)
+    transform: translateX(0) scaleX(0)
+    animation-name: translate
+    animation-duration: var(--progress-duration)
+    animation-iteration-count: infinite
+    animation-fill-mode: forwards
+    animation-timing-function: ease-in
+    will-change: transform, background-color
+
+  &::before
+    left: 50%
+    transform-origin: left
+    --translate-75: -200%
+    --translate-100: -300%
+
+  &::after
+    right: 50%
+    transform-origin: right
+    --translate-75: 200%
+    --translate-100: 300%
+
+@keyframes translate
+  0%
+    transform: translateX(0) scaleX(0)
+    background-color: var(--brand-color-05)
+  75%
+    transform: translateX(var(--translate-75)) scaleX(1)
+    background-color: var(--brand-color)
+  100%
+    transform: translateX(var(--translate-100)) scaleX(1)

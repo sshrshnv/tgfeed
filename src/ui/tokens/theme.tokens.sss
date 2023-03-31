@@ -1,0 +1,163 @@
+@define-mixin theme $i
+  --theme-color-primary:              i($i, var(--color-primary-40),  var(--color-primary-80))
+  --theme-color-on-primary:           i($i, var(--color-primary-100), var(--color-primary-20))
+  --theme-color-primary-container:    i($i, var(--color-primary-90),  var(--color-primary-30))
+  --theme-color-on-primary-container: i($i, var(--color-primary-10),  var(--color-primary-90))
+
+  --theme-color-secondary:              i($i, var(--color-secondary-40),  var(--color-secondary-80))
+  --theme-color-on-secondary:           i($i, var(--color-secondary-100), var(--color-secondary-20))
+  --theme-color-secondary-container:    i($i, var(--color-secondary-90),  var(--color-secondary-30))
+  --theme-color-on-secondary-container: i($i, var(--color-secondary-10),  var(--color-secondary-90))
+
+  --theme-color-tertiary:              i($i, var(--color-tertiary-40),  var(--color-tertiary-80))
+  --theme-color-on-tertiary:           i($i, var(--color-tertiary-100), var(--color-tertiary-20))
+  --theme-color-tertiary-container:    i($i, var(--color-tertiary-90),  var(--color-tertiary-30))
+  --theme-color-on-tertiary-container: i($i, var(--color-tertiary-10),  var(--color-tertiary-90))
+
+  --theme-color-error:              i($i, var(--color-error-40),  var(--color-error-80))
+  --theme-color-on-error:           i($i, var(--color-error-100), var(--color-error-20))
+  --theme-color-error-container:    i($i, var(--color-error-90),  var(--color-error-30))
+  --theme-color-on-error-container: i($i, var(--color-error-10),  var(--color-error-90))
+
+  --theme-color-background:    i($i, var(--color-neutral-variant-99), var(--color-neutral-variant-5))
+  --theme-color-on-background: i($i, var(--color-neutral-variant-10), var(--color-neutral-variant-90))
+
+  --theme-color-surface-0:  i($i, var(--color-neutral-variant-95), var(--color-neutral-variant-10))
+  --theme-color-surface-1:  i($i, var(--color-neutral-variant-90), var(--color-neutral-variant-15))
+  --theme-color-surface-2:  i($i, var(--color-neutral-variant-80), var(--color-neutral-variant-20))
+  --theme-color-surface-3:  i($i, var(--color-neutral-variant-70), var(--color-neutral-variant-25))
+  --theme-color-surface-4:  i($i, var(--color-neutral-variant-60), var(--color-neutral-variant-30))
+  --theme-color-surface-5:  i($i, var(--color-neutral-variant-50), var(--color-neutral-variant-35))
+  --theme-color-on-surface: i($i, var(--color-neutral-variant-10), var(--color-neutral-variant-80))
+
+  --theme-color-outline:         i($i, var(--color-neutral-variant-50), var(--color-neutral-variant-60))
+  --theme-color-outline-variant: i($i, var(--color-neutral-variant-80), var(--color-neutral-variant-30))
+
+  --theme-color-shadow: i($i, var(--color-neutral-0), var(--color-neutral-0))
+  --theme-color-scrim:  i($i, var(--color-neutral-0), var(--color-neutral-0))
+
+  --theme-color-inverse-primary:    i($i, var(--color-primary-80), var(--color-primary-40))
+  --theme-color-inverse-surface:    i($i, var(--color-neutral-20), var(--color-neutral-90))
+  --theme-color-inverse-on-surface: i($i, var(--color-neutral-95), var(--color-neutral-20))
+
+:root
+  color-scheme: light
+  @mixin theme 1
+
+  @media (prefers-color-scheme: dark)
+    color-scheme: dark
+    @mixin theme 2
+
+  --color-primary-0:   #000000
+  --color-primary-5:   #00102D
+  --color-primary-10:  #001A41
+  --color-primary-15:  #002455
+  --color-primary-20:  #002E69
+  --color-primary-25:  #00397E
+  --color-primary-30:  #004494
+  --color-primary-35:  #004FAA
+  --color-primary-40:  #005AC1
+  --color-primary-50:  #2B74E2
+  --color-primary-60:  #4D8EFE
+  --color-primary-70:  #80AAFF
+  --color-primary-80:  #ADC6FF
+  --color-primary-90:  #D8E2FF
+  --color-primary-95:  #EDF0FF
+  --color-primary-98:  #F9F9FF
+  --color-primary-99:  #FEFBFF
+  --color-primary-100: #FFFFFF
+
+  --color-secondary-0:   #000000
+  --color-secondary-5:   #091120
+  --color-secondary-10:  #141B2C
+  --color-secondary-15:  #1E2636
+  --color-secondary-20:  #293041
+  --color-secondary-25:  #343B4D
+  --color-secondary-30:  #3F4759
+  --color-secondary-35:  #4B5265
+  --color-secondary-40:  #575E71
+  --color-secondary-50:  #6F778B
+  --color-secondary-60:  #8991A5
+  --color-secondary-70:  #A3ABC0
+  --color-secondary-80:  #BFC6DC
+  --color-secondary-90:  #DBE2F9
+  --color-secondary-95:  #EDF0FF
+  --color-secondary-98:  #F9F9FF
+  --color-secondary-99:  #FEFBFF
+  --color-secondary-100: #FFFFFF
+
+  --color-tertiary-0:   #000000
+  --color-tertiary-5:   #1D0822
+  --color-tertiary-10:  #29132D
+  --color-tertiary-15:  #341D38
+  --color-tertiary-20:  #402843
+  --color-tertiary-25:  #4C334F
+  --color-tertiary-30:  #583E5B
+  --color-tertiary-35:  #644967
+  --color-tertiary-40:  #715573
+  --color-tertiary-50:  #8B6D8D
+  --color-tertiary-60:  #A687A8
+  --color-tertiary-70:  #C2A1C3
+  --color-tertiary-80:  #DEBCDF
+  --color-tertiary-90:  #FBD7FC
+  --color-tertiary-95:  #FFEBFC
+  --color-tertiary-98:  #FFF7FA
+  --color-tertiary-99:  #FFFBFF
+  --color-tertiary-100: #FFFFFF
+
+  --color-neutral-0:   #000000
+  --color-neutral-5:   #101114
+  --color-neutral-10:  #1B1B1F
+  --color-neutral-15:  #252629
+  --color-neutral-20:  #303033
+  --color-neutral-25:  #3B3B3F
+  --color-neutral-30:  #46464A
+  --color-neutral-35:  #525256
+  --color-neutral-40:  #5E5E62
+  --color-neutral-50:  #77777A
+  --color-neutral-60:  #919094
+  --color-neutral-70:  #ABABAF
+  --color-neutral-80:  #C7C6CA
+  --color-neutral-90:  #E3E2E6
+  --color-neutral-95:  #F2F0F4
+  --color-neutral-98:  #FAF9FD
+  --color-neutral-99:  #FEFBFF
+  --color-neutral-100: #FFFFFF
+
+  --color-neutral-variant-0:   #000000
+  --color-neutral-variant-5:   #0f1115
+  --color-neutral-variant-10:  #16191f
+  --color-neutral-variant-15:  #1d2129
+  --color-neutral-variant-20:  #242933
+  --color-neutral-variant-25:  #2b313d
+  --color-neutral-variant-30:  #323947
+  --color-neutral-variant-35:  #3e4759
+  --color-neutral-variant-40:  #475266
+  --color-neutral-variant-50:  #D5E0F4
+  --color-neutral-variant-60:  #D5E0F4
+  --color-neutral-variant-70:  #D5E0F4
+  --color-neutral-variant-80:  #DCE4F5
+  --color-neutral-variant-90:  #E3E9F7
+  --color-neutral-variant-95:  #EFF0FA
+  --color-neutral-variant-98:  #F9F9FF
+  --color-neutral-variant-99:  #FEFBFF
+  --color-neutral-variant-100: #FFFFFF
+
+  --color-error-0:   #000000
+  --color-error-5:   #2D0001
+  --color-error-10:  #410002
+  --color-error-15:  #540003
+  --color-error-20:  #690005
+  --color-error-25:  #7E0007
+  --color-error-30:  #93000A
+  --color-error-35:  #A80710
+  --color-error-40:  #BA1A1A
+  --color-error-50:  #DE3730
+  --color-error-60:  #FF5449
+  --color-error-70:  #FF897D
+  --color-error-80:  #FFB4AB
+  --color-error-90:  #FFDAD6
+  --color-error-95:  #FFEDEA
+  --color-error-98:  #FFF8F7
+  --color-error-99:  #FFFBFF
+  --color-error-100: #FFFFFF
