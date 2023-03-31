@@ -14,9 +14,6 @@ const SentryPlugin = require('@sentry/webpack-plugin')
 
 const utils = require('./webpack.utils')
 
-const isProd = () => process.env.NODE_ENV === 'production'
-const isDev = () => !isProd()
-
 const appData = {
   APP_VERSION: utils.getAppVersion(),
   APP_TITLE: 'TgFeed',
@@ -32,50 +29,14 @@ try {
   appEnv = process.env
 }
 
-const defineEnvConfig = [
-  ...Object.keys(appData),
-  ...Object.keys(dotenv.config({ path: './.env.example' }).parsed)
-].reduce((config, key) => {
-  config[`process.env.${key}`] = JSON.stringify(
-    appData[key] ?? appEnv[key] ?? process.env[key]
-  )
-  return config
-}, {})
-
-const resolveOptions = {
-  extensions: [
-    '.mjs', '.js', '.jsx', '.tsx', '.ts', '.js', '.json',
-    '.wasm', '.css', '.sss', '.html', '.svg', '.jpg', '.png'
-  ],
-  alias: {
-    '~': path.resolve('./src')
-  }
-}
-
-const mainFields = [
-  'esm2017', 'module', 'jsnext:main', 'browser', 'main'
-]
-
-const terserOptions = {
-  compress: {
-    ecma: 2020
-  },
-  output: {
-    ecma: 2020,
-    beautify: false,
-    comments: false,
-    ascii_only: true
-  }
-}
-
+const isProd = () => process.env.NODE_ENV === 'production'
+const isDev = () => !isProd()
 const isBundleAnalyzer = () => !!process.env.BUNDLE_ANALYZER
 const isSentryAvailable = () =>
   false //isProd() && !(isBundleAnalyzer() || isDevEnvVars()) && !!appEnv.SENTRY_AUTH_TOKEN
 
 module.exports = [{
   mode: isDev() ? 'development' : 'production',
-
-  target: 'web',
 
   entry: isDev() ? {
     app: [
@@ -85,7 +46,7 @@ module.exports = [{
     ],
   } : {
     'inline': [
-      './src/app.inline.css',
+      './src/app.inline.sss',
       './src/app.inline.ts',
     ],
     'app': {
@@ -103,14 +64,24 @@ module.exports = [{
     hashDigestLength: 8
   },
 
-  resolve: resolveOptions,
+  resolve: {
+    extensions: [
+      '.mjs', '.js', '.jsx', '.tsx', '.ts', '.js', '.json',
+      '.wasm', '.css', '.sss', '.html', '.svg', '.jpg', '.png'
+    ],
+    alias: {
+      '~': path.resolve('./src')
+    }
+  },
 
   module: {
     rules: [
       {
         test: /\.m?[jt]sx?$/,
         exclude: /node_modules\/(?!(comlink|idb-keyval|pako)\/).*/,
-        resolve: { mainFields },
+        resolve: {
+          mainFields: ['esm2017', 'module', 'jsnext:main', 'browser', 'main']
+        },
         use: [{
           loader: 'babel-loader'
         }]
@@ -148,7 +119,15 @@ module.exports = [{
   },
 
   plugins: [
-    new webpack.DefinePlugin(defineEnvConfig),
+    new webpack.DefinePlugin([
+      ...Object.keys(appData),
+      ...Object.keys(dotenv.config({ path: './.env.example' }).parsed)
+    ].reduce((config, key) => {
+      config[`process.env.${key}`] = JSON.stringify(
+        appData[key] ?? appEnv[key] ?? process.env[key]
+      )
+      return config
+    }, {})),
 
     isProd() ? new MiniCSSExtractPlugin({
       filename: '[name].[contenthash].css',
@@ -204,15 +183,28 @@ module.exports = [{
   optimization: {
     nodeEnv: isDev() ? 'development' : 'production',
     splitChunks: {
-      chunks: 'all'
+      chunks: 'all',
+      minSize: 1024
     },
     providedExports: true,
-    sideEffects: false,
-    concatenateModules: false,
+    usedExports: true,
+    removeAvailableModules: true,
+    removeEmptyChunks: true,
+    //concatenateModules: false,
     runtimeChunk: 'single',
-    minimize: false,// isProd(),
+    minimize: isProd(),
     minimizer: isProd() ? [
-      new TerserPlugin({ terserOptions }),
+      new TerserPlugin({ terserOptions: {
+        compress: {
+          ecma: 2020
+        },
+        output: {
+          ecma: 2020,
+          beautify: false,
+          comments: false,
+          ascii_only: true
+        }
+      } }),
       new CSSMinimizerPlugin({ minimizerOptions: {
         preset: ['default', {
           colormin: false

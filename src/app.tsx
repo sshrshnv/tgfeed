@@ -1,15 +1,5 @@
-import { render } from 'solid-js/web'
+import { initWorkers } from '~/workers'
+import { renderClient } from '~/client'
 
-import { createWorkers } from '~/shared/workers'
-createWorkers()
-
-const App = () => {
-  return (
-    <div/>
-  )
-}
-
-render(
-  App,
-  self.document.body
-)
+initWorkers()
+renderClient()
