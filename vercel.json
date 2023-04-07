@@ -1,5 +1,0 @@
-{
-  "rewrites": [
-    { "source": "/proxy/errors/:hostId/:projectId", "destination": "https://:hostId.ingest.sentry.io/api/:projectId/envelope" }
-  ]
-}

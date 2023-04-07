@@ -1,6 +1,6 @@
 import { createEffect } from 'solid-js'
 
-import type { Route } from '../routing.state'
+import type { Route } from '../routing.types'
 import { routingState, setRoutingState } from '../routing.state'
 
 let ignoreNativePopEvent = false

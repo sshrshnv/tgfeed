@@ -1,12 +1,19 @@
 .base
-  position: absolute
-  margin: 0 auto
-  height: var(--size-height-48)
-  background-color: var(--theme-color-surface-1)
-  border-radius: var(--size-radius-20)
+  @media (--max-width-m)
+    bottom: max(safe(bottom), var(--layout-offset-bottom))
+    left: 0
+    right: 0
+    margin: 0 auto
+    width: calc(100% - 2 * var(--layout-offset-side))
+    height: var(--layout-height-lp)
+    border-radius: var(--layout-radius-lp)
 
-  @media (--layout-desktop)
-    position: static
-    flex-grow: 2
-    max-width: 648px
-    min-width: 368px
+  @media (--min-width-l)
+    left: max(safe(left), var(--layout-offset-side))
+    top: 0
+    bottom: 0
+    margin: auto 0
+    width: var(--layout-height-lp)
+    border-radius: var(--layout-radius-lp)
+
+    height: 216px

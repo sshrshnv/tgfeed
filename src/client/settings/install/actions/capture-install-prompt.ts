@@ -1,14 +1,17 @@
 import type { BeforeInstallPromptEvent } from 'global'
 
-let resolve: (ev: BeforeInstallPromptEvent) => void
+import { createPromise } from '~/utils/create-promise'
 
-export const capturedInstallPromptEvent = new Promise<BeforeInstallPromptEvent>(_resolve =>
-  resolve = _resolve
-)
+const [
+  capturedInstallPromptPromise,
+  resolveCapturedInstallPromptPromise
+] = createPromise<BeforeInstallPromptEvent>()
 
 export const captureInstallPrompt = () => {
   self.addEventListener('beforeinstallprompt', (ev) => {
     ev.preventDefault()
-    resolve(ev)
+    resolveCapturedInstallPromptPromise(ev)
   })
 }
+
+export const getCapturedInstallPrompt = () => capturedInstallPromptPromise

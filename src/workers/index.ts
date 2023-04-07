@@ -1,1 +1,1 @@
-export * from './workers'
+export * from './init-workers'

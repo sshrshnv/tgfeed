@@ -1,5 +1,5 @@
-import { initApiWorker } from './api'
-import { initDbWorker } from './db'
+import { initApiWorker } from './api/actions'
+import { initDbWorker } from './db/actions'
 
 export const initWorkers = () => {
   const mainDbMessageChannel = new MessageChannel()

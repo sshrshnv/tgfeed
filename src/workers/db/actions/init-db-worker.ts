@@ -1,16 +1,9 @@
 import { comlink, createPromise, postMessage } from '~/utils'
 
-import { DBWorker, DBWorkerMessage } from './db.types'
+import { DBWorker, DBWorkerMessage } from '../db.types'
 
 let dbWorkerInstance: Worker
 let [dbWorkerProxyPromise, resolveDbWorkerProxyPromise] = createPromise<DBWorker>()
-
-export const dbWorker: DBWorker = {
-  call: async cb => {
-    const dbWorkerProxy = await dbWorkerProxyPromise
-    return dbWorkerProxy.call(comlink.proxy(cb))
-  }
-}
 
 export function initDbWorker(
   mainDbMessageChannel: MessageChannel,
@@ -25,7 +18,7 @@ export function initDbWorker(
   }
 
   dbWorkerInstance = new Worker(new URL(
-    './worker/db.worker' /* webpackChunkName: 'db.worker' */,
+    '../worker/db.worker' /* webpackChunkName: 'db.worker' */,
     import.meta.url
   ))
 
@@ -39,3 +32,5 @@ export function initDbWorker(
 
   resolveDbWorkerProxyPromise(comlink.wrap(mainDbMessageChannel.port2) as DBWorker)
 }
+
+export const getDbWorkerProxy = () => dbWorkerProxyPromise

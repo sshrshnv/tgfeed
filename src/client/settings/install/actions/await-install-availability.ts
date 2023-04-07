@@ -1,7 +1,7 @@
 import { isIOSSafari } from '~/utils'
 
 import { setInstallState } from '../install.state'
-import { capturedInstallPromptEvent } from './capture-install-prompt'
+import { getCapturedInstallPrompt } from './capture-install-prompt'
 
 export const awaitInstallAvailability = async () => {
   if (isIOSSafari()) {
@@ -9,6 +9,6 @@ export const awaitInstallAvailability = async () => {
     return
   }
 
-  await capturedInstallPromptEvent
+  await getCapturedInstallPrompt()
   setInstallState('available', true)
 }

@@ -1,3 +1,2 @@
-export * from './api'
-export * from './api'
+export * from './api-worker'
 export * from './api.types'

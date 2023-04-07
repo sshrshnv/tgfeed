@@ -1,4 +1,4 @@
-const utils = require('./build.utils')
+const utils = require('./webpack.utils')
 
 module.exports = {
   presets: [

@@ -12,13 +12,17 @@
   font-weight: 500
   src: local("Arial Bold")
 
-html, body
+html, body, main, header, nav, div, ul, li, button, input
   margin: 0
+  padding: 0
+  box-sizing: border-box
+
+html, body
   width: 100%
   height: 100%
-  padding: 0
-  user-select: none
+  height: -webkit-fill-available
   overflow: hidden
+  user-select: none
   text-rendering: optimizeLegibility
   text-size-adjust: none
   -moz-osx-font-smoothing: grayscale
@@ -26,8 +30,7 @@ html, body
   -webkit-tap-highlight-color: transparent
   -webkit-touch-callout: none
 
-html
-  padding: safe(top) safe(right) 0 safe(left)
+body
   background-color: var(--theme-color-background)
 
   &::before, &::after
@@ -45,6 +48,3 @@ html
   &::after
     bottom: 0
     height: safe(bottom)
-
-html, body, main, header, nav, div, button, input
-  box-sizing: border-box

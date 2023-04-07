@@ -1,9 +1,6 @@
 import { createStore } from 'solid-js/store'
 
-export type Route = {
-  type: 'page' | 'popup' | 'dropdown'
-  params: Record<string, string | number | boolean | null | undefined>
-}
+import type { Route } from './routing.types'
 
 export const [routingState, setRoutingState] = createStore({
   history: [] as Route[],

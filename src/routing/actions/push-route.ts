@@ -1,4 +1,4 @@
-import type { Route } from '../routing.state'
+import type { Route } from '../routing.types'
 import { setRoutingState } from '../routing.state'
 
 export const pushRoute = (route: Route) => setRoutingState(state => {

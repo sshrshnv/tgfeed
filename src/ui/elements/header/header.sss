@@ -1,6 +1,28 @@
 .base
   position: absolute
-  z-index: var(--layout-zindex-1)
-  top: max(safe(top), var(--layout-padding-s))
-  display: flex
-  flex-shrink: 0
+  z-index: var(--layout-zindex-5)
+  top: calc(safe(top) + 1px)
+  left: 0
+  right: 0
+  margin: 0 auto
+  height: var(--layout-height-l)
+  //border-radius: var(--layout-radius-l)
+  border-top: 1px solid var(--theme-color-surface-1)
+  background-color: var(--theme-color-surface-0)
+  box-shadow: var(--layout-shadow-1)
+
+  &::before
+    top: -2px
+    left: 0
+    right: 0
+    height: 1px
+    background-color: var(--theme-color-background)
+
+  @media (--max-width-m)
+    //width: calc(100% - var(--layout-offset-side) * 2)
+
+    &::before
+      //background-color: var(--theme-color-surface-0)
+
+  @media (--min-width-l)
+    //width: min(100%, var(--layout-width-xl))

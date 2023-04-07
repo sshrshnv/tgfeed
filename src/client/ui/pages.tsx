@@ -1,5 +1,11 @@
+import { Header, Nav } from '~/ui/elements'
+
 export const Pages = () => {
   return (
-    <div/>
+    <>
+      <Header>
+      </Header>
+      <Nav/>
+    </>
   )
 }

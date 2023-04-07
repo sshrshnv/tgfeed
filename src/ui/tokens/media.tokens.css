@@ -1,6 +1,6 @@
 @custom-media --max-width-s (max-width: 359px);
 @custom-media --min-width-m (min-width: 360px);
-@custom-media --max-width-m (max-width: 640px);
-@custom-media --min-width-l (min-width: 641px);
+@custom-media --max-width-m (max-width: 639px);
+@custom-media --min-width-l (min-width: 640px);
 
 @custom-media --display-mode-standalone (display-mode: standalone);

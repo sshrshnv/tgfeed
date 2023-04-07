@@ -1,7 +1,8 @@
 import type { ParentComponent } from 'solid-js'
 import { clsx } from 'clsx'
 
-import styles from './header.sss'
+import layoutStyles from '../layout.sss'
+import headerStyles from './header.sss'
 
 type Props = {
 
@@ -10,7 +11,8 @@ type Props = {
 export const Header: ParentComponent<Props> = (props) => {
   return (
     <header class={clsx(
-      styles.base
+      layoutStyles.before,
+      headerStyles.base
     )}>
       {props.children}
     </header>
