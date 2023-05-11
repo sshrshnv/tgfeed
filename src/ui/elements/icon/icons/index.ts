@@ -1,7 +1,0 @@
-export { default as back } from './back.svg'
-export { default as channel } from './channel.svg'
-export { default as cross } from './cross.svg'
-export { default as device } from './device.svg'
-export { default as logo } from './logo.svg'
-export { default as settings } from './settings.svg'
-export { default as user } from './user.svg'

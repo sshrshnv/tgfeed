@@ -56,7 +56,7 @@ declare module '*.aac' {
   export default url
 }
 
-declare module '*.svg' {
+declare module '*.svg?sprite' {
   const svg: {
     id: string
   }

@@ -15,14 +15,14 @@ module.exports = {
     ['postcss-simple-vars'],
     ['@csstools/postcss-global-data', {
       files: [
-        './src/ui/tokens/media.tokens.css'
+        './src/shared/tokens/media.tokens.css'
       ]
     }],
     ['postcss-custom-media'],
     ...(utils.isProd() ? ['postcss-variable-compress/splitFiles.js'] : []),
     ['postcss-dark-theme-class', {
-      darkSelector: '[data-theme="dark"]',
-      lightSelector: '[data-theme="light"]'
+      darkSelector: '[data-theme-mode="dark"]',
+      lightSelector: '[data-theme-mode="light"]'
     }],
     ['postcss-preset-env']
   ],

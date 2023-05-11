@@ -1,0 +1,6 @@
+export * from './create-promise'
+export * from './detect-platform'
+export * from './comlink'
+export * from './local-storage'
+export * from './post-message'
+export * from './set-delay'

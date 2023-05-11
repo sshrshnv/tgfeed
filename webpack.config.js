@@ -12,15 +12,8 @@ const CSSMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const SentryPlugin = require('@sentry/webpack-plugin')
 
-const utils = require('./webpack.utils')
-
-const appData = {
-  APP_VERSION: utils.getAppVersion(),
-  APP_TITLE: 'TgFeed',
-  APP_DESCRIPTION: '',
-  APP_LOCALE_LANGS: utils.getLocaleLangs(),
-  APP_LOCALE_TEXTS: utils.getLocaleTexts()
-}
+const appConfig = require('./app.config')
+const { isDev, isProd, templateParameters } = require('./webpack.utils')
 
 let appEnv
 try {
@@ -29,8 +22,6 @@ try {
   appEnv = process.env
 }
 
-const isProd = () => process.env.NODE_ENV === 'production'
-const isDev = () => !isProd()
 const isBundleAnalyzer = () => !!process.env.BUNDLE_ANALYZER
 const isSentryAvailable = () =>
   false //isProd() && !(isBundleAnalyzer() || isDevEnvVars()) && !!appEnv.SENTRY_AUTH_TOKEN
@@ -42,7 +33,7 @@ module.exports = [{
     app: [
       './src/app.inline.sss',
       './src/app.inline.ts',
-      './src/app.tsx',
+      './src/app.ts',
     ],
   } : {
     'inline': [
@@ -50,7 +41,7 @@ module.exports = [{
       './src/app.inline.ts',
     ],
     'app': {
-      import: './src/app.tsx',
+      import: './src/app.ts',
       dependOn: 'inline',
     }
   },
@@ -103,7 +94,12 @@ module.exports = [{
         }]
       }, {
         test: /\.svg$/,
-        use: 'svg-symbol-sprite-loader'
+        oneOf: [{
+          resourceQuery: /sprite/,
+          use: 'svg-symbol-sprite-loader'
+        }, {
+          type: 'asset/resource',
+        }]
       }, {
         test: /\.(avif|webp|png)$/,
         type: 'asset/resource'
@@ -120,11 +116,11 @@ module.exports = [{
 
   plugins: [
     new webpack.DefinePlugin([
-      ...Object.keys(appData),
+      ...Object.keys(appConfig),
       ...Object.keys(dotenv.config({ path: './.env.example' }).parsed)
     ].reduce((config, key) => {
       config[`process.env.${key}`] = JSON.stringify(
-        appData[key] ?? appEnv[key] ?? process.env[key]
+        appConfig[key] ?? appEnv[key] ?? process.env[key]
       )
       return config
     }, {})),
@@ -138,8 +134,8 @@ module.exports = [{
       template: './src/app.html',
       filename: 'index.html',
       inject: false,
-      templateParameters: utils.templateParameters,
-      minify: false// isProd()
+      templateParameters,
+      minify: isProd()
     }),
 
     isProd() ? new HtmlInlineCSSPlugin({
@@ -159,7 +155,7 @@ module.exports = [{
 
     /*isProd() ? new CopyPlugin({
       patterns: [{
-        from: './src/ui/images/manifest-splash-icon-512.png',
+        from: './src/shared/images/manifest-splash-icon-512.png',
         to: './manifest-splash-icon-512.[contenthash].png'
       }]
     }) : () => {},*/
@@ -168,10 +164,7 @@ module.exports = [{
       authToken: appEnv.SENTRY_AUTH_TOKEN,
       org: 'alexander-shershnev',
       project: 'tgfeed',
-      include: './build',
-      deploy: {
-        env: process.env.ENV_VARS
-      }
+      include: './build'
     }) : () => {},
 
     isBundleAnalyzer() ? new BundleAnalyzerPlugin({
@@ -231,7 +224,7 @@ module.exports = [{
   },
 
   stats: {
-    children: isBundleAnalyzer(),
+    children: true,// isBundleAnalyzer(),
     modules: isBundleAnalyzer(),
     errorDetails: true
   }

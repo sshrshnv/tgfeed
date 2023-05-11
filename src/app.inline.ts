@@ -1,8 +1,14 @@
-import { captureGlobalErrors } from '~/tracking/errors/actions/capture-global-errors'
+import { captureGlobalErrors } from '~/shared/errors/actions/capture-global-errors'
 //captureGlobalErrors()
 
-import { presetTheme } from '~/client/settings/theme/actions/preset-theme'
+import { presetTheme } from '~/core/theme/actions/preset-theme'
 presetTheme()
 
-import { captureInstallPrompt } from '~/client/settings/install/actions/capture-install-prompt'
+import { presetLocale } from '~/core/locale/actions/preset-locale'
+presetLocale()
+
+import { captureInstallPrompt } from '~/core/install/actions/capture-install-prompt'
 captureInstallPrompt()
+
+import { preloadIconSprite } from '~/shared/utils/preload-icon-sprite'
+preloadIconSprite()

@@ -1,6 +1,6 @@
-@import './ui/tokens/font.tokens.sss'
-@import './ui/tokens/layout.tokens.sss'
-@import './ui/tokens/theme.tokens.sss'
+@import './shared/tokens/font.tokens.sss'
+@import './shared/tokens/layout.tokens.sss'
+@import './shared/tokens/theme.tokens.sss'
 
 @font-face
   font-family: "Arial"
@@ -12,10 +12,11 @@
   font-weight: 500
   src: local("Arial Bold")
 
-html, body, main, header, nav, div, ul, li, button, input
+html, body, main, header, nav, div, ul, li, button, label, input
   margin: 0
   padding: 0
   box-sizing: border-box
+  appearance: none
 
 html, body
   width: 100%
@@ -30,9 +31,7 @@ html, body
   -webkit-tap-highlight-color: transparent
   -webkit-touch-callout: none
 
-body
-  background-color: var(--theme-color-background)
-
+html
   &::before, &::after
     position: absolute
     z-index: var(--layout-zindex-max)
@@ -48,3 +47,12 @@ body
   &::after
     bottom: 0
     height: safe(bottom)
+
+body
+  background-color: var(--theme-color-background)
+  color: var(--theme-color-on-surface)
+
+  > svg
+    position: absolute
+    width: 0
+    height: 0

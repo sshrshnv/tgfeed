@@ -1,74 +1,47 @@
 const pkg = require('./package.json')
+const appConfig = require('./app.config')
 
-const utils = {
-  getAppVersion: () => {
-    return pkg.version
-  },
+const isDev = () => process.env.NODE_ENV === 'development'
+const isProd = () => process.env.NODE_ENV === 'production'
 
-  getPkgVersion: (name, n = 2) => {
-    return pkg.dependencies[name].split('.').slice(0, n).join('.')
-  },
+const getPkgVersion = (name, n = 2) =>
+  pkg.dependencies[name].split('.').slice(0, n).join('.')
 
-  getLocaleLangs: () => {
-    const glob = require('glob')
-    const path = require('path')
-    return {}
-    //const localeLangsPath = path.resolve('./src/locales/**/lang.json')
+const templateParameters = (compilation, assets, assetTags, options) => {
+  let APP_ICON_SPRITE_HASH = ''
 
-    /*return glob.sync(localeLangsPath).reduce((obj, file) => {
-      obj[file.split('/').slice(-2)[0]] = require(file)
-      return obj
-    }, {})*/
-  },
+  Object.keys(compilation.assets).forEach(key => {
+    if (!key.startsWith('icons.')) return
+    const attributes = ' xmlns:xlink="http://www.w3.org/1999/xlink" style="position: absolute; width: 0; height: 0"'
+    compilation.assets[key]._value = compilation.assets[key]._value.replace(attributes, '')
+  })
 
-  getLocaleTexts: () => {
-    const glob = require('glob')
-    const path = require('path')
-    return {}
-    //const localeTextsPath = path.resolve('./src/locales/en/texts/*.json')
+  assetTags = assetTags.headTags.filter(tag => {
+    const iconSpriteFileMatch = tag.innerHTML?.match(isDev() ? /icons\.svg/ : /icons\..*\.svg/)
+    if (!iconSpriteFileMatch) return true
+    APP_ICON_SPRITE_HASH = isDev() ? '' : iconSpriteFileMatch[0].split('.')[1]
+    return false
+  })
 
-    /*const texts = glob.sync(localeTextsPath).reduce((obj, file) => {
-      return { ...obj, ...require(file) }
-    }, {})
-
-    const deepMapTexts = (filledTexts, cleanedTexts = {}) => {
-      Object.keys(filledTexts).forEach(key => {
-        const texts = filledTexts[key]
-        cleanedTexts[key] = typeof texts === 'string' ? '' : deepMapTexts(texts)
-      })
-      return cleanedTexts
+  return {
+    compilation,
+    webpackConfig: compilation.options,
+    htmlWebpackPlugin: {
+      tags: assetTags,
+      files: assets,
+      options
+    },
+    params: {
+      ...appConfig,
+      APP_ICON_SPRITE_HASH
     }
-
-    return deepMapTexts(texts)*/
-  },
-
-  templateParameters: (compilation, assets, assetTags, options) => {
-    const params = {}
-    Object.keys(compilation.assets).forEach(key => {
-      if (!key.startsWith('icons.')) return
-      const attributes = ' xmlns:xlink="http://www.w3.org/1999/xlink" style="position: absolute; width: 0; height: 0"'
-      compilation.assets[key]._value = compilation.assets[key]._value.replace(attributes, '')
-    })
-    assetTags = assetTags.headTags.filter(tag => {
-      const iconsFileMatch = tag.innerHTML?.match(utils.isDev() ? /icons\.svg/ : /icons\..*\.svg/)
-      if (!iconsFileMatch) return true
-      params.iconsFileHash = utils.isDev() ? '' : iconsFileMatch[0].split('.')[1]
-      return false
-    })
-    return {
-      compilation,
-      webpackConfig: compilation.options,
-      htmlWebpackPlugin: {
-        tags: assetTags,
-        files: assets,
-        options
-      },
-      params
-    }
-  },
-
-  isDev: () => process.env.NODE_ENV === 'development',
-  isProd: () => process.env.NODE_ENV === 'production'
+  }
 }
 
-module.exports = utils
+module.exports = {
+  isDev,
+  isProd,
+
+  getPkgVersion,
+  templateParameters
+}

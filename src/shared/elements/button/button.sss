@@ -1,0 +1,28 @@
+.base
+  margin: 0
+  border: none
+  box-shadow: none
+  background-color: transparent
+  font-family: inherit
+  line-height: 1
+  cursor: pointer
+  user-select: none
+  transition: opacity 200ms ease-in-out
+
+  > svg
+    width: var(--layout-svg-size-xl)
+    height: var(--layout-svg-size-xl)
+    fill: var(--theme-color-on-surface)
+
+  &:focus
+    outline: none
+
+  &:active
+    opacity: 0.5
+
+  ._disabled
+    opacity: 0.5
+    cursor: not-allowed
+
+  ._error
+    //

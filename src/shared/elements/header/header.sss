@@ -1,0 +1,19 @@
+.base
+  display: flex
+  align-items: center
+  flex-shrink: 0
+  width: 100%
+  height: var(--layout-size-xl)
+  background-color: var(--theme-color-surface-0)
+  box-shadow: var(--layout-shadow-1)
+
+.button
+  height: 100%
+  width: var(--layout-size-xl)
+
+  > svg
+    width: var(--layout-size-s)
+    height: var(--layout-size-s)
+
+  &:last-child:not(:first-child)
+    margin-left: auto
