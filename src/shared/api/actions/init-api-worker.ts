@@ -3,7 +3,7 @@ import { comlink, createPromise, postMessage } from '~/shared/utils'
 import type { APIWorker } from '../api.types'
 
 let apiWorkerInstance: Worker
-let [apiWorkerProxyPromise, resolveApiWorkerProxyPromise] = createPromise<APIWorker>()
+let [apiWorkerPromise, resolveApiWorkerPromise] = createPromise<APIWorker>()
 
 export const initApiWorker = (
   mainApiMessageChannel: MessageChannel,
@@ -13,12 +13,12 @@ export const initApiWorker = (
     try {
       apiWorkerInstance.terminate()
     } finally {
-      [apiWorkerProxyPromise, resolveApiWorkerProxyPromise] = createPromise<APIWorker>()
+      [apiWorkerPromise, resolveApiWorkerPromise] = createPromise<APIWorker>()
     }
   }
 
   apiWorkerInstance = new Worker(new URL(
-    '../worker/api.worker' /* webpackChunkName: 'api.worker' */,
+    '../api.worker' /* webpackChunkName: 'api.worker' */,
     import.meta.url
   ))
 
@@ -30,7 +30,7 @@ export const initApiWorker = (
     apiDbMessageChannel.port2
   ])
 
-  resolveApiWorkerProxyPromise(comlink.wrap(mainApiMessageChannel.port2) as APIWorker)
+  resolveApiWorkerPromise(comlink.wrap(mainApiMessageChannel.port2) as APIWorker)
 }
 
-export const getApiWorkerProxy = () => apiWorkerProxyPromise
+export const getApiWorker = () => apiWorkerPromise

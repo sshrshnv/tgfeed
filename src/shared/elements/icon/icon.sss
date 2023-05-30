@@ -1,3 +1,13 @@
 .base
-  flex-shrink: 0
+  width: var(--local-icon-size)
+  height: var(--local-icon-size)
   fill: currentColor
+
+  &._small
+    --local-icon-size: var(--layout-size-16)
+
+  &._medium
+    --local-icon-size: var(--layout-size-20)
+
+  &._large
+    --local-icon-size: var(--layout-size-24)

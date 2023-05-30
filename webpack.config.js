@@ -5,15 +5,19 @@ const SvgSymbolSprite = require('svg-symbol-sprite-loader')
 const CopyPlugin = require('copy-webpack-plugin')
 const HtmlPlugin = require('html-webpack-plugin')
 const HtmlInlineScriptPlugin = require('html-inline-script-webpack-plugin')
-const HtmlInlineCSSPlugin = require("html-inline-css-webpack-plugin").default
-const MiniCSSExtractPlugin = require('mini-css-extract-plugin')
+const HtmlInlineClPlugin = require("html-inline-css-webpack-plugin").default
+const MiniClExtractPlugin = require('mini-css-extract-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
-const CSSMinimizerPlugin = require('css-minimizer-webpack-plugin')
+const ClMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-const SentryPlugin = require('@sentry/webpack-plugin')
 
 const appConfig = require('./app.config')
-const { isDev, isProd, templateParameters } = require('./webpack.utils')
+const {
+  isDev,
+  isProd,
+  templateParameters
+} = require('./webpack.utils')
+const isBundleAnalyzer = () => !!process.env.BUNDLE_ANALYZER
 
 let appEnv
 try {
@@ -21,10 +25,6 @@ try {
 } catch {
   appEnv = process.env
 }
-
-const isBundleAnalyzer = () => !!process.env.BUNDLE_ANALYZER
-const isSentryAvailable = () =>
-  false //isProd() && !(isBundleAnalyzer() || isDevEnvVars()) && !!appEnv.SENTRY_AUTH_TOKEN
 
 module.exports = [{
   mode: isDev() ? 'development' : 'production',
@@ -79,7 +79,7 @@ module.exports = [{
       }, {
         test: /\.sss$/i,
         use: [{
-          loader: isDev() ? 'style-loader' : MiniCSSExtractPlugin.loader
+          loader: isDev() ? 'style-loader' : MiniClExtractPlugin.loader
         }, {
           loader: 'css-loader',
           options: {
@@ -125,7 +125,7 @@ module.exports = [{
       return config
     }, {})),
 
-    isProd() ? new MiniCSSExtractPlugin({
+    isProd() ? new MiniClExtractPlugin({
       filename: '[name].[contenthash].css',
       chunkFilename: '[name].[contenthash].css'
     }) : () => {},
@@ -138,7 +138,7 @@ module.exports = [{
       minify: isProd()
     }),
 
-    isProd() ? new HtmlInlineCSSPlugin({
+    isProd() ? new HtmlInlineClPlugin({
       filter: (filename) => filename.includes('inline') || filename.includes('index')
     }) : () => {},
 
@@ -159,13 +159,6 @@ module.exports = [{
         to: './manifest-splash-icon-512.[contenthash].png'
       }]
     }) : () => {},*/
-
-    isSentryAvailable() ? new SentryPlugin({
-      authToken: appEnv.SENTRY_AUTH_TOKEN,
-      org: 'alexander-shershnev',
-      project: 'tgfeed',
-      include: './build'
-    }) : () => {},
 
     isBundleAnalyzer() ? new BundleAnalyzerPlugin({
       analyzerHost: '0.0.0.0',
@@ -189,16 +182,16 @@ module.exports = [{
     minimizer: isProd() ? [
       new TerserPlugin({ terserOptions: {
         compress: {
-          ecma: 2020
+          ecma: 2021
         },
         output: {
-          ecma: 2020,
+          ecma: 2021,
           beautify: false,
           comments: false,
           ascii_only: true
         }
       } }),
-      new CSSMinimizerPlugin({ minimizerOptions: {
+      new ClMinimizerPlugin({ minimizerOptions: {
         preset: ['default', {
           colormin: false
         }]

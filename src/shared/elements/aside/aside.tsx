@@ -1,10 +1,10 @@
 import type { ParentComponent } from 'solid-js'
 
-import asideStyles from './aside.sss'
+import asideCSS from './aside.sss'
 
 export const Aside: ParentComponent = (props) => {
   return (
-    <aside class={asideStyles.base}>
+    <aside class={asideCSS.base}>
       {props.children}
     </aside>
   )

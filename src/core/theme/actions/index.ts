@@ -1,2 +1,2 @@
 export * from './change-theme'
-export * from './preset-theme'
+export * from './restore-theme'

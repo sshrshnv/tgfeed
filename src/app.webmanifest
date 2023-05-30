@@ -9,49 +9,49 @@
   "theme_color": "#3A4E7E",
   "icons": [
     {
-      "src": "./shared/manifest/icon-squircle-192.png",
+      "src": "./shared/icons/manifest/squircle-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./shared/manifest/icon-squircle-512.png",
+      "src": "./shared/icons/manifest/squircle-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./shared/manifest/icon-maskable-192.png",
+      "src": "./shared/icons/manifest/maskable-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "./shared/manifest/icon-maskable-512.png",
+      "src": "./shared/icons/manifest/maskable-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "./shared/manifest/icon-maskable.svg",
+      "src": "./shared/icons/manifest/maskable.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "maskable"
     },
     {
-      "src": "./shared/manifest/icon-maskable-monochrome-192.png",
+      "src": "./shared/icons/manifest/maskable-monochrome-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable monochrome"
     },
     {
-      "src": "./shared/manifest/icon-maskable-monochrome-512.png",
+      "src": "./shared/icons/manifest/maskable-monochrome-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable monochrome"
     },
     {
-      "src": "./shared/manifest/icon-maskable-monochrome.svg",
+      "src": "./shared/icons/manifest/maskable-monochrome.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "maskable monochrome"

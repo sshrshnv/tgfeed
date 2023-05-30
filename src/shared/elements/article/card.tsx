@@ -1,6 +1,6 @@
 import type { ParentComponent } from 'solid-js'
 
-import cardStyles from './card.sss'
+import cardCSS from './card.sss'
 
 type Props = {
 
@@ -9,7 +9,7 @@ type Props = {
 export const Card: ParentComponent<Props> = (props) => {
   return (
     <div
-      class={cardStyles.base}
+      class={cardCSS.base}
     >
       {props.children}
     </div>

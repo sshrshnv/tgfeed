@@ -1,2 +1,2 @@
 export * from './change-locale'
-export * from './preset-locale'
+export * from './restore-locale'

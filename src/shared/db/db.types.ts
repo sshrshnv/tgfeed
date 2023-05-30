@@ -1,22 +1,27 @@
 import type { DBSchema as DBSchemaTypes, IDBPDatabase } from 'idb'
 
-import type { PostsDBSchema } from '~/feed/entities/posts'
-import type { ChannelsDBSchema } from '~/feed/entities/channels'
+import type { PostsDBSchema } from '~/feed/posts'
+import type { ChannelsDBSchema } from '~/feed/channels'
 
-export interface DBSchema extends DBSchemaTypes {
+export interface DBSchema extends DBSchemaTypes,
+  ChannelsDBSchema,
+  PostsDBSchema
+{
   state: {
     key: string
     value: any
   }
-  posts: PostsDBSchema
-  channels: ChannelsDBSchema
 }
 
 export type DB = IDBPDatabase<DBSchema>
 
 export type DBWorker = {
-  call: <T>(cb: (db: DB) => T) => Promise<T>
+  call: DBWorkerCaller
 }
+
+export type DBWorkerCaller = <T>(
+  cb: (db: DB) => T
+) => Promise<T>
 
 export type DBWorkerMessage = {
   mainPort: MessagePort

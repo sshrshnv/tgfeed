@@ -1,2 +1,1 @@
-import { createStaticStore } from '@solid-primitives/static-store'
-
+//import { createStore } from 'solid-js/store'

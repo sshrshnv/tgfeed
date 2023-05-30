@@ -75,7 +75,7 @@ declare module '*.webmanifest' {
   export default url
 }
 
-declare module '*.worker.ts' {
+declare module 'worker.ts' {
   class WebpackWorker extends Worker {
     constructor()
     [property: string]: any

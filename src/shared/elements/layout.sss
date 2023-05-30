@@ -1,8 +1,12 @@
-.flexCenter
+.flex
   display: flex
+
+  & > *
+    flex-shrink: 0
+
+.flexCenter
   justify-content: center
   align-items: center
-  flex-shrink: 0
 
 .fullscreen
   position: absolute

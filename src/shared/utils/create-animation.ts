@@ -3,7 +3,7 @@ import { onMount, createEffect, createSignal, batch } from 'solid-js'
 import { clsx } from 'clsx'
 
 import { isIOS } from '~/shared/utils'
-import animationStyles from '~/shared/elements/animations.sss'
+import animationCSS from '~/shared/elements/animations.sss'
 
 type AnimationParams = {
   isActive: Accessor<boolean>
@@ -11,7 +11,7 @@ type AnimationParams = {
 
 export type AnimationState = {
   elementRef: Ref<Element>
-  elementStyles: string
+  elementCl: string
   isPending: Accessor<boolean>
   isEntered: Accessor<boolean>
   isExited: Accessor<boolean>
@@ -23,8 +23,8 @@ export const createAnimation = (params: AnimationParams) => {
 
   const elementRef = ref => element = ref
 
-  const elementStyles = clsx(
-    isIOS() && animationStyles.performance
+  const elementCSS= clsx(
+    isIOS() && animationCSS.performance
   )
 
   const [isPending, setPending] = createSignal(true)
@@ -53,7 +53,7 @@ export const createAnimation = (params: AnimationParams) => {
 
   return {
     elementRef,
-    elementStyles,
+    elementCSS,
     isPending,
     isEntered,
     isExited

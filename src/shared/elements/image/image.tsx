@@ -2,10 +2,11 @@ import type { Component } from 'solid-js'
 import { createSignal } from 'solid-js'
 import { clsx } from 'clsx'
 
-import imageStyles from './image.sss'
+import imageCSS from './image.sss'
 
 type Props = {
   src: string
+  alt: string
   class?: string
   fadeIn?: boolean
   onLoad?: () => void
@@ -29,12 +30,13 @@ export const Image: Component<Props> = (props) => {
     <img
       class={clsx(
         props.class,
-        imageStyles.base,
-        props.fadeIn && imageStyles._faded,
-        isLoaded() && imageStyles._loaded,
-        isReady() && imageStyles._ready
+        imageCSS.base,
+        props.fadeIn && imageCSS._faded,
+        isLoaded() && imageCSS._loaded,
+        isReady() && imageCSS._ready
       )}
       src={props.src}
+      alt={props.alt}
       onLoad={handleLoad}
       onTransitionEnd={handleTransitionEnd}
     />

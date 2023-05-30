@@ -1,2 +1,2 @@
-export * from './db-worker'
+export * from './actions'
 export * from './db.types'

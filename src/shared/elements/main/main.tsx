@@ -1,10 +1,10 @@
 import type { ParentComponent } from 'solid-js'
 
-import mainStyles from './main.sss'
+import mainCSS from './main.sss'
 
 export const Main: ParentComponent = (props) => {
   return (
-    <main class={mainStyles.base}>
+    <main class={mainCSS.base}>
       {props.children}
     </main>
   )

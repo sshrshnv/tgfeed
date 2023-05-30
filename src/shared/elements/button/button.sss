@@ -1,20 +1,16 @@
 .base
   margin: 0
+  padding: 0 var(--layout-size-16)
+  gap: var(--layout-size-8)
   border: none
   box-shadow: none
   background-color: transparent
-  font-family: inherit
-  line-height: 1
   cursor: pointer
   user-select: none
   transition: opacity 200ms ease-in-out
+  will-change: opacity
 
-  > svg
-    width: var(--layout-svg-size-xl)
-    height: var(--layout-svg-size-xl)
-    fill: var(--theme-color-on-surface)
-
-  &:focus
+  &:focus:not(:focus-visible)
     outline: none
 
   &:active

@@ -1,2 +1,2 @@
 export * from './icon'
-export * as iconStyles from './icon.sss'
+export * as iconCSS from './icon.sss'

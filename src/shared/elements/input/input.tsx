@@ -1,6 +1,6 @@
 import type { Component } from 'solid-js'
 
-import inputStyles from './input.sss'
+import inputCSS from './input.sss'
 
 type Props = {
   class?: string

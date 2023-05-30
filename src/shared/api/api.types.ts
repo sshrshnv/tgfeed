@@ -1,4 +1,4 @@
-import type { ClientError, MethodDeclMap } from './worker/mtproto'
+import { ClientError, MethodDeclMap } from './mtproto'
 
 export type API = {
   req: <T extends keyof MethodDeclMap>(
@@ -18,8 +18,10 @@ export type APIError = ClientError & {
 }
 
 export type APIWorker = {
-  call: <T>(cb: (api: API) => T) => Promise<T>
+  call: APIWorkerCaller
 }
+
+export type APIWorkerCaller = <T>(cb: (api: API) => T) => Promise<T>
 
 export type APIWorkerMessage = {
   mainPort: MessagePort

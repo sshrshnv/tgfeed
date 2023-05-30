@@ -1,2 +1,2 @@
 export * from './header'
-export { default as headerStyles } from './header.sss'
+export { default as headerCSS } from './header.sss'

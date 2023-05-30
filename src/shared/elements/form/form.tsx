@@ -1,6 +1,6 @@
 import type { ParentComponent } from 'solid-js'
 
-import formStyles from './form.sss'
+import formCSS from './form.sss'
 
 type Props = {
   onSubmit?: () => void
@@ -14,7 +14,7 @@ export const Form: ParentComponent<Props> = (props) => {
 
   return (
     <form
-      class={formStyles.base}
+      class={formCSS.base}
       autocomplete='off'
       autocapitalize='off'
       onSubmit={handleSubmit}

@@ -1,19 +1,24 @@
-.base
-  display: flex
-  align-items: center
+.wrapper
   flex-shrink: 0
+  justify-content: center
   width: 100%
-  height: var(--layout-size-xl)
-  background-color: var(--theme-color-surface-0)
-  box-shadow: var(--layout-shadow-1)
+  padding: var(--layout-size-8)
+
+.base
+  align-items: center
+  width: min(800px, 100%)
+  height: var(--layout-size-56)
+  border-radius: var(--layout-radius-20)
+  background-color: var(--theme-color-surface-2)
 
 .button
   height: 100%
-  width: var(--layout-size-xl)
-
-  > svg
-    width: var(--layout-size-s)
-    height: var(--layout-size-s)
+  min-width: var(--layout-size-56)
+  color: var(--theme-color-on-surface)
 
   &:last-child:not(:first-child)
-    margin-left: auto
+    //margin-left: auto
+
+.chip
+  margin-left: auto
+  background-color: var(--theme-color-surface-1)

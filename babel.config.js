@@ -5,13 +5,18 @@ module.exports = {
     ['@babel/preset-env', {
       'modules': false,
       'bugfixes': true,
-      'corejs': utils.getPkgVersion('core-js'),
-      'useBuiltIns': 'entry',
+      'corejs': {
+        'version': utils.getPkgVersion('core-js'),
+        'proposals': true
+      },
+      'useBuiltIns': 'usage',
     }],
     ['babel-preset-solid'],
     ['@babel/typescript'],
   ],
   plugins: utils.isDev() ? [
-    'solid-refresh/babel',
+    ['solid-refresh/babel', {
+      'bundler': 'webpack5'
+    }]
   ] : []
 }

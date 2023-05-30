@@ -12,7 +12,7 @@
   font-weight: 500
   src: local("Arial Bold")
 
-html, body, main, header, nav, div, ul, li, button, label, input
+html, body, main, header, nav, div, hr, ul, li, button, label, input
   margin: 0
   padding: 0
   box-sizing: border-box
@@ -49,6 +49,8 @@ html
     height: safe(bottom)
 
 body
+  display: flex
+  flex-direction: column
   background-color: var(--theme-color-background)
   color: var(--theme-color-on-surface)
 

@@ -1,0 +1,16 @@
+.base
+  margin-left: auto
+  height: var(--layout-size-40)
+  padding: 0 var(--layout-size-16) 0 0
+
+.item
+  position: relative
+  z-index: 1
+  height: 100%
+  padding: 0 var(--layout-size-16)
+  cursor: pointer
+
+  &._checked
+    color: var(--theme-color-on-secondary-container)
+    transition: color 200ms ease-out
+    cursor: default

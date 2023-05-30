@@ -3,11 +3,12 @@ import { clsx } from 'clsx'
 
 import * as icons from '~/shared/icons'
 
-import iconStyles from './icon.sss'
+import iconCSS from './icon.sss'
 
 export type IconProps = {
   class?: string
-  icon: keyof typeof icons
+  name: keyof typeof icons
+  size: 'small' | 'medium' | 'large'
   viewBox?: string
 }
 
@@ -16,11 +17,12 @@ export const Icon: Component<IconProps> = (props) => {
     <svg
       class={clsx(
         props.class,
-        iconStyles.base
+        iconCSS.base,
+        iconCSS[`_${props.size}`]
       )}
       viewBox={props.viewBox}
     >
-      <use href={`#${icons[props.icon].id}`}/>
+      <use href={`#${icons[props.name].id}`}/>
     </svg>
   )
 }

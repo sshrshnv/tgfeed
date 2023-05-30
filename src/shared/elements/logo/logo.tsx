@@ -3,14 +3,15 @@ import { clsx } from 'clsx'
 
 import { Icon } from '~/shared/elements'
 
-import layoutStyles from '../layout.sss'
-import logoStyles from './logo.sss'
+import layoutCSS from '../layout.sss'
+import logoCSS from './logo.sss'
 
 export const Logo: Component = () => {
   return (
     <div class={clsx(
-      layoutStyles.flexCenter,
-      logoStyles.base
+      layoutCSS.flex,
+      layoutCSS.flexCenter,
+      logoCSS.base
     )}>
       <Icon icon='logo'/>
     </div>
