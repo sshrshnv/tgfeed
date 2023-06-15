@@ -33,7 +33,7 @@ module.exports = [{
     app: [
       './src/app.inline.sss',
       './src/app.inline.ts',
-      './src/app.ts',
+      './src/app.tsx',
     ],
   } : {
     'inline': [
@@ -41,7 +41,7 @@ module.exports = [{
       './src/app.inline.ts',
     ],
     'app': {
-      import: './src/app.ts',
+      import: './src/app.tsx',
       dependOn: 'inline',
     }
   },
@@ -69,7 +69,7 @@ module.exports = [{
     rules: [
       {
         test: /\.m?[jt]sx?$/,
-        exclude: /node_modules\/(?!(comlink|idb-keyval|pako)\/).*/,
+        exclude: /node_modules\/(?!(comlink|idb-keyval)\/).*/,
         resolve: {
           mainFields: ['esm2017', 'module', 'jsnext:main', 'browser', 'main']
         },
@@ -83,9 +83,11 @@ module.exports = [{
         }, {
           loader: 'css-loader',
           options: {
+            esModule: true,
             modules: {
+              namedExport: true,
               localIdentName: isDev() ? '[name]__[local]' : '[hash:base64:5]',
-              exportLocalsConvention: 'asIs'
+              exportLocalsConvention: 'dashesOnly'
             },
             sourceMap: isDev()
           }
@@ -116,6 +118,7 @@ module.exports = [{
 
   plugins: [
     new webpack.DefinePlugin([
+      'NODE_ENV',
       ...Object.keys(appConfig),
       ...Object.keys(dotenv.config({ path: './.env.example' }).parsed)
     ].reduce((config, key) => {
@@ -205,9 +208,10 @@ module.exports = [{
     //https: true,
     host: '0.0.0.0',
     port: 3000,
-    hot: true,
+    liveReload: false,
+    hot: isDev(),
     historyApiFallback: true,
-    compress: true,
+    compress: false,
     client: {
       overlay: {
         warnings: false,
@@ -217,7 +221,7 @@ module.exports = [{
   },
 
   stats: {
-    children: true,// isBundleAnalyzer(),
+    children: isBundleAnalyzer(),
     modules: isBundleAnalyzer(),
     errorDetails: true
   }

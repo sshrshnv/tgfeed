@@ -5,8 +5,9 @@ const getClVarValueByIndex = (index, ...values) => {
 const getClSafeAreaEnvValueBySide = (side, additionalValue = 0) => {
   let env = `env(safe-area-inset-${side}, 0)`
 
-  if (additionalValue && parseInt(additionalValue))
+  if (additionalValue) {
     env = `calc(${env} + ${additionalValue})`
+  }
 
   return env
 }

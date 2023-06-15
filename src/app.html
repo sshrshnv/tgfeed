@@ -3,6 +3,7 @@
   lang="<%= params.APP_DEFAULT_LOCALE_LANG %>"
   data-icon-sprite-hash="<%= params.APP_ICON_SPRITE_HASH %>"
   data-theme-mode="<%= params.APP_DEFAULT_THEME_MODE %>"
+  data-browser="supported"
 >
   <head>
     <title><%= params.APP_TITLE %></title>
@@ -14,10 +15,44 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="theme-color" content="<%= params.APP_DEFAULT_THEME_COLOR %>">
     <link rel="manifest" href="<%= require('./app.webmanifest') %>">
+    <style>
+      .warning {
+        position: fixed;
+        z-index: 9999;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0 20%;
+        text-align: center;
+        background-color: #000000;
+        color: #FF897D;
+        font-size: 20px;
+      }
+
+      html[data-browser='supported'] .browser {
+        display: none;
+      }
+    </style>
+    <script>
+      var features = [
+        'Proxy', 'MessageChannel', 'BigInt', 'ResizeObserver', 'IntersectionObserver', 'HTMLDialogElement'
+      ];
+      var unsupported = typeof [].some !== 'function' || features.some(function(feature) {
+        return typeof self[feature] !== 'function';
+      })
+      if (unsupported) {
+        self.document.documentElement.setAttribute('data-browser', 'unsupported');
+      }
+    </script>
     <%= htmlWebpackPlugin.tags.filter((tag) => tag.tagName !== 'script') %>
     <%= htmlWebpackPlugin.tags.filter((tag) => tag.tagName === 'script') %>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript class="warning">You need to enable JavaScript to run this app.</noscript>
+    <div class="warning browser">You need to update your Browser to run this app.</div>
   </body>
 </html>

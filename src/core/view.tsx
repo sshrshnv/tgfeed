@@ -1,37 +1,22 @@
-import { render } from 'solid-js/web'
+import { routes } from '~/core/routes'
+import { MenuButton, MenuDialog } from '~/core/ui'
+import { FeedChannelSearch, FeedOffsetSelect } from '~/feed/ui'
+import { Header, Main, Aside } from '~/shared/ui/elements'
 
-import type { Route } from '~/shared/routing'
-import { routing } from '~/shared/routing'
-import {
-  Main, Header, Button, Dropdown, Chip, Icon,
-  headerCSS
-} from '~/shared/elements'
-
-import { routes } from './routes'
-
-const View = () => {
-
-
+export const View = () => {
   return (
     <>
       <Header>
-        <Button class={headerCSS.button}>
-          <Icon name='menu' size='large'/>
-        </Button>
-
-        <Chip class={headerCSS.chip} text='24 hours'/>
-        <Button class={headerCSS.button}>
-          <Icon name='history' size='large'/>
-        </Button>
-
+        <MenuButton/>
+        <FeedChannelSearch/>
+        <FeedOffsetSelect/>
       </Header>
 
       <Main/>
+
+      <Aside>
+        <MenuDialog/>
+      </Aside>
     </>
   )
 }
-
-export const renderView = () => render(
-  View,
-  self.document.body
-)

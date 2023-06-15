@@ -15,7 +15,7 @@ module.exports = {
     ['postcss-simple-vars'],
     ['@csstools/postcss-global-data', {
       files: [
-        './src/shared/tokens/media.tokens.css'
+        './src/shared/ui/tokens/media.tokens.css'
       ]
     }],
     ['postcss-custom-media'],

@@ -10,5 +10,5 @@ restoreLocale()
 import { captureInstallPrompt } from '~/core/install/actions/capture-install-prompt'
 captureInstallPrompt()
 
-import { preloadIconSprite } from '~/shared/utils/preload-icon-sprite'
+import { preloadIconSprite } from '~/shared/ui/utils/preload-icon-sprite'
 preloadIconSprite()

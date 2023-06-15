@@ -1,0 +1,20 @@
+.container
+  top: 0
+  left: 0
+
+  @media (--max-width-m)
+    &::before
+      display: none
+
+  @media (--min-width-l)
+    top: max(safe(top), 8px)
+    left: calc(50% - var(--layout-dialog-width) / 2)
+    width: var(--layout-dialog-width)
+    height: calc(100% - max(safe(top), 8px) - max(safe(bottom), 8px))
+
+.item
+  position: absolute
+  top: 0
+  left: 0
+  width: 100%
+  height: 100%

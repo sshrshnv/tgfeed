@@ -11,8 +11,7 @@ const [localeTextsPromise, resolveLocaleTextsPromise] = createPromise<LocaleText
 
 export const restoreLocale = () => {
   restoredLocale = localStorage.get<Locale>('locale') || {
-    lang: detectPreferLocaleLang(),
-    texts: undefined
+    lang: detectPreferLocaleLang()
   }
   setLocaleAttributes(restoredLocale)
   loadLocaleTexts(restoredLocale).then(localeTexts =>
@@ -20,7 +19,7 @@ export const restoreLocale = () => {
   )
 }
 
-export const getRestoredLocale = (cb: (localeText: LocaleTexts) => void) => {
+export const getRestoredLocale = (cb: (localeTexts: LocaleTexts) => void) => {
   localeTextsPromise.then(localeTexts => cb(localeTexts))
   return restoredLocale
 }

@@ -12,12 +12,39 @@ export const routes: Record<string, Route> = {
     type: 'page'
   },
 
-  auth: {
-    id: 'auth',
-    type: 'popup'
-  },
   menu: {
     id: 'menu',
-    type: 'popup'
+    type: 'dialog'
+  },
+  auth: {
+    id: 'auth',
+    type: 'dialog'
+  },
+  addChannel: {
+    id: 'addChannel',
+    type: 'dialog'
+  },
+  selectChannels: {
+    id: 'selectChannels',
+    type: 'dialog'
+  },
+  locale: {
+    id: 'locale',
+    type: 'dialog'
+  },
+  theme: {
+    id: 'theme',
+    type: 'dialog'
+  },
+
+  feedChannelSearch: {
+    id: 'feedChannelSearch',
+    type: 'popover'
+  },
+  feedOffsetSelect: {
+    id: 'feedOffsetSelect',
+    type: 'popover'
   }
 }
+
+export const dialogRoutes = () => Object.values(routes).filter(({ type }) => type == 'dialog')

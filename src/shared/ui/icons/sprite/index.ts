@@ -1,0 +1,7 @@
+export { default as add } from './add.svg?sprite'
+export { default as back } from './back.svg?sprite'
+export { default as close } from './close.svg?sprite'
+export { default as history } from './history.svg?sprite'
+export { default as menu } from './menu.svg?sprite'
+export { default as search } from './search.svg?sprite'
+export { default as settings } from './settings.svg?sprite'

@@ -1,0 +1,41 @@
+.flex
+  display: flex
+
+  & > *
+    flex-shrink: 0
+
+.flexCenter
+  justify-content: center
+  align-items: center
+
+.fullscreen
+  position: absolute
+  inset: 0
+
+.hidden
+  position: absolute
+  z-index: -1
+  width: 0
+  height: 0
+  overflow: hidden
+
+.before
+  &::before
+    z-index: -1
+    position: absolute
+    display: block
+    content: ''
+
+.after
+  &::after
+    z-index: -1
+    position: absolute
+    display: block
+    content: ''
+
+.outline
+  outline: 2px solid transparent
+  outline-offset: -2px
+
+  &:focus-visible
+    outline-color: var(--theme-color-outline-variant)

@@ -1,6 +1,6 @@
-@import './shared/tokens/font.tokens.sss'
-@import './shared/tokens/layout.tokens.sss'
-@import './shared/tokens/theme.tokens.sss'
+@import './shared/ui/tokens/font.tokens.sss'
+@import './shared/ui/tokens/layout.tokens.sss'
+@import './shared/ui/tokens/theme.tokens.sss'
 
 @font-face
   font-family: "Arial"
@@ -10,9 +10,9 @@
 @font-face
   font-family: "Arial"
   font-weight: 500
-  src: local("Arial Bold")
+  src: local("Arial")
 
-html, body, main, header, nav, div, hr, ul, li, button, label, input
+html, body, main, header, dialog, nav, div, span, p, hr, ul, li, button, label, input
   margin: 0
   padding: 0
   box-sizing: border-box
@@ -51,8 +51,9 @@ html
 body
   display: flex
   flex-direction: column
-  background-color: var(--theme-color-background)
+  background-color: var(--theme-color-surface-1)
   color: var(--theme-color-on-surface)
+  font-family: var(--font-family)
 
   > svg
     position: absolute

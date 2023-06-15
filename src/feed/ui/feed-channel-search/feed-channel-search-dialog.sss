@@ -1,0 +1,27 @@
+.wrapper
+  --local-zindex: 2
+
+.staticBase
+  max-width: 100%
+  opacity: 0
+  will-change: opacity
+
+.input
+  z-index: 10
+  padding: 0 0 0 40px
+  border-radius: inherit
+
+.popover
+  position: absolute
+  top: var(--layout-header-height)
+  left: calc(-1 * var(--layout-header-height) + var(--layout-dialog-offset))
+  width: calc(100% + 2 * var(--layout-header-height) - 2 * var(--layout-dialog-offset))
+  min-height: 40px
+  max-height: 50vh
+  border-radius: var(--layout-dialog-radius)
+  background-color: var(--theme-color-surface-1)
+
+  @media (--min-width-l)
+    left: 0
+    width: 100%
+    max-width: var(--layout-dialog-width)

@@ -1,40 +1,21 @@
-import { createEffect } from 'solid-js'
-
 import type { Route } from '../routing.types'
-import { routing, setRouting } from '../routing.state'
+import { setRouting } from '../routing.state'
+import { ignoreNativePopEvent } from '../utils'
 
-let ignoreNativePopEvent = false
+export const popRoute = (route: Route | undefined) => {
+  if (!route) return
+  ignoreNativePopEvent()
 
-export const popRoute = (route: Route) => setRouting(state => {
-  ignoreNativePopEvent = true
+  setRouting(state => {
+    const routeIndex = state.history.findLastIndex(item =>
+      item.type === route.type && self.JSON.stringify(item) === self.JSON.stringify(route)
+    )
 
-  const routeIndex = state.history.findLastIndex(item =>
-    item.type === route.type && self.JSON.stringify(item) === self.JSON.stringify(route)
-  )
+    if (routeIndex < 0) return state
 
-  if (routeIndex < 0) return state
+    const history = state.history.slice(0, routeIndex)
+    self.history.go(routeIndex - state.history.length)
 
-  const history = state.history.slice(0, routeIndex + 1)
-  self.history.go(routeIndex - state.history.length)
-
-  return { history }
-})
-
-const handleNativePopEvent = () => {
-  if (ignoreNativePopEvent) {
-    ignoreNativePopEvent = false
-    return
-  }
-
-  setRouting(state => ({
-    history: state.history.slice(0, state.history.length)
-  }))
+    return { history }
+  })
 }
-
-createEffect((prev) => {
-  if (!prev) {
-    self.addEventListener('popstate', handleNativePopEvent)
-  } else if (!routing.history.length) {
-    self.removeEventListener('popstate', handleNativePopEvent)
-  }
-})
