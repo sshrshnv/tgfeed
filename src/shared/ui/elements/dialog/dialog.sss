@@ -10,6 +10,7 @@
   outline: none
   background: transparent
   overflow: visible
+  color: var(--theme-color-on-surface)
 
   &._open
     z-index: var(--local-zindex, 1)
@@ -21,15 +22,15 @@
     position: fixed
     z-index: -1
     inset: 0
-    background-color: transparent //var(--theme-color-background)
-    opacity: 0
-    will-change: opacity
+    background-color: transparent
+    //opacity: 0
+    //will-change: opacity
 
   &._open::before
-    animation: backdropIn 400ms cubic-bezier(0.05, 0.7, 0.1, 1.0) forwards
+    //animation: backdropIn 400ms cubic-bezier(0.05, 0.7, 0.1, 1.0) forwards
 
   &._closing::before
-    animation: backdropOut 200ms cubic-bezier(0.3, 0.0, 0.8, 0.15) forwards
+    //animation: backdropOut 200ms cubic-bezier(0.3, 0.0, 0.8, 0.15) forwards
 
 @keyframes backdropIn
   0%

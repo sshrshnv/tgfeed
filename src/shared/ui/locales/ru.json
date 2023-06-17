@@ -1,6 +1,8 @@
 {
   "channelSearch": "Найти канал…",
   "channelSearchPlaceholder": "Ссылка или название канала…",
+  "configureChannels": "Выбрать каналы",
+  "configureFilters": "Настроить фильтры",
 
   "intro": {
 

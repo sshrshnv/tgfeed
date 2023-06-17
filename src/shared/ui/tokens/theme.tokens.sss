@@ -37,7 +37,10 @@
   --theme-color-inverse-surface:    i($i, var(--color-neutral-20), var(--color-neutral-90))
   --theme-color-inverse-on-surface: i($i, var(--color-neutral-95), var(--color-neutral-20))
 
-html, ::before, ::after, ::backdrop
+  --theme-color-hr-top:    i($i, var(--color-neutral-variant-80), var(--color-neutral-variant-10))
+  --theme-color-hr-bottom: i($i, var(--color-neutral-variant-95), var(--color-neutral-variant-20))
+
+html
   color-theme: light
   @mixin theme 1
 
@@ -45,7 +48,7 @@ html, ::before, ::after, ::backdrop
     color-theme: dark
     @mixin theme 2
 
-:root, ::before, ::after, ::backdrop
+:root
   --color-primary-0:   #000000
   --color-primary-5:   #00102D
   --color-primary-10:  #001A41

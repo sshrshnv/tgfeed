@@ -2,7 +2,7 @@ import { comlink, createPromise, setDelay } from '~/shared/utils'
 import type { DBWorker, DBWorkerCaller } from '~/shared/db'
 
 import type { API, APIWorker, APIWorkerMessage } from './api.types'
-import type { ClientConfig, ClientMetaData, MethodDeclMap, Updates } from './mtproto'
+import type { ClientConfig, MethodDeclMap, Updates } from './mtproto'
 import { Client } from './mtproto'
 
 const [dbWorkerPromise, resolveDbWorkerPromise] = createPromise<DBWorker>()
@@ -13,7 +13,7 @@ const callDbWorker: DBWorkerCaller = async cb => {
 }
 
 const apiPromise = new Promise<API>(async resolve => {
-  const meta = await callDbWorker(db => db.get('state', 'meta'))
+  const meta = await callDbWorker(db => db.get('apiMeta', 'data'))
   console.log('================> META', meta)
   /*const client = new Client({
 

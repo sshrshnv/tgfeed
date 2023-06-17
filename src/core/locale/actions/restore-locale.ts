@@ -9,17 +9,17 @@ import { setLocaleAttributes } from '../utils/set-locale-attributes'
 let restoredLocale: Locale
 const [localeTextsPromise, resolveLocaleTextsPromise] = createPromise<LocaleTexts>()
 
-export const restoreLocale = () => {
+export const restoreLocale = async () => {
   restoredLocale = localStorage.get<Locale>('locale') || {
     lang: detectPreferLocaleLang()
   }
   setLocaleAttributes(restoredLocale)
-  loadLocaleTexts(restoredLocale).then(localeTexts =>
-    resolveLocaleTextsPromise(localeTexts)
-  )
+  const localeTexts = await loadLocaleTexts(restoredLocale)
+  resolveLocaleTextsPromise(localeTexts)
 }
 
 export const getRestoredLocale = (cb: (localeTexts: LocaleTexts) => void) => {
+  if (!restoredLocale) restoreLocale()
   localeTextsPromise.then(localeTexts => cb(localeTexts))
   return restoredLocale
 }

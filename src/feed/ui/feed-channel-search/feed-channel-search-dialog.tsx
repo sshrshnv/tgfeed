@@ -44,6 +44,7 @@ export const FeedChannelSearchDialog: Component<FeedChannelSearchDialogProps> = 
           <Input
             class={feedChannelSearchDialogCSS.input}
             placeholder={locale.texts?.channelSearchPlaceholder}
+            autofocus
           />
         </div>
       )}

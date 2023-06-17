@@ -14,7 +14,7 @@ const getStorageCache = () => {
 }
 
 export const localStorage = {
-  set: (key: string, value: string | number | boolean | object) => {
+  set: (key: string, value: string | number | boolean | object | null) => {
     getStorageCache()[key] = value
     setTimeout(() => {
       try {

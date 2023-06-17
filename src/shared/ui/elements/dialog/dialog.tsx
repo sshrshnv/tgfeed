@@ -35,11 +35,18 @@ export const Dialog: ParentComponent<DialogProps> = (_props) => {
     props.onCancel()
   }
 
+  const handleKeyDown = (ev: KeyboardEvent) => {
+    if (ev.key.toLowerCase() !== 'escape') return
+    props.onCancel()
+  }
+
   createEffect((prev) => {
     if (!prev && props.open && !dialogEl.open) {
+      self.document.addEventListener('keydown', handleKeyDown)
       props.modal ? dialogEl.showModal() : dialogEl.show()
     }
     if (prev && !props.open && dialogEl.open) {
+      self.document.removeEventListener('keydown', handleKeyDown)
       dialogEl.close()
     }
 

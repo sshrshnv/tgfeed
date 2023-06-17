@@ -11,6 +11,35 @@ export const routes: Record<string, Route> = {
     path: '/me',
     type: 'page'
   },
+  feedChannels: {
+    id: 'feedChannels',
+    type: 'page'
+  },
+  feedFilters: {
+    id: 'feedFilters',
+    type: 'page'
+  },
+
+  feedChannelSearch: {
+    id: 'feedChannelSearch',
+    type: 'popover'
+  },
+  feedFilterSearch: {
+    id: 'feedFilterSearch',
+    type: 'popover'
+  },
+  feedOffsetSelect: {
+    id: 'feedOffsetSelect',
+    type: 'popover'
+  },
+  feedChannelsSelect: {
+    id: 'feedChannelsSelect',
+    type: 'popover'
+  },
+  feedFiltersSelect: {
+    id: 'feedFiltersSelect',
+    type: 'popover'
+  },
 
   menu: {
     id: 'menu',
@@ -20,31 +49,6 @@ export const routes: Record<string, Route> = {
     id: 'auth',
     type: 'dialog'
   },
-  addChannel: {
-    id: 'addChannel',
-    type: 'dialog'
-  },
-  selectChannels: {
-    id: 'selectChannels',
-    type: 'dialog'
-  },
-  locale: {
-    id: 'locale',
-    type: 'dialog'
-  },
-  theme: {
-    id: 'theme',
-    type: 'dialog'
-  },
-
-  feedChannelSearch: {
-    id: 'feedChannelSearch',
-    type: 'popover'
-  },
-  feedOffsetSelect: {
-    id: 'feedOffsetSelect',
-    type: 'popover'
-  }
 }
 
 export const dialogRoutes = () => Object.values(routes).filter(({ type }) => type == 'dialog')

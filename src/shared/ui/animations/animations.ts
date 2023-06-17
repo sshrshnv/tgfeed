@@ -44,7 +44,7 @@ const standardAccelerateOptions: AnymationOptions = {
 
 export const slideInRightAnimation: AnimationParams = {
   keyframes: [
-    { scale: '0.75 1', translate: '-24px', opacity: 0 },
+    { scale: '0.75 1', translate: '-96px', opacity: 0 },
     { scale: '1 1', translate: '0', opacity: 1 }
   ],
   options: emphasizedDecelerateOptions,
@@ -57,7 +57,7 @@ export const slideInRightAnimation: AnimationParams = {
 export const slideOutLeftAnimation = {
   keyframes: [
     { scale: '1 1', translate: '0', opacity: 1 },
-    { scale: '0.75 1', translate: '-24px', opacity: 0 }
+    { scale: '0.75 1', translate: '-48px', opacity: 0 }
   ],
   options: emphasizedAccelerateOptions
 }

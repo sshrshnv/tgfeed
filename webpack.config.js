@@ -112,6 +112,9 @@ module.exports = [{
         generator : {
           filename : '[name][ext]',
         }
+      }, {
+        test: /\.inline\.html$/,
+        type: 'asset/source'
       }
     ]
   },
