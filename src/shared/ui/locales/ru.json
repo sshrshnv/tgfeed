@@ -1,8 +1,32 @@
 {
+  "account": {
+    "title": "Аккаунт",
+    "signIn": "Войти",
+    "signOut": "Выйти"
+  },
+
+  "theme": {
+    "title": "Тема",
+    "system": "Системная",
+    "dark": "Тёмная",
+    "light": "Светлая"
+  },
+
+  "locale": {
+    "title": "Язык"
+  },
+
+  "channels": "Каналы",
+  "messages": "Сообщения",
   "channelSearch": "Найти канал…",
   "channelSearchPlaceholder": "Ссылка или название канала…",
   "configureChannels": "Выбрать каналы",
   "configureFilters": "Настроить фильтры",
+
+  "auth": {
+    "logIn": "Войти",
+    "logOut": "Выйти"
+  },
 
   "intro": {
 

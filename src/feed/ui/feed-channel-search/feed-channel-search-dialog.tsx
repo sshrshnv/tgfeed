@@ -6,8 +6,6 @@ import { locale } from '~/core/locale'
 import { routes } from '~/core/routes'
 import { routing } from '~/shared/routing'
 import { TransitionDialog, Input, Icon } from '~/shared/ui/elements'
-import { slideInBottomAnimation, slideOutTopAnimation } from '~/shared/ui/animations'
-import { animationsCSS } from '~/shared/ui/animations'
 
 import * as feedChannelSearchCSS from './feed-channel-search.sss'
 import * as feedChannelSearchDialogCSS from './feed-channel-search-dialog.sss'
@@ -27,14 +25,12 @@ export const FeedChannelSearchDialog: Component<FeedChannelSearchDialogProps> = 
       wrapperClass={feedChannelSearchDialogCSS.wrapper}
       route={routes.feedChannelSearch}
       open={isOpen()}
-      inAnimation={slideInBottomAnimation}
-      outAnimation={slideOutTopAnimation}
+      animation='slideInBottomAnimation'
       staticChildren={(
         <div class={clsx(
           feedChannelSearchCSS.base,
           feedChannelSearchDialogCSS.staticBase,
-          isOpen() ? animationsCSS.fadeInAnimation : animationsCSS.fadeOutAnimation,
-          animationsCSS.performance,
+          feedChannelSearchDialogCSS[isOpen() ? 'fadeInAnimation' : 'fadeOutAnimation']
         )}>
           <Icon
             class={feedChannelSearchCSS.icon}

@@ -2,7 +2,7 @@ import type { Component } from 'solid-js'
 
 import { locale } from '~/core/locale'
 import { routes } from '~/core/routes'
-import { Button, Icon, Text } from '~/shared/ui/elements'
+import { Button, Icon } from '~/shared/ui/elements'
 
 import { FeedChannelSearchDialog } from './feed-channel-search-dialog'
 import * as feedChannelSearchCSS from './feed-channel-search.sss'

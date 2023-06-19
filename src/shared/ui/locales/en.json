@@ -1,4 +1,23 @@
 {
+  "account": {
+    "title": "Account",
+    "signIn": "Sign In",
+    "signOut": "Sign Out"
+  },
+
+  "theme": {
+    "title": "Theme",
+    "system": "System",
+    "dark": "Dark",
+    "light": "Light"
+  },
+
+  "locale": {
+    "title": "Language"
+  },
+
+  "channels": "Channels",
+  "messages": "Messages",
   "channelSearch": "Search channel…",
   "channelSearchPlaceholder": "Channel name or link…",
   "configureChannels": "Configure channels",

@@ -1,2 +1,2 @@
 export { locale } from './locale.state'
-export * from './actions'
+export * from './locale.types'

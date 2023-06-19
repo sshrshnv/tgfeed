@@ -1,6 +1,4 @@
-import type { Route } from '~/shared/routing'
-
-export const routes: Record<string, Route> = {
+export const routes = {
   intro: {
     id: 'intro',
     path: '/',
@@ -49,6 +47,4 @@ export const routes: Record<string, Route> = {
     id: 'auth',
     type: 'dialog'
   },
-}
-
-export const dialogRoutes = () => Object.values(routes).filter(({ type }) => type == 'dialog')
+} as const

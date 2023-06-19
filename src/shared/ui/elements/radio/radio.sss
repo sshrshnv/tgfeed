@@ -1,16 +1,31 @@
 .base
-  margin-left: auto
-  height: var(--layout-size-40)
-  padding: 0 var(--layout-size-16) 0 0
+  align-items: center
+  gap: 16px
+  height: 32px
+  padding: 0 16px
 
-.item
-  position: relative
-  z-index: 1
+  &:not(._checked)
+    cursor: pointer
+
+.icon
+  opacity: var(--local-opacity)
+
+.text
+  opacity: var(--local-opacity)
+
+  &::first-letter
+    text-transform: capitalize
+
+.input
+  position: absolute
+  z-index: -1
+  top: 0
+  left: 0
+  width: 100%
   height: 100%
-  padding: 0 var(--layout-size-16)
-  cursor: pointer
-
-  &._checked
-    color: var(--theme-color-on-secondary-container)
-    transition: color 200ms ease-out
-    cursor: default
+  border-radius: 8px
+  border: none
+  background-color: transparent
+  box-shadow: none
+  transition: outline-color 200ms ease-in-out
+  will-change: outline-color

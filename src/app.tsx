@@ -1,7 +1,8 @@
 import { render } from 'solid-js/web'
 
-import { View, initWorkers } from '~/core'
-import { restoreAccount } from '~/core/account'
+import { initWorkers } from '~/core/workers'
+import { View } from '~/core/view'
+import { restoreAccount } from '~/core/account/actions'
 
 import {
   preventContextMenu,

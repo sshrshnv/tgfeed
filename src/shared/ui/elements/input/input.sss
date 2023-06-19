@@ -1,6 +1,4 @@
 .input
-  --local-transition-property: outline-color
-
   margin: 0
   display: block
   width: 100%
@@ -9,13 +7,14 @@
   padding: 0 16px
   border: none
   box-shadow: none
-  appearance: none
   font: var(--font-label-large)
   font-weight: 400
   letter-spacing: var(--font-label-large-tracking)
   line-height: 0
   background-color: transparent
   color: inherit
+  transition: outline-color 200ms ease-in-out
+  will-change: outline-color
 
   &::placeholder
     font: var(--font-label-large)

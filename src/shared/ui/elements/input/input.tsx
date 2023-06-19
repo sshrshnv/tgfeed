@@ -2,7 +2,6 @@ import type { Component, ComponentProps } from 'solid-js'
 import { splitProps } from 'solid-js'
 import { clsx } from 'clsx'
 
-import * as animationCSS from '../../animations/animations.sss'
 import * as layoutCSS from '../layout.sss'
 import * as inputCSS from './input.sss'
 
@@ -23,8 +22,7 @@ export const Input: Component<InputProps> = (_props) => {
       class={clsx(
         props.class,
         inputCSS.input,
-        layoutCSS.outline,
-        animationCSS.transition
+        layoutCSS.outline
       )}
       type={props.type || 'text'}
       autocomplete='off'

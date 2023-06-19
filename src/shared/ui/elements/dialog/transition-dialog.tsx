@@ -5,9 +5,10 @@ import { clsx } from 'clsx'
 
 import type { Route } from '~/shared/routing'
 import { popRoute } from '~/shared/routing'
-import type { AnimationParams } from '~/shared/ui/animations'
+import { isIOS } from '~/shared/utils'
 
 import { Dialog } from './dialog'
+import * as animationsCSS from '../animations.sss'
 import * as transitionDialogCSS from './transition-dialog.sss'
 
 export type TransitionDialogProps = {
@@ -16,41 +17,17 @@ export type TransitionDialogProps = {
   wrapperClass?: string
   open?: boolean
   modal?: boolean
-  inAnimation: AnimationParams
-  outAnimation?: AnimationParams
+  animation: Extract<keyof typeof transitionDialogCSS, `${string}Animation`>
   staticChildren?: JSX.Element
 }
 
 export const TransitionDialog: ParentComponent<TransitionDialogProps> = (props) => {
-  let animation: Animation
-
   const [isTransition, setTransition] = createSignal(false)
 
-  const handleBeforeEnter = () => {
-    setTransition(true)
-  }
+  const handleBeforeEnter = () => setTransition(true)
+  const handleAfterExit = () => setTransition(false)
 
-  const handleEnter = (el: Element, done) => {
-    animation = el.animate(props.inAnimation.keyframes, props.inAnimation.options)
-    animation.finished.then(done)
-  }
-
-  const handleExit = (el, done) => {
-    if (props.outAnimation) {
-      animation = el.animate(props.outAnimation.keyframes, props.outAnimation.options)
-    } else {
-      animation.reverse()
-    }
-    animation.finished.then(done)
-  }
-
-  const handleAfterExit = () => {
-    setTransition(false)
-  }
-
-  const handleCancel = () => {
-    popRoute(props.route)
-  }
+  const handleCancel = () => popRoute(props.route)
 
   return (
     <Dialog
@@ -63,16 +40,17 @@ export const TransitionDialog: ParentComponent<TransitionDialogProps> = (props) 
       {props.staticChildren}
 
       <Transition
+        enterActiveClass={transitionDialogCSS._enterActive}
+        exitActiveClass={transitionDialogCSS._exitActive}
         onBeforeEnter={handleBeforeEnter}
-        onEnter={handleEnter}
-        onExit={handleExit}
         onAfterExit={handleAfterExit}
       >
         <Show when={props.open}>
           <div class={clsx(
             props.class,
-            props.inAnimation.class,
-            transitionDialogCSS.animatable
+            transitionDialogCSS.popover,
+            transitionDialogCSS[props.animation],
+            isIOS() && animationsCSS.forcedPerformance
           )}>
             {props.children}
           </div>

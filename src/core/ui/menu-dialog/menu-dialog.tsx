@@ -1,11 +1,19 @@
 import type { Component } from 'solid-js'
+import { Switch, Match } from 'solid-js'
 import { clsx } from 'clsx'
 
-import { locale } from '~/core/locale'
 import { routes } from '~/core/routes'
+import { account } from '~/core/account'
+import { AccountMenu } from '~/core/account/ui'
+import { locale } from '~/core/locale'
+import { LocaleMenu } from '~/core/locale/ui'
+import { ThemeMenu } from '~/core/theme/ui'
 import { routing } from '~/shared/routing'
-import { TransitionDialog, Menu, Text, layoutCSS } from '~/shared/ui/elements'
-import { slideInRightAnimation, slideOutLeftAnimation } from '~/shared/ui/animations'
+import {
+  TransitionDialog,
+  Menu, MenuTitle, MenuButton, MenuFooter,
+  Text, layoutCSS
+} from '~/shared/ui/elements'
 
 import * as menuDialogCSS from './menu-dialog.sss'
 
@@ -20,40 +28,49 @@ export const MenuDialog: Component = () => {
       )}
       route={routes.menu}
       open={isOpen()}
-      inAnimation={slideInRightAnimation}
-      outAnimation={slideOutLeftAnimation}
+      animation='slideInRightAnimation'
     >
-      <menu>
-        <Text
-          class={menuDialogCSS.title}
-          variant='label'
-          size='small'
-        >
-          Channels
-        </Text>
-        <Menu class={menuDialogCSS.nav} items={[
-          { route: routes.feedChannelSearch, icon: 'edit', text: locale.texts?.configureChannels || '' }
-        ]}/>
+      <Menu>
+        <Switch>
+          <Match when={account.authorized}>
+            <MenuTitle
+              text={locale.texts?.channels}
+            />
+            <MenuButton
+              route={routes.feedChannels}
+              text={locale.texts?.configureChannels}
+              icon='edit'
+            />
 
-        <Text class={menuDialogCSS.title} variant='label' size='small'>
-          Messages
-        </Text>
-        <Menu class={menuDialogCSS.nav} items={[
-          { icon: 'filter', text: locale.texts?.configureFilters || '' },
-        ]}/>
-      </menu>
+            <MenuTitle
+              text={locale.texts?.messages}
+            />
+            <MenuButton
+              route={routes.feedFilters}
+              text={locale.texts?.configureFilters}
+              icon='filter'
+            />
 
-      <footer class={clsx(
-        menuDialogCSS.footer,
-        layoutCSS.flex
-      )}>
+            <AccountMenu/>
+          </Match>
+
+          <Match when={!account.authorized}>
+            <AccountMenu/>
+          </Match>
+        </Switch>
+
+        <ThemeMenu/>
+        <LocaleMenu/>
+      </Menu>
+
+      <MenuFooter>
         <Text variant='label' size='small'>
           {process.env.APP_TITLE}
         </Text>
         <Text variant='label' size='small'>
           v{process.env.APP_VERSION}
         </Text>
-      </footer>
+      </MenuFooter>
     </TransitionDialog>
   )
 }

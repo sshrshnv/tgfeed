@@ -5,7 +5,6 @@ import { clsx } from 'clsx'
 import type { Route } from '~/shared/routing'
 import { pushRoute } from '~/shared/routing'
 
-import * as animationCSS from '../../animations/animations.sss'
 import * as layoutCSS from '../layout.sss'
 import * as buttonCSS from './button.sss'
 
@@ -31,7 +30,6 @@ export const Button: ParentComponent<ButtonProps> = (_props) => {
         props.class,
         buttonCSS.base,
         layoutCSS.outline,
-        animationCSS.transition,
         layoutCSS.flex,
         layoutCSS.flexCenter
       )}

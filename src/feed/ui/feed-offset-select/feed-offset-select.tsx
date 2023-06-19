@@ -4,7 +4,6 @@ import { locale } from '~/core/locale'
 import { routes } from '~/core/routes'
 import { routing } from '~/shared/routing'
 import { TransitionDialog, Text, Button, Icon } from '~/shared/ui/elements'
-import { slideInBottomAnimation, slideOutTopAnimation } from '~/shared/ui/animations'
 
 import { formatOffset } from './utils'
 import * as feedOffsetSelectCSS from './feed-offset-select.sss'
@@ -33,8 +32,7 @@ export const FeedOffsetSelect: Component = () => {
         route={routes.feedOffsetSelect}
         class={feedOffsetSelectCSS.popover}
         open={isOpen()}
-        inAnimation={slideInBottomAnimation}
-        outAnimation={slideOutTopAnimation}
+        animation='slideInBottomAnimation'
       >
         test
       </TransitionDialog>

@@ -1,2 +1,66 @@
-.animatable
+.popover
   position: absolute
+  border-radius: var(--layout-dialog-radius)
+
+.slideInRightAnimation, .slideInBottomAnimation
+  animation-fill-mode: forwards
+  transform-origin: 0 0
+  will-change: translate, scale, opacity
+
+  &._enterActive
+    animation-timing-function: cubic-bezier(0, 0, 0, 1)
+    animation-duration: 300ms
+
+  &._exitActive
+    animation-timing-function: cubic-bezier(0.3, 0, 1, 1)
+    animation-duration: 150ms
+
+.slideInRightAnimation
+  &._enterActive
+    animation-name: translateInRight
+
+  &._exitActive
+    animation-name: translateOutLeft
+
+.slideInBottomAnimation
+  &._enterActive
+    animation-name: translateInBottom
+
+  &._exitActive
+    animation-name: translateOutTop
+
+@keyframes translateInRight
+  0%
+    translate: -48px
+    scale: 0.9 1
+    opacity: 0
+  100%
+    translate: 0
+    scale: 1 1
+    opacity: 1
+
+@keyframes translateOutLeft
+  0%
+    translate: 0
+    opacity: 1
+  100%
+    translate: -48px
+    opacity: 0
+
+@keyframes translateInBottom
+  0%
+    translate: 0 -24px
+    scale: 1 0.9
+    opacity: 0
+  100%
+    translate: 0
+    scale: 1 1
+    opacity: 1
+
+@keyframes translateOutTop
+  0%
+    translate: 0 0
+    opacity: 1
+  100%
+    translate: 0 -24px
+    opacity: 0

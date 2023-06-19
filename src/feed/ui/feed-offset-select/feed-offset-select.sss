@@ -22,12 +22,11 @@
     background-color: var(--theme-color-surface-2)
 
 .button
-  width: var(--layout-header-height)
+  width: var(--layout-header-size)
 
 .popover
+  top: calc(var(--layout-header-size) + var(--layout-dialog-offset))
   right: max(safe(right), var(--layout-dialog-offset))
-  top: calc(var(--layout-header-height) + var(--layout-dialog-offset))
-  border-radius: var(--layout-dialog-radius)
   background-color: var(--theme-color-surface-1)
 
   min-width: 200px

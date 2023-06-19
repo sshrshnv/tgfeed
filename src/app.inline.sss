@@ -34,7 +34,7 @@ html, body
 html
   &::before, &::after
     position: absolute
-    z-index: var(--layout-zindex-max)
+    z-index: 9999
     left: 0
     right: 0
     pointer-events: none
@@ -66,8 +66,8 @@ body
     border-bottom: 1px solid var(--theme-color-hr-bottom)
 
   .warning
-    position: fixed
-    z-index: 9999
+    position: absolute
+    z-index: 9990
     top: 0
     right: 0
     bottom: 0

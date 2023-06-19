@@ -7,7 +7,7 @@ const getLocaleLangs = () => {
     const pathParts = file.split('/')
     const localeLang = pathParts[pathParts.length - 1].split('.')[0]
     return localeLang
-  })
+  }).reverse()
 }
 
 module.exports = {
