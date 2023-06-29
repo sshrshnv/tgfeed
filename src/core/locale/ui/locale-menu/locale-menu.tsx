@@ -6,11 +6,12 @@ import { MenuTitle, MenuRadioGroup } from '~/shared/ui/elements'
 import type { LocaleLang } from '../../locale.types'
 import { locale } from '../../locale.state'
 import { changeLocale } from '../../actions'
+import { formatLocaleLang } from '../../utils'
 
 export const LocaleMenu: Component = () => {
   const getItems = createMemo(() =>
     (process.env.APP_LOCALE_LANGS as unknown as [LocaleLang]).map(lang => ({
-      value: lang, text: new Intl.DisplayNames([lang], { type: 'language' }).of(lang)
+      value: lang, text: formatLocaleLang(lang)
     }))
   )
 

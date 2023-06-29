@@ -6,22 +6,22 @@
   },
 
   "theme": {
-    "title": "Тема",
+    "title": "Тема интерфейса",
     "system": "Системная",
     "dark": "Тёмная",
     "light": "Светлая"
   },
 
   "locale": {
-    "title": "Язык"
+    "title": "Язык интерфейса"
   },
 
   "channels": "Каналы",
   "messages": "Сообщения",
   "channelSearch": "Найти канал…",
   "channelSearchPlaceholder": "Ссылка или название канала…",
-  "configureChannels": "Выбрать каналы",
-  "configureFilters": "Настроить фильтры",
+  "configureChannels": "Список каналов",
+  "configureFilters": "Фильтр сообщений",
 
   "auth": {
     "logIn": "Войти",

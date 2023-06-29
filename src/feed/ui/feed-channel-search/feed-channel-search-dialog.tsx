@@ -3,7 +3,7 @@ import { createMemo } from 'solid-js'
 import { clsx } from 'clsx'
 
 import { locale } from '~/core/locale'
-import { routes } from '~/core/routes'
+import { feedRoutes } from '~/feed/feed.routes'
 import { routing } from '~/shared/routing'
 import { TransitionDialog, Input, Icon } from '~/shared/ui/elements'
 
@@ -16,14 +16,14 @@ export type FeedChannelSearchDialogProps = {
 
 export const FeedChannelSearchDialog: Component<FeedChannelSearchDialogProps> = () => {
   const isOpen = createMemo(() =>
-    routing.currentRoute?.id === routes.feedChannelSearch.id
+    routing.currentRoute?.id === feedRoutes.channelSearchPopover.id
   )
 
   return (
     <TransitionDialog
       class={feedChannelSearchDialogCSS.popover}
       wrapperClass={feedChannelSearchDialogCSS.wrapper}
-      route={routes.feedChannelSearch}
+      route={feedRoutes.channelSearchPopover}
       open={isOpen()}
       animation='slideInBottomAnimation'
       staticChildren={(

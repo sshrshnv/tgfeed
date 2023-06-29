@@ -1,10 +1,10 @@
 import { default as buildMtproto } from './mtproto/builder'
 import { default as parseMtproto } from './mtproto/parser'
-import { default as buildLayer } from './layer143/builder'
-import { default as parseLayer } from './layer143/parser'
+import { default as buildLayer } from './layer158/builder'
+import { default as parseLayer } from './layer158/parser'
 import { Reader32, Writer32 } from '../serialization'
 import { MethodDeclMap as MtprotoMethodDeclMap } from './mtproto/types'
-import { MethodDeclMap as LayerMethodDeclMap } from './layer143/types'
+import { MethodDeclMap as LayerMethodDeclMap } from './layer158/types'
 
 // types
 export type {
@@ -17,7 +17,7 @@ export type {
   AuthBindTempAuthKey,
   InputCheckPasswordSRP,
   AccountPassword,
-} from './layer143/types'
+} from './layer158/types'
 
 export interface MethodDeclMap extends MtprotoMethodDeclMap, LayerMethodDeclMap {
 }

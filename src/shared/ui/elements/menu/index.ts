@@ -1,5 +1,6 @@
 export * from './menu-button'
 export * from './menu-footer'
 export * from './menu-radio-group'
+export * from './menu-route-button'
 export * from './menu-title'
 export * from './menu'

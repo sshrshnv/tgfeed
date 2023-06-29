@@ -1,0 +1,40 @@
+.header
+  height: calc(var(--layout-header-top-offset) + var(--layout-header-size))
+  padding: var(--layout-header-top-offset) safe(right) 0 safe(left)
+
+.hr
+  position: absolute
+  top: calc(var(--layout-header-top-offset) - 2px)
+  left: 0
+  right: 0
+
+.main
+  border-radius: 16px 16px 0 0
+
+.menu
+  top: calc(var(--layout-header-top-offset) + var(--layout-header-size) + var(--layout-dialog-offset))
+  left: max(safe(left), var(--layout-dialog-offset))
+  bottom: max(safe(bottom), var(--layout-dialog-offset))
+
+._uniform
+  .header
+    position: absolute
+    top: 0
+    left: 0
+    background-color: transparent
+
+  .hr
+    border-color: transparent
+
+  .main
+    padding-top: safe(top)
+    border-radius: 0
+    background: none
+
+    &::before
+      inset:   0
+      background: linear-gradient(to bottom, var(--theme-color-surface-1), var(--theme-color-background))
+
+  .menu
+    top: max(safe(top), var(--layout-dialog-offset))
+    background: var(--theme-color-surface-2)

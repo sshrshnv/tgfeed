@@ -8,6 +8,7 @@ import { popRoute } from '~/shared/routing'
 import { isIOS } from '~/shared/utils'
 
 import { Dialog } from './dialog'
+import * as scrollCSS from '../scroll.sss'
 import * as animationsCSS from '../animations.sss'
 import * as transitionDialogCSS from './transition-dialog.sss'
 
@@ -40,6 +41,8 @@ export const TransitionDialog: ParentComponent<TransitionDialogProps> = (props) 
       {props.staticChildren}
 
       <Transition
+        enterClass={transitionDialogCSS._enter}
+        exitClass={transitionDialogCSS._exit}
         enterActiveClass={transitionDialogCSS._enterActive}
         exitActiveClass={transitionDialogCSS._exitActive}
         onBeforeEnter={handleBeforeEnter}
@@ -48,6 +51,8 @@ export const TransitionDialog: ParentComponent<TransitionDialogProps> = (props) 
         <Show when={props.open}>
           <div class={clsx(
             props.class,
+            scrollCSS.base,
+            scrollCSS._hidden,
             transitionDialogCSS.popover,
             transitionDialogCSS[props.animation],
             isIOS() && animationsCSS.forcedPerformance

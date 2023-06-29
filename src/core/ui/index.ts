@@ -1,2 +1,2 @@
-export * from './menu-button'
-export * from './menu-dialog'
+export * from './core-menu-button'
+export * from './core-menu-dialog'

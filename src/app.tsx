@@ -1,22 +1,17 @@
 import { render } from 'solid-js/web'
 
-import { initWorkers } from '~/core/workers'
-import { View } from '~/core/view'
 import { restoreAccount } from '~/core/account/actions'
-
-import {
-  preventContextMenu,
-  preventDragAndDrop,
-  preventScale
-} from '~/shared/ui/utils'
-
-initWorkers()
 restoreAccount()
 
+import { preventContextMenu, preventDragAndDrop, preventScale } from '~/shared/ui/utils'
 preventContextMenu()
 preventDragAndDrop()
 preventScale()
 
+import { initWorkers } from './app.workers'
+initWorkers()
+
+import { View } from './app.view'
 render(
   () => <View/>,
   self.document.body

@@ -22,9 +22,10 @@ export const MenuButton: Component<MenuButtonProps> = (props) => {
       <Icon
         class={menuButtonCSS.icon}
         name={props.icon}
-        size='large'
+        size='medium'
       />
       <Text
+        class={menuButtonCSS.text}
         variant='label'
         size='large'
       >

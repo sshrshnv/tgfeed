@@ -2,11 +2,11 @@
   "account": {
     "title": "Account",
     "signIn": "Sign In",
-    "signOut": "Sign Out"
+    "signOut": "Log Out"
   },
 
   "theme": {
-    "title": "Theme",
+    "title": "Color theme",
     "system": "System",
     "dark": "Dark",
     "light": "Light"
@@ -16,12 +16,52 @@
     "title": "Language"
   },
 
-  "channels": "Channels",
-  "messages": "Messages",
+  "auth": {
+    "phone": {
+      "label": "Phone Number",
+      "description": "Please enter your Telegram phone number.",
+      "descriptionBan": "Telegram's automatic protection has been triggered and your account has been banned. This is a one-time error, it will not happen again after recovering."
+    },
+    "code": {
+      "label": "Code",
+      "auth.sentCodeTypeApp": "We have sent you a message with the code at the Telegram app.",
+      "auth.sentCodeTypeSms": "We have sent you an SMS\n with the code.",
+      "auth.sentCodeTypeCall": "You will receive an automatic call with a synthesized voice which tell you a verification code.",
+      "auth.sentCodeTypeFlashCall": "You will receive an automatic call with a synthesized voice which tell you a verification code."
+    },
+    "password": {
+      "label": "2FA-Password",
+      "description": "Your account is protected with a\n 2FA-Password"
+    },
+    "button": {
+      "next": "Next",
+      "wait": "Wait",
+      "recover": "Recover",
+      "auth.codeTypeSms": "Send an SMS",
+      "auth.codeTypeCall": "Receive a call",
+      "auth.codeTypeFlashCall": "Receive a flash call"
+    },
+    "error": {
+      "unknown": "Something went wrong",
+      "PHONE_NUMBER_BANNED": "Banned phone number",
+      "PHONE_NUMBER_INVALID": "Invalid phone number",
+      "PHONE_NUMBER_FLOOD": "Too many requests",
+      "PHONE_CODE_EMPTY": "Empty code",
+      "PHONE_CODE_EXPIRED": "Expired code",
+      "PHONE_CODE_INVALID": "Invalid code",
+      "PHONE_NUMBER_UNOCCUPIED": "User doesn't exist on Telegram",
+      "PASSWORD_HASH_INVALID": "Invalid password"
+    }
+  },
+
+  "feed": {
+    
+  },
+
   "channelSearch": "Search channel…",
   "channelSearchPlaceholder": "Channel name or link…",
-  "configureChannels": "Configure channels",
-  "configureFilters": "Configure filters",
+  "configureChannels": "Channel list",
+  "configureFilters": "Message filter",
 
   "intro": {
 

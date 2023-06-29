@@ -9,11 +9,11 @@ import * as logoCSS from './logo.sss'
 export const Logo: Component = () => {
   return (
     <div class={clsx(
+      logoCSS.base,
       layoutCSS.flex,
-      layoutCSS.flexCenter,
-      logoCSS.base
+      layoutCSS.flexCenter
     )}>
-      <Icon icon='logo'/>
+      {process.env.APP_TITLE}
     </div>
   )
 }

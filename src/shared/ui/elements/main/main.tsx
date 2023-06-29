@@ -1,11 +1,21 @@
-import type { ParentComponent } from 'solid-js'
+import type { ParentComponent, ComponentProps } from 'solid-js'
+import { splitProps } from 'solid-js'
+import { clsx } from 'clsx'
 
+import * as layoutCSS from '../layout.sss'
 import * as mainCSS from './main.sss'
 
-export const Main: ParentComponent = (props) => {
+export type MainProps = ComponentProps<'main'>
+
+export const Main: ParentComponent<MainProps> = (_props) => {
+  const [props, mainProps] = splitProps(_props, ['class'])
   return (
-    <main class={mainCSS.base}>
-      {props.children}
-    </main>
+    <main {...mainProps}
+      class={clsx(
+        props.class,
+        mainCSS.base,
+        layoutCSS.before
+      )}
+    />
   )
 }

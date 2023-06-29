@@ -15,8 +15,8 @@ export const restoreAccount = async () => {
   resolveAccountDataPromise(accountData)
 }
 
-export const getRestoredAccount = (cb: (accountData: AccountData | undefined) => void) => {
+export const getRestoredAccount = (cb?: (accountData: AccountData | undefined) => void) => {
   if (!restoredAccount) restoreAccount()
-  accountDataPromise.then(accountData => cb(accountData))
+  accountDataPromise.then(accountData => cb?.(accountData))
   return restoredAccount
 }

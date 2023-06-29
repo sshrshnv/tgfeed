@@ -1,15 +1,32 @@
 import type { Component } from 'solid-js'
+import { createMemo } from 'solid-js'
 
 import { locale } from '~/core/locale'
-import { routes } from '~/core/routes'
+import { feedRoutes } from '~/feed'
 import { routing } from '~/shared/routing'
-import { TransitionDialog, Text, Button, Icon } from '~/shared/ui/elements'
+import {
+  TransitionDialog, Text, Button, Icon,
+  Menu, MenuTitle, MenuRadioGroup
+} from '~/shared/ui/elements'
 
 import { formatOffset } from './utils'
 import * as feedOffsetSelectCSS from './feed-offset-select.sss'
 
 export const FeedOffsetSelect: Component = () => {
-  const isOpen = () => routing.currentRoute?.id === routes.feedOffsetSelect.id
+  const getItems = createMemo(() => [
+    { value: 12, text: formatOffset(locale.lang, 12, 'hour', 'long') },
+    { value: 24, text: formatOffset(locale.lang, 24, 'hour', 'long') },
+    { value: 24 * 2, text: formatOffset(locale.lang, 2, 'day', 'long') },
+    { value: 24 * 7, text: formatOffset(locale.lang, 7, 'day', 'long') },
+  ])
+
+  const isOpen = createMemo(() =>
+    routing.currentRoute?.id === feedRoutes.offsetSelectPopover.id
+  )
+
+  const handleChange = () => {
+    //
+  }
 
   return (
     <div class={feedOffsetSelectCSS.base}>
@@ -23,18 +40,28 @@ export const FeedOffsetSelect: Component = () => {
 
       <Button
         class={feedOffsetSelectCSS.button}
-        route={routes.feedOffsetSelect}
+        route={feedRoutes.offsetSelectPopover}
       >
         <Icon name='history' size='large'/>
       </Button>
 
       <TransitionDialog
-        route={routes.feedOffsetSelect}
+        route={feedRoutes.offsetSelectPopover}
         class={feedOffsetSelectCSS.popover}
         open={isOpen()}
         animation='slideInBottomAnimation'
       >
-        test
+        <Menu>
+          <MenuTitle
+            text='Feed for the last'
+          />
+          <MenuRadioGroup
+            value={24}
+            name='feed-offset'
+            items={getItems()}
+            onChange={handleChange}
+          />
+        </Menu>
       </TransitionDialog>
     </div>
   )

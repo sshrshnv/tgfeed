@@ -9,4 +9,4 @@ export type TransportState = import('./transport/abstract').TransportState
 export type MethodDeclMap = import('./tl').MethodDeclMap
 export type UpdateDeclMap = import('./tl').UpdateDeclMap
 
-export * from './tl/layer143/types'
+export * from './tl/layer158/types'
