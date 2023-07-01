@@ -1,6 +1,6 @@
 import type { Route } from '../routing.types'
 import { setRouting } from '../routing.state'
-import { listenNativePopEvent } from '../utils'
+import { listenNativePopEvent, findRouteIndex } from '../utils'
 
 let nativePopEventListenerAdded = false
 
@@ -8,22 +8,21 @@ export const pushRoute = (route: Route) => {
   if (!nativePopEventListenerAdded) {
     nativePopEventListenerAdded = true
     listenNativePopEvent(() => setRouting(state => ({
-      history: state.history.slice(0, state.history.length - 1)
+      history: state.history.toSpliced(-1)
     })))
   }
 
   setRouting(state => {
-    const historyLength = state.history.length
-    const history = [
-      ...state.history.filter(item =>
-        item.type === route.type && self.JSON.stringify(item) === self.JSON.stringify(route)
-      ),
-      route
-    ]
+    const routeIndex = findRouteIndex(state.history, route)
 
-    if (historyLength < history.length) {
-      self.history.pushState(null, '')
+    if (routeIndex < 0) {
+      self.history.pushState(null, '', route.path)
+    } else if (route.path && self.location.pathname !== route.path) {
+      self.history.replaceState(null, '', route.path)
     }
+
+    const history = state.history.toSpliced(routeIndex, routeIndex < 0 ? 0 : 1)
+    history.push(route)
 
     return { history }
   })

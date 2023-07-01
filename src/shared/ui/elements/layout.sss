@@ -34,8 +34,11 @@
     content: ''
 
 .outline
-  outline: 2px solid transparent
-  outline-offset: -2px
+  outline: none
 
-  &:focus-visible
-    outline-color: var(--theme-color-outline-variant)
+  @media (hover: hover)
+    outline: 2px solid transparent
+    outline-offset: -2px
+
+    &:focus-visible
+      outline-color: var(--theme-color-outline-variant)

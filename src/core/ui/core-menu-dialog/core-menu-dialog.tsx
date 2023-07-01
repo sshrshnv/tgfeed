@@ -11,8 +11,8 @@ import { feedRoutes } from '~/feed'
 import { routing } from '~/shared/routing'
 import {
   TransitionDialog,
-  Menu, MenuRouteButton, MenuFooter,
-  Logo, Text, layoutCSS
+  Menu, MenuTitle, MenuRouteButton, MenuFooter,
+  Text, layoutCSS
 } from '~/shared/ui/elements'
 
 import { coreRoutes } from '../../core.routes'
@@ -37,7 +37,10 @@ export const CoreMenuDialog: Component<CoreMenuDialogProps> = (props) => {
       animation='slideInRightAnimation'
     >
       <Menu>
-        <Logo/>
+        <MenuTitle
+          class={coreMenuDialogCSS.title}
+          text={process.env.APP_TITLE}
+        />
 
         <Show when={account.authorized}>
           <MenuRouteButton
@@ -61,7 +64,7 @@ export const CoreMenuDialog: Component<CoreMenuDialogProps> = (props) => {
 
       <MenuFooter>
         <Text variant='label' size='small'>
-          {process.env.APP_TITLE}
+          Privacy
         </Text>
         <Text variant='label' size='small'>
           v{process.env.APP_VERSION}

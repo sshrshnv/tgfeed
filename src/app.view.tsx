@@ -1,9 +1,17 @@
-import { Show, createMemo, createEffect } from 'solid-js'
+import { Switch, Match, Show, createMemo, createEffect, lazy } from 'solid-js'
 
 import { CoreMenuButton, CoreMenuDialog } from '~/core/ui'
-import { FeedHeaderControls } from '~/feed/ui'
 import { routing } from '~/shared/routing'
-import { Header, Main, Aside, HR } from '~/shared/ui/elements'
+import { Header, Main, Aside, Logo, HR } from '~/shared/ui/elements'
+
+import { introRoutes } from '~/intro'
+import { authRoutes } from '~/auth'
+import { feedRoutes } from '~/feed'
+
+const IntroMainContent = lazy(async () => ({ default: (await import('~/intro/ui')).IntroMainContent }))
+const AuthMainContent = lazy(async () => ({ default: (await import('~/auth/ui')).AuthMainContent }))
+const FeedHeaderControls = lazy(async () => ({ default: (await import('~/feed/ui')).FeedHeaderControls }))
+const FeedMainContent = lazy(async () => ({ default: (await import('~/feed/ui')).FeedMainContent }))
 
 import * as appViewCSS from './app.view.sss'
 
@@ -30,7 +38,23 @@ export const View = () => {
         </Show>
       </Header>
 
-      <Main class={appViewCSS.main}/>
+      <Main class={appViewCSS.main}>
+        <Show when={!isFeed()}>
+          <Logo withTitle/>
+        </Show>
+
+        <Switch>
+          <Match when={routing.currentPageRoute.id === introRoutes.page.id}>
+            <IntroMainContent/>
+          </Match>
+          <Match when={routing.currentPageRoute.id === authRoutes.page.id}>
+            <AuthMainContent/>
+          </Match>
+          <Match when={routing.currentPageRoute.id === feedRoutes.page.id}>
+            <FeedMainContent/>
+          </Match>
+        </Switch>
+      </Main>
 
       <Aside>
         <CoreMenuDialog class={appViewCSS.menu}/>

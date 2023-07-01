@@ -1,11 +1,21 @@
 .base
   height: var(--layout-header-size)
-  text-transform: uppercase
-  letter-spacing: 4px
-  font-size: 16px
-  font-family: var(--font-family)
-  font-weight: bold
-  line-height: 1
-  background-image: linear-gradient(to right, var(--theme-color-primary) 25%, var(--theme-color-tertiary) 90%)
-  background-clip: text
-  -webkit-text-fill-color: transparent
+
+.icon
+  width: 24px
+  height: 24px
+  fill: var(--theme-color-logo)
+
+._withTitle
+  height: auto
+  padding: var(--layout-header-size) 0
+
+  @media (--min-width-l)
+    padding-top: calc(var(--layout-header-size) * 2)
+
+  .icon
+    width: auto
+    height: 40px
+
+    @media (--min-width-l)
+      height: 80px
