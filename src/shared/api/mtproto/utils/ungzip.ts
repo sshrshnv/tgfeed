@@ -1,5 +1,3 @@
-import 'compression-streams-polyfill/lib/global'
-
 export const ungzip = async (buffer: ArrayBuffer) => {
   if (!self.DecompressionStream) {
     const { makeDecompressionStream } = await import('compression-streams-polyfill/ponyfill' /* webpackChunkName: 'compression.polyfill' */)

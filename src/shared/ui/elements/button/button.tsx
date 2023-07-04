@@ -18,10 +18,11 @@ export const Button: ParentComponent<ButtonProps> = (_props) => {
   ])
 
   const handleClick = (ev) => {
+    if (typeof props.onClick === 'function') {
+      props.onClick(ev)
+      return
+    }
     if (props.route) pushRoute(props.route)
-    if (typeof props.onClick !== 'function') return
-    ev.preventDefault()
-    props.onClick(ev)
   }
 
   return (

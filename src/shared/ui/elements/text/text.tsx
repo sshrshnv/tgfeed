@@ -6,12 +6,16 @@ import * as textCSS from './text.sss'
 export type TextProps = ComponentProps<'span'> & {
   variant: 'title' | 'label' | 'body'
   size: 'large' | 'medium' | 'small'
+  center?: boolean
+  uppercase?: boolean
 }
 
 export const Text: FlowComponent<TextProps> = (props) => {
   return (
     <span {...props} class={clsx(
       props.class,
+      props.center && textCSS._center,
+      props.uppercase && textCSS._uppercase,
       textCSS.base,
       textCSS[`_${props.variant}`],
       textCSS[`_${props.size}`]

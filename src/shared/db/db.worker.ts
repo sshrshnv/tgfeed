@@ -27,15 +27,13 @@ const dbPromise = openDB<DBSchema>(DB_NAME, DB_VERSION, {
   blocked(currentVersion, blockedVersion, event) {
     //
   },
+}).then(db => {
+  return comlink.proxy(db)
 })
 
-let db: DB
 const dbWorker: DBWorker = {
   call: async cb => {
-    if (!db) {
-      db = await dbPromise
-      db = comlink.proxy(db)
-    }
+    const db: DB = await dbPromise
     return cb(db)
   }
 }

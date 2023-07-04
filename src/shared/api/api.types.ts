@@ -1,4 +1,4 @@
-import type { ClientError, ClientMetaData, MethodDeclMap } from './mtproto'
+import type { ClientError, ClientMetaData, MethodDeclMap, InputCheckPasswordSRP, AccountPassword } from './mtproto'
 
 export type API = {
   req: <T extends keyof MethodDeclMap>(
@@ -11,6 +11,11 @@ export type API = {
       attempt?: number
     }
   ) => Promise<MethodDeclMap[T]['res']>
+
+  localReq: <T extends keyof LocalMethodDeclMap>(
+    method: T,
+    data: LocalMethodDeclMap[T]['req']
+  ) => Promise<LocalMethodDeclMap[T]['res']>
 }
 
 export type APIError = ClientError & {
@@ -40,5 +45,15 @@ export type APIRequestsDBSchema = {
   apiRequests: {
     key: keyof MethodDeclMap
     value: number
+  }
+}
+
+export type LocalMethodDeclMap = {
+  getPasswordKdf: {
+    req: {
+      passwordAlgo: AccountPassword.accountPassword
+      password: string
+    }
+    res: InputCheckPasswordSRP | undefined
   }
 }

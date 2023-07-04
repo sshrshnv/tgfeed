@@ -19,7 +19,7 @@
   "auth": {
     "phone": {
       "label": "Phone Number",
-      "description": "Please enter your Telegram phone number.",
+      "description": "Please enter your Telegram\n phone number.",
       "descriptionBan": "Telegram's automatic protection has been triggered and your account has been banned. This is a one-time error, it will not happen again after recovering."
     },
     "code": {
@@ -55,7 +55,7 @@
   },
 
   "feed": {
-    
+
   },
 
   "channelSearch": "Search channel…",

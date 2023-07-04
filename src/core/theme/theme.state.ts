@@ -1,8 +1,12 @@
 import { createStore } from 'solid-js/store'
 
 import type { Theme } from './theme.types'
-import { getRestoredTheme } from './actions'
+import { getSavedTheme } from './utils'
+
+const getInitialState = () => {
+  return getSavedTheme()
+}
 
 export const [theme, setTheme] = createStore<Theme>(
-  getRestoredTheme()
+  getInitialState()
 )

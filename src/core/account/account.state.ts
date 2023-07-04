@@ -1,8 +1,14 @@
 import { createStore } from 'solid-js/store'
 
-import type { Account } from './account.types'
-import { getRestoredAccount } from './actions'
+import type { Account, AccountData } from './account.types'
+import { getSavedAccount, getSavedAccountData } from './utils'
+
+const getIniaitalState = (cb: (accountData: AccountData | undefined) => void) => {
+  const savedAccount = getSavedAccount()
+  getSavedAccountData().then(cb)
+  return savedAccount
+}
 
 export const [account, setAccount] = createStore<Account>(
-  getRestoredAccount(accountData => setAccount('data', accountData))
+  getIniaitalState(accountData => setAccount('data', accountData))
 )

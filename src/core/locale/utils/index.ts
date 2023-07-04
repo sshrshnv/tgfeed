@@ -1,4 +1,6 @@
 export * from './detect-prefer-locale-lang'
 export * from './format-locale-lang'
+export * from './get-saved-locale'
 export * from './load-locale-texts'
+export * from './save-locale'
 export * from './set-locale-attributes'

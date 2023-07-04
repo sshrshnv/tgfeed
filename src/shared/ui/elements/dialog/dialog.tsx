@@ -26,7 +26,7 @@ export const Dialog: ParentComponent<DialogProps> = (_props) => {
   }
 
   const handleClick = (ev) => {
-    if (ev.target.nodeName.toLowerCase() !== 'dialog') return
+    if (!['dialog', 'button'].includes(ev.target.nodeName.toLowerCase())) return
     props.onCancel()
   }
 

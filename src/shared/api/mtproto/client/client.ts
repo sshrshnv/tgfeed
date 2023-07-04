@@ -1,5 +1,5 @@
 import { build, parse } from '../tl'
-import type { MethodDeclMap, AccountPassword } from '../tl'
+import type { MethodDeclMap, AccountPassword, InputCheckPasswordSRP } from '../tl'
 import Transport from '../transport/abstract'
 import type { TransportConfig, TransportState } from '../transport/abstract'
 import { Http, Socket } from '../transport'
@@ -84,7 +84,13 @@ export default class Client {
     if (this.cfg.autoConnect) this.authorize(cfg.dc)
   }
 
-  getPasswordKdfAsync(conf: AccountPassword.accountPassword, password: string, cb: (result: object) => void): void {
+  getPasswordKdf({
+    passwordAlgo: conf,
+    password
+  }: {
+    passwordAlgo: AccountPassword.accountPassword
+    password: string
+  }): InputCheckPasswordSRP.inputCheckPasswordSRP | undefined {
     if (!conf.srp_id || !conf.srp_B || !conf.current_algo || conf.current_algo._ === 'passwordKdfAlgoUnknown') return
 
     const srp = genPasswordSRP(
@@ -97,7 +103,7 @@ export default class Client {
       password,
     )
 
-    cb(srp)
+    return srp
   }
 
   /** Performs DH-exchange for temp and perm auth keys, binds them and invoking layer */

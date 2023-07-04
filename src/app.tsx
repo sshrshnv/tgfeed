@@ -1,8 +1,5 @@
 import { render } from 'solid-js/web'
 
-import { restoreAccount } from '~/core/account/actions'
-restoreAccount()
-
 import { preventContextMenu, preventDragAndDrop, preventScale } from '~/shared/ui/utils'
 preventContextMenu()
 preventDragAndDrop()

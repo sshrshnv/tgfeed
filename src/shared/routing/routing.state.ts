@@ -1,7 +1,20 @@
 import { createStore } from 'solid-js/store'
 
+import { getSavedAccount } from '~/core/account/utils'
+import { introRoutes } from '~/intro'
+import { authRoutes } from '~/auth'
+import { feedRoutes } from '~/feed'
+
 import type { Route } from './routing.types'
-import { getInitialPageRoute } from './actions/get-initial-page-route'
+
+const getInitialPageRoute = () => {
+  const savedAccount = getSavedAccount()
+  return (
+    self.location.pathname === introRoutes.page.path ? introRoutes.page :
+    savedAccount.authorized ? feedRoutes.page :
+    authRoutes.page
+  )
+}
 
 export const [routing, setRouting] = createStore({
   initialPageRoute: getInitialPageRoute(),
