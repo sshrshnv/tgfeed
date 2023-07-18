@@ -1,6 +1,6 @@
 import type { Component } from 'solid-js'
 
-import { locale } from '~/core/locale'
+import { localeState } from '~/core/locale'
 import { feedRoutes } from '~/feed'
 import { Button, Icon } from '~/shared/ui/elements'
 
@@ -19,7 +19,7 @@ export const FeedChannelSearch: Component = () => {
         class={feedChannelSearchCSS.button}
         route={feedRoutes.channelSearchPopover}
       >
-        {locale.texts?.channelSearch}
+        {localeState.texts?.channelSearch}
       </Button>
 
       <FeedChannelSearchDialog/>

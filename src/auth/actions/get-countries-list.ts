@@ -1,8 +1,7 @@
-import { callApiWorker } from '~/shared/api'
+import { api } from '~/shared/api'
 
-export const getCountriesList = (
-  lang_code: string
-) => callApiWorker(api => api.req('help.getCountriesList', {
-  lang_code,
-  hash: 0
-}))
+export const getCountriesList = () =>
+  api.req('help.getCountriesList', {
+    lang_code: 'en',
+    hash: 0
+  })

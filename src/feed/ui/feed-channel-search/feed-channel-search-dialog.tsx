@@ -2,7 +2,7 @@ import type { Component } from 'solid-js'
 import { createMemo } from 'solid-js'
 import { clsx } from 'clsx'
 
-import { locale } from '~/core/locale'
+import { localeState } from '~/core/locale'
 import { feedRoutes } from '~/feed/feed.routes'
 import { routing } from '~/shared/routing'
 import { TransitionDialog, Input, Icon } from '~/shared/ui/elements'
@@ -39,7 +39,7 @@ export const FeedChannelSearchDialog: Component<FeedChannelSearchDialogProps> = 
           />
           <Input
             class={feedChannelSearchDialogCSS.input}
-            placeholder={locale.texts?.channelSearchPlaceholder}
+            placeholder={localeState.texts?.channelSearchPlaceholder}
             autofocus
           />
         </div>

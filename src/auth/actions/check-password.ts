@@ -1,14 +1,16 @@
-import { callApiWorker } from '~/shared/api'
+import { api } from '~/shared/api'
+
+import { handleSignIn } from './handle-sign-in'
 
 export const checkPassword = async (
   password: string
 ) => {
-  const passwordAlgo = await callApiWorker(api => api.req('account.getPassword'))
-  const passwordHash = await callApiWorker(api => api.localReq('getPasswordKdf', {
+  const passwordAlgo = await api.req('account.getPassword')
+  const passwordHash = await api.exec('getPasswordKdf', {
     passwordAlgo,
     password
-  }))
-  return callApiWorker(api => api.req('auth.checkPassword', {
-    password: passwordHash
-  }))
+  })
+  return api.req('auth.checkPassword', {
+    password: passwordHash!
+  }).then(handleSignIn)
 }

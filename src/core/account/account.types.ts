@@ -9,7 +9,7 @@ export type AccountDBSchema = {
   }
 }
 
-export type Account = {
+export type AccountState = {
   authorized: boolean
-  data?: AccountData
+  data: AccountData | null
 }

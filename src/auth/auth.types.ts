@@ -1,12 +1,10 @@
+import type { AuthSentCode } from '~/shared/api/mtproto'
+
 export type AuthStep = 'phoneNumber' | 'code' | 'password'
 
-export type AuthData = {
-  country: string
-  phoneNumber: string
-  code: string
-}
-
-export type Auth = {
+export type AuthState = {
   step: AuthStep
-  data: AuthData
+  phone_number?: string
+  phone_number_formatted?: string
+  meta: AuthSentCode.authSentCode | null
 }

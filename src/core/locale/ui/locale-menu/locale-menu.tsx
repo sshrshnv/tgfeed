@@ -4,8 +4,7 @@ import { createMemo } from 'solid-js'
 import { MenuTitle, MenuRadioGroup } from '~/shared/ui/elements'
 
 import type { LocaleLang } from '../../locale.types'
-import { locale } from '../../locale.state'
-import { changeLocale } from '../../actions'
+import { localeState, setLocaleState } from '../../locale-state'
 import { formatLocaleLang } from '../../utils'
 
 export const LocaleMenu: Component = () => {
@@ -16,16 +15,16 @@ export const LocaleMenu: Component = () => {
   )
 
   const handleChange = (lang: LocaleLang) => {
-    changeLocale({ lang })
+    setLocaleState({ lang })
   }
 
   return (
     <>
       <MenuTitle
-        text={locale.texts?.locale.title}
+        text={localeState.texts?.locale.title}
       />
       <MenuRadioGroup
-        value={locale.lang}
+        value={localeState.lang}
         name='language'
         items={getItems()}
         onChange={handleChange}

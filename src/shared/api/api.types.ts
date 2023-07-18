@@ -12,27 +12,20 @@ export type API = {
     }
   ) => Promise<MethodDeclMap[T]['res']>
 
-  localReq: <T extends keyof LocalMethodDeclMap>(
+  exec: <T extends keyof ExecMethodDeclMap>(
     method: T,
-    data: LocalMethodDeclMap[T]['req']
-  ) => Promise<LocalMethodDeclMap[T]['res']>
+    data: ExecMethodDeclMap[T]['req']
+  ) => Promise<ExecMethodDeclMap[T]['res']>
 }
 
 export type APIError = ClientError & {
   method: string
 }
 
-export type APIWorker = {
-  call: APIWorkerCaller
-}
-
-export type APIWorkerCaller = <T>(cb: (api: API) => T) => Promise<T>
-
 export type APIWorkerMessage = {
   mainPort: MessagePort
-  dbPort: MessagePort
+  dbStoragePort: MessagePort
 }
-
 
 export type APIMetaDBSchema = {
   apiMeta: {
@@ -48,7 +41,7 @@ export type APIRequestsDBSchema = {
   }
 }
 
-export type LocalMethodDeclMap = {
+export type ExecMethodDeclMap = {
   getPasswordKdf: {
     req: {
       passwordAlgo: AccountPassword.accountPassword

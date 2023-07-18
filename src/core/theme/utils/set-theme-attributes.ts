@@ -1,4 +1,4 @@
-import type { Theme, ThemeMode } from '../theme.types'
+import type { ThemeState, ThemeMode } from '../theme.types'
 import { getThemeModeMQ } from './get-theme-mode-mq'
 
 const themeModeEl = document.documentElement
@@ -21,7 +21,7 @@ export const setThemeColorAttribute = (themeMode: ThemeMode) => {
   }
 }
 
-export const setThemeAttributes = (theme: Theme) => {
-  setThemeModeAttribute(theme.mode)
-  setThemeColorAttribute(theme.mode)
+export const setThemeAttributes = (themeState: ThemeState) => {
+  setThemeModeAttribute(themeState.mode)
+  setThemeColorAttribute(themeState.mode)
 }

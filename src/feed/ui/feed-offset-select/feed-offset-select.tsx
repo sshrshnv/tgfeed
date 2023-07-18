@@ -1,7 +1,7 @@
 import type { Component } from 'solid-js'
 import { createMemo } from 'solid-js'
 
-import { locale } from '~/core/locale'
+import { localeState } from '~/core/locale'
 import { feedRoutes } from '~/feed'
 import { routing } from '~/shared/routing'
 import {
@@ -14,10 +14,10 @@ import * as feedOffsetSelectCSS from './feed-offset-select.sss'
 
 export const FeedOffsetSelect: Component = () => {
   const getItems = createMemo(() => [
-    { value: 12, text: formatOffset(locale.lang, 12, 'hour', 'long') },
-    { value: 24, text: formatOffset(locale.lang, 24, 'hour', 'long') },
-    { value: 24 * 2, text: formatOffset(locale.lang, 2, 'day', 'long') },
-    { value: 24 * 7, text: formatOffset(locale.lang, 7, 'day', 'long') },
+    { value: 12, text: formatOffset(localeState.lang, 12, 'hour', 'long') },
+    { value: 24, text: formatOffset(localeState.lang, 24, 'hour', 'long') },
+    { value: 24 * 2, text: formatOffset(localeState.lang, 2, 'day', 'long') },
+    { value: 24 * 7, text: formatOffset(localeState.lang, 7, 'day', 'long') },
   ])
 
   const isOpen = createMemo(() =>
@@ -35,7 +35,7 @@ export const FeedOffsetSelect: Component = () => {
         variant='label'
         size='small'
       >
-        {formatOffset(locale.lang, 24, 'hour')}
+        {formatOffset(localeState.lang, 24, 'hour')}
       </Text>
 
       <Button

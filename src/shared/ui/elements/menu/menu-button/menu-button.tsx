@@ -18,6 +18,7 @@ export const MenuButton: Component<MenuButtonProps> = (props) => {
     <Button
       class={menuButtonCSS.base}
       route={props.route}
+      onClick={props.onClick}
     >
       <Icon
         class={menuButtonCSS.icon}

@@ -222,7 +222,7 @@ export default class Client {
   }
 
   /** Resolve response message */
-  resolve = async (cfg: TransportConfig, msg: TransportState | ErrorMessage | EncryptedMessage | PlainMessage) => {
+  resolve = (cfg: TransportConfig, msg: TransportState | ErrorMessage | EncryptedMessage | PlainMessage) => {
     // resolve tranport state event
     if (typeof msg === 'string') {
       // emit client event if base dc status sent
@@ -315,7 +315,8 @@ export default class Client {
     }
 
     if (!error && result) {
-      await this.rpc.processMessage(result, {
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      this.rpc.processMessage(result, {
         id,
         dc: cfg.dc,
         thread: cfg.thread,

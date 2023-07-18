@@ -1,23 +1,58 @@
-.base
-  flex-direction: column
-  align-items: center
-  gap: 16px
+.description, .error
+  margin: 0 auto
+  display: block
   max-width: 320px
-
-.description
-  padding-bottom:  calc(var(--layout-header-size) / 2)
   white-space: pre-line
   text-align: center
 
-.input
-  max-width: 280px
+.description
+  padding-bottom: 24px
+
+.error
+  padding-top: 16px
+  color: var(--theme-color-error)
+
+.form
+  position: relative
+  max-width: 320px
   height: 48px
-  border-radius: 8px
+  border-radius: 24px
+  background-color: var(--theme-color-surface-1)
+
+.icon
+  position: absolute
+  z-index: 1
+  top: 0
+  left: 0
+  padding: 16px 4px 16px 12px
+
+.input
+  position: relative
+  z-index: 0
+  padding: 0 48px 0 32px
+  border-radius: 24px
   background-color: var(--theme-color-background)
+  font: var(--font-title-medium)
+  letter-spacing: 0.5px
 
 .button
-  max-width: 280px
-  height: 48px
-  border-radius: 8px
+  position: absolute
+  z-index: 1
+  top: 0
+  right: 0
+  bottom: 0
+  width: 48px
+  padding: 0
+  gap: 0
+  border-radius: 24px
   background-color: var(--theme-color-primary)
   color: var(--theme-color-on-primary)
+
+.footer
+  margin-top: auto
+  height: 56px
+  gap: 16px
+
+.footerButton
+  width: auto
+  color: var(--theme-color-secondary)

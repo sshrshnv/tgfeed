@@ -1,31 +1,30 @@
 import type { Component } from 'solid-js'
 import { createMemo } from 'solid-js'
 
-import { locale } from '~/core/locale'
+import { localeState } from '~/core/locale'
 import { MenuTitle, MenuRadioGroup } from '~/shared/ui/elements'
 
 import type { ThemeMode } from '../../theme.types'
-import { theme } from '../../theme.state'
-import { changeTheme } from '../../actions'
+import { themeState, setThemeState } from '../../theme-state'
 
 export const ThemeMenu: Component = () => {
   const getItems = createMemo(() => [
-    { value: 'system', text: locale.texts?.theme.system },
-    { value: 'light', text: locale.texts?.theme.light },
-    { value: 'dark', text: locale.texts?.theme.dark }
+    { value: 'system', text: localeState.texts?.theme.system },
+    { value: 'light', text: localeState.texts?.theme.light },
+    { value: 'dark', text: localeState.texts?.theme.dark }
   ])
 
   const handleChange = (mode: ThemeMode) => {
-    changeTheme({ mode })
+    setThemeState({ mode })
   }
 
   return (
     <>
       <MenuTitle
-        text={locale.texts?.theme.title}
+        text={localeState.texts?.theme.title}
       />
       <MenuRadioGroup
-        value={theme.mode}
+        value={themeState.mode}
         name='theme'
         items={getItems()}
         onChange={handleChange}

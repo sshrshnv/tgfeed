@@ -9,13 +9,8 @@ export type InputProps = ComponentProps<'input'>
 
 export const Input: Component<InputProps> = (_props) => {
   const [props, inputProps] = splitProps(_props, [
-    'class', 'type', 'name', 'onInput'
+    'class', 'type', 'name'
   ])
-
-  const handleInput = ev => {
-    if (typeof props.onInput !== 'function') return
-    props.onInput(ev.target.value || '')
-  }
 
   return (
     <input {...inputProps}
@@ -26,7 +21,6 @@ export const Input: Component<InputProps> = (_props) => {
       )}
       type={props.type || 'text'}
       autocomplete='off'
-      onInput={handleInput}
     />
   )
 }

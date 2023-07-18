@@ -1,7 +1,7 @@
 export type LocaleLang = 'en'
 export type LocaleTexts = typeof import('~/shared/ui/locales/en.json')
 
-export type Locale = {
+export type LocaleState = {
   lang: LocaleLang
-  texts?: LocaleTexts
+  texts: LocaleTexts | null
 }

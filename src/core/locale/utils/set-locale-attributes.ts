@@ -1,4 +1,4 @@
-import type { Locale, LocaleLang } from '../locale.types'
+import type { LocaleState, LocaleLang } from '../locale.types'
 
 const localeLangEl = self.document.documentElement
 
@@ -8,6 +8,6 @@ export const setLocaleLangAttribute = (localeLang: LocaleLang) => {
   }
 }
 
-export const setLocaleAttributes = (locale: Locale) => {
-  setLocaleLangAttribute(locale.lang)
+export const setLocaleAttributes = (localeState: LocaleState) => {
+  setLocaleLangAttribute(localeState.lang)
 }

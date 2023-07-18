@@ -149,17 +149,17 @@ export default class RPCService {
   /**
    * Processes RPC response messages
    */
-  async processMessage(result: any, headers: RPCHeaders, ack = true) {
+  processMessage(result: any, headers: RPCHeaders, ack = true) {
     debug(this.client.cfg, headers.dc, '->', result._)
 
     switch (result._) {
-    case 'msg_container': await this.processMessageContainer(result, headers); break
+    case 'msg_container': this.processMessageContainer(result, headers); break
     case 'new_session_created': this.processSessionCreated(result, headers); break
     case 'bad_server_salt': this.processBadServerSalt(result, headers); break
     case 'bad_msg_notification': this.processBadMsgNotification(result, headers); break
     case 'msgs_ack': break
-    case 'gzip_packed': await this.processGzipped(result, headers); break
-    case 'rpc_result': await this.processRPCResult(result, headers); break
+    case 'gzip_packed': this.processGzipped(result, headers); break
+    case 'rpc_result': this.processRPCResult(result, headers); break
     case 'msg_detailed_info': break
 
     default:
@@ -182,11 +182,12 @@ export default class RPCService {
   /**
    * Process: gzip_packed
    */
-  async processGzipped(result: Object.gzip_packed, headers: RPCHeaders) {
+  processGzipped(result: Object.gzip_packed, headers: RPCHeaders) {
     try {
-      const buffer = await ungzip(result.packed_data)
-      const reader = new Reader32(ab2i(buffer))
-      this.processMessage(parse(reader), headers, false)
+      ungzip(result.packed_data, (buffer) => {
+        const reader = new Reader32(ab2i(buffer))
+        this.processMessage(parse(reader), headers, false)
+      })
     } catch (e) {
       console.warn('Unable to decode gzip data', e) // eslint-disable-line no-console
     }
@@ -195,13 +196,13 @@ export default class RPCService {
   /**
    * Process: msg_container
    */
-  async processMessageContainer(result: any /* MessageContainer.msg_container */, headers: RPCHeaders) {
+  processMessageContainer(result: any /* MessageContainer.msg_container */, headers: RPCHeaders) {
     for (let i = 0; i < result.messages.length; i += 1) {
       const item = result.messages[i]
 
       this.ackMsg(headers.transport, headers.dc, headers.thread, item.msg_id)
 
-      await this.processMessage(item.body, {
+      this.processMessage(item.body, {
         ...headers,
         id: item.msg_id,
       }, false)
@@ -246,30 +247,37 @@ export default class RPCService {
   /**
    * Processes: rpc_result
    */
-  async processRPCResult(res: RpcResult.rpc_result, headers: RPCHeaders) {
+  processRPCResult(res: RpcResult.rpc_result, headers: RPCHeaders) {
     let { result } = res as any
     const reqID = res.req_msg_id
 
     if (headers.id) this.ackMsg(headers.transport, headers.dc, headers.thread, headers.id)
 
+    const process = result => {
+      switch (result._) {
+      case 'rpc_error':
+        this.emit(reqID, {
+          type: 'rpc',
+          code: result.error_code,
+          message: result.error_message,
+        }, result)
+        break
+
+      default:
+        this.emit(reqID, null, result)
+      }
+    }
+
     // Ungzip if gzipped
     if (result && result._ === 'gzip_packed') {
-      const buffer = await ungzip(result.packed_data)
-      const reader = new Reader32(ab2i(buffer))
-      result = parse(reader) as any
+      ungzip(result.packed_data, (buffer) => {
+        const reader = new Reader32(ab2i(buffer))
+        result = parse(reader) as any
+        process(result)
+      })
+      return
     }
 
-    switch (result._) {
-    case 'rpc_error':
-      this.emit(reqID, {
-        type: 'rpc',
-        code: result.error_code,
-        message: result.error_message,
-      }, result)
-      break
-
-    default:
-      this.emit(reqID, null, result)
-    }
+    process(result)
   }
 }

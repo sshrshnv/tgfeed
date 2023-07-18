@@ -1,1 +1,1 @@
-export * from './set-account-data'
+export * from './log-out'

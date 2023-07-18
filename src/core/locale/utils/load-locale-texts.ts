@@ -1,6 +1,6 @@
-import type { Locale, LocaleTexts } from '../locale.types'
+import type { LocaleState, LocaleTexts } from '../locale.types'
 
-export const loadLocaleTexts = async (locale: Locale): Promise<LocaleTexts> => {
-  const localeTextsModule = await import(`~/shared/ui/locales/${locale.lang}.json` /* webpackChunkName: 'locale.' */)
+export const loadLocaleTexts = async (localeState: LocaleState): Promise<LocaleTexts> => {
+  const localeTextsModule = await import(`~/shared/ui/locales/${localeState.lang}.json` /* webpackChunkName: 'locale.' */)
   return localeTextsModule.default
 }

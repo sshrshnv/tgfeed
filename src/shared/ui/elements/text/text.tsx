@@ -4,7 +4,7 @@ import { clsx } from 'clsx'
 import * as textCSS from './text.sss'
 
 export type TextProps = ComponentProps<'span'> & {
-  variant: 'title' | 'label' | 'body'
+  variant: 'display' | 'headline' | 'title' | 'label' | 'body'
   size: 'large' | 'medium' | 'small'
   center?: boolean
   uppercase?: boolean
@@ -19,8 +19,6 @@ export const Text: FlowComponent<TextProps> = (props) => {
       textCSS.base,
       textCSS[`_${props.variant}`],
       textCSS[`_${props.size}`]
-    )}>
-      {props.children}
-    </span>
+    )}/>
   )
 }

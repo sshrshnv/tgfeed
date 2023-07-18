@@ -1,36 +1,42 @@
 import { comlink, createPromise, setDelay } from '~/shared/utils'
-import type { DBWorker, DBWorkerCaller } from '~/shared/db'
+import type { DBStorage } from '~/shared/storage/db-storage'
+import { initDbStorage } from '~/shared/storage/db-storage/utils/init-db-storage'
 
-import type { API, APIWorker, APIWorkerMessage } from './api.types'
+import type { API, APIWorkerMessage } from './api.types'
 import type { ClientMetaData, Updates } from './mtproto'
 import { Client } from './mtproto'
+import { handleApiRes } from './utils/handle-api-res'
 
-const [dbWorkerPromise, resolveDbWorkerPromise] = createPromise<DBWorker>()
+const [dbStorageWorkerPromise, resolveDbStorageWorkerPromise] = createPromise<DBStorage>()
+const getDbStoragePromise = () => dbStorageWorkerPromise
+const dbStorage = initDbStorage(getDbStoragePromise)
 
-const callDbWorker: DBWorkerCaller = async cb => {
-  const dbWorker = await dbWorkerPromise
-  return dbWorker.call(comlink.proxy(cb))
+const getMeta = async () => (await dbStorage.get('apiMeta', 'data')) || {
+  pfs: false,
+  baseDC: 2,
+  userID: '',
+  dcs: {}
+}
+
+const saveMeta = (meta: ClientMetaData) => {
+  dbStorage.put('apiMeta', meta, 'data')
+}
+
+const deleteMeta = () => {
+  dbStorage.delete('apiMeta', 'data')
 }
 
 const apiPromise = new Promise<API>(async resolve => {
-  let meta: ClientMetaData = await callDbWorker(db => db.get('apiMeta', 'data')) || {
-    pfs: false,
-    baseDC: 2,
-    userID: '',
-    dcs: {}
-  }
+  let migratedDC: number
 
-  const saveMeta = (metaData: Partial<ClientMetaData>) => {
-    meta = { ...meta, ...metaData }
-    callDbWorker(db => db.put('apiMeta', meta, 'data'))
-  }
+  const meta: ClientMetaData = await getMeta()
 
   const client = new Client({
     APIID: +(process.env.API_ID || ''),
     APIHash: process.env.API_HASH || '',
     APILayer: 158,
     test: false,
-    debug: false,
+    debug: true,
     dc: meta.baseDC,
     ssl: true,
     autoConnect: true,
@@ -40,12 +46,13 @@ const apiPromise = new Promise<API>(async resolve => {
     meta
   })
 
-  client.on('metaChanged', (saveMeta))
+  client.on('metaChanged', saveMeta)
 
   const api: API = {
     req: async (method, data = {}, params = {}) => {
       const { thread, timeout } = params
-      let { dc = meta.baseDC, attempt = 0 } = params
+      let { dc, attempt = 0 } = params
+      dc = dc || migratedDC
 
       if (timeout) {
         await setDelay(timeout)
@@ -61,14 +68,6 @@ const apiPromise = new Promise<API>(async resolve => {
 
         const { code, message = '' } = err
 
-        if (code === 420) {
-          const [_, delay] = message.split('FLOOD_WAIT_')
-          resolve(api.req(method, data, {
-            dc, thread, timeout: +delay * 1000
-          }))
-          return
-        }
-
         if (code === 303) {
           const [_type, dcId] = message.split('_MIGRATE_')
 
@@ -79,7 +78,10 @@ const apiPromise = new Promise<API>(async resolve => {
           resolve(api.req(method, data, {
             dc, thread
           }))
-          saveMeta({ baseDC: dc })
+
+          migratedDC = dc
+          const meta = await getMeta()
+          saveMeta({ ...meta, baseDC: dc })
           return
         }
 
@@ -90,32 +92,42 @@ const apiPromise = new Promise<API>(async resolve => {
           return
         }
 
-        reject(err)
+        if (message === 'CONNECTION_NOT_INITED') {
+          await deleteMeta()
+        }
+
+        reject(new Error(message, {
+          cause: method
+        }))
       })
 
       return promise
     },
 
-    localReq: async (method, data) => {
+    exec: async (method, data) => {
       return client[method]?.(data)
     }
   }
 
   resolve(api)
-}).then(api => {
-  return comlink.proxy(api)
 })
 
-const apiWorker: APIWorker = {
-  call: async cb => {
+const apiWorker: API = {
+  req: async (method, ...args) => {
     const api = await apiPromise
-    return cb(api)
+    const res = await api.req(method, ...args)
+    return handleApiRes(method, res, dbStorage)
+  },
+
+  exec: async (...args) => {
+    const api = await apiPromise
+    return api.exec(...args)
   }
 }
 
 self.onmessage = (ev: MessageEvent<APIWorkerMessage>) => {
-  if (ev.data?.dbPort) {
-    resolveDbWorkerPromise(comlink.wrap(ev.data.dbPort) as DBWorker)
+  if (ev.data?.dbStoragePort) {
+    resolveDbStorageWorkerPromise(comlink.wrap(ev.data.dbStoragePort) as DBStorage)
   }
   if (ev.data?.mainPort) {
     comlink.expose(apiWorker, ev.data.mainPort)

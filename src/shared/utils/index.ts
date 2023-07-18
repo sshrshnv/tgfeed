@@ -1,6 +1,6 @@
 export * from './comlink'
 export * from './create-promise'
+export * from './create-state-store'
 export * from './detect-platform'
-export * from './local-storage'
 export * from './post-message'
 export * from './set-delay'

@@ -1,4 +1,4 @@
-import { callApiWorker } from '~/shared/api'
+import { api } from '~/shared/api'
 
 export const getNearestDc = () =>
-  callApiWorker(api => api.req('help.getNearestDc'))
+  api.req('help.getNearestDc')

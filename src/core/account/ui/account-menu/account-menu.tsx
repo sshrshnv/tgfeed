@@ -1,29 +1,31 @@
 import type { Component } from 'solid-js'
 import { Switch, Match } from 'solid-js'
 
-import { locale } from '~/core/locale'
+import { localeState } from '~/core/locale'
 import { authRoutes } from '~/auth'
 import { MenuTitle, MenuRouteButton, MenuButton } from '~/shared/ui/elements'
 
-import { account } from '../../account.state'
+import { logOut } from '../../actions'
+import { accountState } from '../../account-state'
 
 export const AccountMenu: Component = () => {
   return (
     <>
       <Switch>
-        <Match when={account.authorized}>
+        <Match when={accountState.authorized}>
           <MenuTitle
-            text={locale.texts?.account.title}
+            text={localeState.texts?.account.title}
           />
           <MenuButton
-            text={locale.texts?.account.signOut}
+            text={localeState.texts?.account.signOut}
             icon='logout'
+            onClick={logOut}
           />
         </Match>
-        <Match when={!account.authorized}>
+        <Match when={!accountState.authorized}>
           <MenuRouteButton
             route={authRoutes.page}
-            text={locale.texts?.account.signIn}
+            text={localeState.texts?.account.signIn}
             variant='primary'
             icon='account'
           />

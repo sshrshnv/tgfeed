@@ -1,7 +1,6 @@
 export type ThemeMode = 'system' | 'light' | 'dark'
 export type ThemeColor = string
 
-export type Theme = {
+export type ThemeState = {
   mode: ThemeMode
-  color?: ThemeColor
 }

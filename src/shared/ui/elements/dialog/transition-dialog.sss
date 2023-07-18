@@ -5,7 +5,7 @@
   transform-origin: 0 0
   will-change: translate, scale, opacity
 
-.slideInRightAnimation, .slideInBottomAnimation
+.slideInRightAnimation, .slideInLeftAnimation, .slideInBottomAnimation
   &._enter, &._exit
     opacity: 0
 
@@ -19,21 +19,34 @@
 
 .slideInRightAnimation
   &._enterActive
-    animation-name: translateInRight
+    --local-translate: -48px
+    animation-name: translateInX
 
   &._exitActive
-    animation-name: translateOutLeft
+    --local-translate: -24px
+    animation-name: translateOutX
+
+.slideInLeftAnimation
+  &._enterActive
+    --local-translate: 48px
+    animation-name: translateInX
+
+  &._exitActive
+    --local-translate: 24px
+    animation-name: translateOutX
 
 .slideInBottomAnimation
   &._enterActive
-    animation-name: translateInBottom
+    --local-translate: 0 -24px
+    animation-name: translateInY
 
   &._exitActive
-    animation-name: translateOutTop
+    --local-translate: 0 -12px
+    animation-name: translateOutY
 
-@keyframes translateInRight
+@keyframes translateInX
   0%
-    translate: -48px
+    translate: var(--local-translate)
     scale: 0.9 1
     opacity: 0
   100%
@@ -41,17 +54,17 @@
     scale: 1 1
     opacity: 1
 
-@keyframes translateOutLeft
+@keyframes translateOutX
   0%
     translate: 0
     opacity: 1
   100%
-    translate: -24px
+    translate: var(--local-translate)
     opacity: 0
 
-@keyframes translateInBottom
+@keyframes translateInY
   0%
-    translate: 0 -24px
+    translate: var(--local-translate)
     scale: 1 0.9
     opacity: 0
   100%
@@ -59,10 +72,10 @@
     scale: 1 1
     opacity: 1
 
-@keyframes translateOutTop
+@keyframes translateOutY
   0%
     translate: 0 0
     opacity: 1
   100%
-    translate: 0 -12px
+    translate: var(--local-translate)
     opacity: 0

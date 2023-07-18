@@ -22,7 +22,7 @@
     <noscript class="warning">You need to enable JavaScript to run this app.</noscript>
     <script>
       var features = [
-        'Proxy', 'MessageChannel', 'BigInt', 'ResizeObserver', 'IntersectionObserver', 'HTMLDialogElement'
+        'Proxy', 'MessageChannel', 'BigInt', 'TransformStream', 'ResizeObserver', 'IntersectionObserver', 'HTMLDialogElement'
       ]
       var unsupported = typeof [].some !== 'function' || features.some(function(feature) {
         return typeof self[feature] !== 'function'

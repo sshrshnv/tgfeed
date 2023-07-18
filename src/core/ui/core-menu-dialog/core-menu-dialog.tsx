@@ -2,20 +2,20 @@ import type { Component } from 'solid-js'
 import { Show } from 'solid-js'
 import { clsx } from 'clsx'
 
-import { account } from '~/core/account'
+import { accountState } from '~/core/account'
 import { AccountMenu } from '~/core/account/ui'
-import { locale } from '~/core/locale'
+import { localeState } from '~/core/locale'
 import { LocaleMenu } from '~/core/locale/ui'
 import { ThemeMenu } from '~/core/theme/ui'
 import { feedRoutes } from '~/feed'
 import { routing } from '~/shared/routing'
 import {
-  TransitionDialog,
-  Menu, MenuTitle, MenuRouteButton, MenuFooter,
-  Text, layoutCSS
+  TransitionDialog, Text,
+  Menu, MenuTitle, MenuRouteButton, MenuFooter
 } from '~/shared/ui/elements'
 
 import { coreRoutes } from '../../core.routes'
+import * as layoutCSS from '../../../shared/ui/elements/layout.sss'
 import * as coreMenuDialogCSS from './core-menu-dialog.sss'
 
 export type CoreMenuDialogProps = {
@@ -42,16 +42,16 @@ export const CoreMenuDialog: Component<CoreMenuDialogProps> = (props) => {
           text={process.env.APP_TITLE}
         />
 
-        <Show when={account.authorized}>
+        <Show when={accountState.authorized}>
           <MenuRouteButton
             route={feedRoutes.channelsPage}
-            text={locale.texts?.configureChannels}
+            text={localeState.texts?.configureChannels}
             variant='primary'
             icon='channels'
           />
           <MenuRouteButton
             route={feedRoutes.filtersPage}
-            text={locale.texts?.configureFilters}
+            text={localeState.texts?.configureFilters}
             variant='tertiary'
             icon='visibilityOff'
           />
