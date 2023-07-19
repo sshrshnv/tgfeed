@@ -1,14 +1,18 @@
 {
   "env": {
-    "es2020": true,
+    "es2024": true,
     "browser": true,
+    "worker": true,
+    "serviceworker": true,
     "node": true
   },
   "plugins": [
+    "compat",
     "jsx-a11y",
     "solid"
   ],
   "extends": [
+    "plugin:compat/recommended",
     "plugin:jsx-a11y/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:solid/typescript"

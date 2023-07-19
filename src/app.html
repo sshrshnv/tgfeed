@@ -13,6 +13,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="theme-color" content="<%= params.APP_DEFAULT_THEME_COLOR %>">
+    <style inline></style>
     <link rel="manifest" href="<%= require('./app.webmanifest') %>">
     <%= htmlWebpackPlugin.tags.filter((tag) => tag.tagName !== 'script') %>
     <%= htmlWebpackPlugin.tags.filter((tag) => tag.tagName === 'script') %>
@@ -21,17 +22,19 @@
     <div hidden class="warning" data-browser="You need to update your browser to run this app."></div>
     <noscript class="warning">You need to enable JavaScript to run this app.</noscript>
     <script>
-      var features = [
-        'Proxy', 'MessageChannel', 'BigInt', 'TransformStream', 'ResizeObserver', 'IntersectionObserver', 'HTMLDialogElement'
-      ]
-      var unsupported = typeof [].some !== 'function' || features.some(function(feature) {
-        return typeof self[feature] !== 'function'
-      });
-      if (unsupported) {
-        var warningEl = self.document.querySelector('.warning[data-browser]')
-        warningEl.textContent = warningEl.getAttribute('data-browser')
-        warningEl.removeAttribute('hidden')
-      }
+      (() => {
+        const features = [
+          'Proxy', 'MessageChannel', 'BigInt', 'TransformStream', 'ResizeObserver', 'IntersectionObserver', 'HTMLDialogElement'
+        ]
+        const unsupported = typeof [].some !== 'function' || features.some(function(feature) {
+          return typeof self[feature] !== 'function'
+        })
+        if (unsupported) {
+          const warningEl = self.document.querySelector('.warning[data-browser]')
+          warningEl.textContent = warningEl.getAttribute('data-browser')
+          warningEl.removeAttribute('hidden')
+        }
+      })()
     </script>
   </body>
 </html>

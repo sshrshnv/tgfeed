@@ -6,8 +6,7 @@ module.exports = {
       'modules': false,
       'bugfixes': true,
       'corejs': {
-        'version': utils.getPkgVersion('core-js'),
-        'proposals': true
+        'version': utils.getPkgVersion('core-js')
       },
       'useBuiltIns': 'usage',
     }],

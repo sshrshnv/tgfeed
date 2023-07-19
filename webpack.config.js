@@ -5,7 +5,7 @@ const SvgSymbolSprite = require('svg-symbol-sprite-loader')
 const CopyPlugin = require('copy-webpack-plugin')
 const HtmlPlugin = require('html-webpack-plugin')
 const HtmlInlineScriptPlugin = require('html-inline-script-webpack-plugin')
-const HtmlInlineClPlugin = require("html-inline-css-webpack-plugin").default
+const HtmlInlineCSSPlugin = require("html-inline-css-webpack-plugin").default
 const MiniClExtractPlugin = require('mini-css-extract-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const ClMinimizerPlugin = require('css-minimizer-webpack-plugin')
@@ -69,7 +69,7 @@ module.exports = [{
     rules: [
       {
         test: /\.m?[jt]sx?$/,
-        exclude: /node_modules\/(?!(comlink|idb-keyval)\/).*/,
+        exclude: /node_modules\/(?!(comlink|idb)\/).*/,
         resolve: {
           mainFields: ['esm2017', 'module', 'jsnext:main', 'browser', 'main']
         },
@@ -140,12 +140,25 @@ module.exports = [{
       template: './src/app.html',
       filename: 'index.html',
       inject: false,
+      minify: {
+        minifyCSS: true,
+        minifyJS: true,
+        collapseInlineTagWhitespace: true,
+        collapseWhitespace: true,
+        removeScriptTypeAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        preserveLineBreaks: false
+      },
       templateParameters,
-      minify: isProd()
     }),
 
-    isProd() ? new HtmlInlineClPlugin({
-      filter: (filename) => filename.includes('inline') || filename.includes('index')
+    isProd() ? new HtmlInlineCSSPlugin({
+      filter: (filename) => filename.includes('inline') || filename.includes('index'),
+      leaveCSSFile: false,
+      replace: {
+        target: '<style inline></style>',
+        removeTarget: true
+      }
     }) : () => {},
 
     isProd() ? new HtmlInlineScriptPlugin({
@@ -188,11 +201,10 @@ module.exports = [{
     minimizer: isProd() ? [
       new TerserPlugin({ terserOptions: {
         compress: {
-          ecma: 2021
+          ecma: 2024
         },
-        output: {
-          ecma: 2021,
-          beautify: false,
+        format: {
+          ecma: 2024,
           comments: false,
           ascii_only: true
         }
