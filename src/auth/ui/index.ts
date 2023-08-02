@@ -1,1 +1,1 @@
-export * from './auth-main-content'
+export * from './auth-content'

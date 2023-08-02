@@ -2,25 +2,27 @@ import { Switch, Match, Show, createMemo, createEffect, lazy } from 'solid-js'
 import { clsx } from 'clsx'
 
 import { CoreMenuButton, CoreMenuDialog } from '~/core/ui'
-import { routing } from '~/shared/routing'
+import { routingState } from '~/shared/routing'
 import { Header, Main, Aside, HR } from '~/shared/ui/elements'
 
 import { introRoutes } from '~/intro'
 import { authRoutes } from '~/auth'
 import { feedRoutes } from '~/feed'
 
-const IntroMainContent = lazy(async () => ({ default: (await import('~/intro/ui')).IntroMainContent }))
-const AuthMainContent = lazy(async () => ({ default: (await import('~/auth/ui')).AuthMainContent }))
-const FeedHeaderControls = lazy(async () => ({ default: (await import('~/feed/ui')).FeedHeaderControls }))
-const FeedMainContent = lazy(async () => ({ default: (await import('~/feed/ui')).FeedMainContent }))
-
 import * as layoutCSS from './shared/ui/elements/layout.sss'
 import * as scrollCSS from './shared/ui/elements/scroll.sss'
 import * as appViewCSS from './app.view.sss'
 
+const IntroMainContent = lazy(async () => ({ default: (await import('~/intro/ui')).IntroMainContent }))
+const AuthContent = lazy(async () => ({ default: (await import('~/auth/ui')).AuthContent }))
+const FeedTabs = lazy(async () => ({ default: (await import('~/feed/ui')).FeedTabs }))
+const FeedManagingButton = lazy(async () => ({ default: (await import('~/feed/ui')).FeedManagingButton }))
+const FeedManagingDialog = lazy(async () => ({ default: (await import('~/feed/ui')).FeedManagingDialog }))
+const FeedContent = lazy(async () => ({ default: (await import('~/feed/ui')).FeedContent }))
+
 export const View = () => {
   const isFeed = createMemo(() => {
-    return routing.currentPageRoute?.id.startsWith('feed')
+    return routingState.currentPageRoute?.id.startsWith('feed')
   })
 
   createEffect(() => {
@@ -34,10 +36,17 @@ export const View = () => {
       <Header class={appViewCSS.header}>
         <HR class={appViewCSS.hr}/>
 
-        <CoreMenuButton/>
+        <CoreMenuButton class={clsx(
+          appViewCSS.headerButton,
+          isFeed() && appViewCSS._left
+        )}/>
 
         <Show when={isFeed()}>
-          <FeedHeaderControls/>
+          <FeedTabs/>
+          <FeedManagingButton class={clsx(
+            appViewCSS.headerButton,
+            appViewCSS._right
+          )}/>
         </Show>
       </Header>
 
@@ -46,20 +55,31 @@ export const View = () => {
         !isFeed() && [layoutCSS.flex, scrollCSS.base, scrollCSS._hidden]
       )}>
         <Switch>
-          <Match when={routing.currentPageRoute.id === introRoutes.page.id}>
+          <Match when={routingState.currentPageRoute.id === introRoutes.page.id}>
             <IntroMainContent/>
           </Match>
-          <Match when={routing.currentPageRoute.id === authRoutes.page.id}>
-            <AuthMainContent/>
+          <Match when={routingState.currentPageRoute.id === authRoutes.page.id}>
+            <AuthContent/>
           </Match>
-          <Match when={routing.currentPageRoute.id === feedRoutes.page.id}>
-            <FeedMainContent/>
+          <Match when={routingState.currentPageRoute.id === feedRoutes.page.id}>
+            <FeedContent/>
           </Match>
         </Switch>
       </Main>
 
-      <Aside>
-        <CoreMenuDialog class={appViewCSS.menu}/>
+      <Aside position='left'>
+        <CoreMenuDialog class={clsx(
+          appViewCSS.menu,
+          appViewCSS._left
+        )}/>
+      </Aside>
+      <Aside position='right'>
+        <Show when={isFeed()}>
+          <FeedManagingDialog class={clsx(
+            appViewCSS.menu,
+            appViewCSS._right
+          )}/>
+        </Show>
       </Aside>
     </>
   )

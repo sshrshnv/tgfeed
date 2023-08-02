@@ -46,13 +46,17 @@
   },
 
   "feed": {
-
+    "routeTitle": "Feed",
+    "menuTitle": "Feed",
+    "newFolderTitle": "New folder",
+    "editFolderTitle": "Edit folder",
+    "foldersTitle": "Folders",
+    "defaultFolder": "All channels",
+    "emptyFoldersList": "No folders created",
+    "buttons": {
+      "newFolder": "Create new folder"
+    }
   },
-
-  "channelSearch": "Search channel…",
-  "channelSearchPlaceholder": "Channel name or link…",
-  "configureChannels": "Channel list",
-  "configureFilters": "Message filter",
 
   "intro": {
 

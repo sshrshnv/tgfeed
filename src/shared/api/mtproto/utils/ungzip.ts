@@ -10,11 +10,11 @@ export const ungzip = (buffer: ArrayBuffer, cb) => {
   }
 
   if (!self.DecompressionStream) {
-    import('compression-streams-polyfill/ponyfill' /* webpackChunkName: 'compression.polyfill' */).then(({ makeDecompressionStream }) => {
+    /*import('compression-streams-polyfill/ponyfill' / webpackChunkName: 'compression.polyfill' /).then(({ makeDecompressionStream }) => {
       self.DecompressionStream = makeDecompressionStream(TransformStream)
       process()
     })
-    return
+    return*/
   }
   process()
 }

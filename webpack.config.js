@@ -69,7 +69,7 @@ module.exports = [{
     rules: [
       {
         test: /\.m?[jt]sx?$/,
-        exclude: /node_modules\/(?!(comlink|idb)\/).*/,
+        exclude: /node_modules/,
         resolve: {
           mainFields: ['esm2017', 'module', 'jsnext:main', 'browser', 'main']
         },

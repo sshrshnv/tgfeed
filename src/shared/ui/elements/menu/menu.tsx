@@ -1,19 +1,28 @@
 import type { Component, ComponentProps } from 'solid-js'
+import { splitProps } from 'solid-js'
 import { clsx } from 'clsx'
 
+import * as scrollCSS from '../scroll.sss'
 import * as layoutCSS from '../layout.sss'
 import * as menuCSS from './menu.sss'
 
-export type MenuProps = ComponentProps<'menu'>
+export type MenuProps = ComponentProps<'menu'> & {
+  scrollable?: boolean
+}
 
-export const Menu: Component<MenuProps> = (props) => {
+export const Menu: Component<MenuProps> = (_props) => {
+  const [props, menuProps] = splitProps(_props, [
+    'class', 'scrollable'
+  ])
+
   return (
-    <menu class={clsx(
-      props.class,
-      menuCSS.base,
-      layoutCSS.flex
-    )}>
-      {props.children}
-    </menu>
+    <menu {...menuProps}
+      class={clsx(
+        props.class,
+        props.scrollable && [scrollCSS.base, scrollCSS._hidden],
+        menuCSS.base,
+        layoutCSS.flex
+      )}
+    />
   )
 }

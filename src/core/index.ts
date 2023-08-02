@@ -1,1 +1,1 @@
-export * from './core.routes'
+export * from './core-routes'

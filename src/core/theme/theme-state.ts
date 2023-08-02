@@ -1,14 +1,9 @@
 import { localStorage } from '~/shared/storage/local-storage'
 import { createStateStore } from '~/shared/utils'
 
-import type { ThemeState } from './theme.types'
 import { setThemeAttributes } from './utils'
 
-export const THEME_STATE_STORAGE_KEY = 'themeState'
-
-export const DEFAULT_THEME_STATE: ThemeState = {
-  mode: 'system'
-}
+import { DEFAULT_THEME_STATE, THEME_STATE_STORAGE_KEY } from './theme.const'
 
 export const [themeState, setThemeState] = createStateStore({
   defaultState: DEFAULT_THEME_STATE,
@@ -18,4 +13,4 @@ export const [themeState, setThemeState] = createStateStore({
 })
 
 export const getPersistedThemeState = () =>
-  localStorage.getItem<ThemeState>(THEME_STATE_STORAGE_KEY) || DEFAULT_THEME_STATE
+  localStorage.get(THEME_STATE_STORAGE_KEY) || DEFAULT_THEME_STATE

@@ -1,6 +1,18 @@
 .header
   height: calc(var(--layout-header-top-offset) + var(--layout-header-size))
   padding: var(--layout-header-top-offset) safe(right) 0 safe(left)
+  justify-content: space-between
+
+.headerButton
+  position: relative
+  z-index: 1
+  width: var(--layout-header-size)
+
+  &._left
+    background-image: linear-gradient(to right, var(--theme-color-surface-1) calc(var(--layout-header-size) - 8px), transparent)
+
+  &._right
+    background-image: linear-gradient(to left, var(--theme-color-surface-1) calc(var(--layout-header-size) - 8px), transparent)
 
 .hr
   position: absolute
@@ -13,8 +25,13 @@
 
 .menu
   top: calc(var(--layout-header-top-offset) + var(--layout-header-size) + var(--layout-dialog-offset))
-  left: max(safe(left), var(--layout-dialog-offset))
   bottom: max(safe(bottom), var(--layout-dialog-offset))
+
+  &._left
+    left: max(safe(left), var(--layout-dialog-offset))
+
+  &._right
+    right: max(safe(right), var(--layout-dialog-offset))
 
 ._uniform
   .header
@@ -31,7 +48,7 @@
     flex-direction: column
     flex-shrink: 1
     padding-top: calc(safe(top) + 72px)
-    
+
     border-radius: 0
     background: none
 

@@ -1,4 +1,4 @@
-import { routing } from '../routing.state'
+import { routingState } from '../routing-state'
 
 let nativePopEventIgnored = false
 export const ignoreNativePopEvent = () => {
@@ -12,8 +12,8 @@ export const listenNativePopEvent = (handler: () => void) => {
     } else {
       handler()
     }
-    if (self.location.pathname !== routing.currentPageRoute.path) {
-      self.history.replaceState(null, '', routing.currentPageRoute.path)
+    if (self.location.pathname !== routingState.currentPageRoute.path) {
+      self.history.replaceState(null, '', routingState.currentPageRoute.path)
     }
   })
 }

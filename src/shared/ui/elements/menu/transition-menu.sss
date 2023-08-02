@@ -1,0 +1,40 @@
+.animated
+  position: absolute
+  top: 0
+  right: 0
+  bottom: 0
+  left: 0
+  animation-fill-mode: forwards
+  transform-origin: 0 0
+  will-change: translate, opacity
+
+  &._enter, &._exit
+    opacity: 0
+
+  &._enterActive
+    --local-translate: 48px
+    animation-name: translateInX
+    animation-timing-function: cubic-bezier(0, 0, 0, 1)
+    animation-duration: 300ms
+
+  &._exitActive
+    --local-translate: 24px
+    animation-name: translateOutX
+    animation-timing-function: cubic-bezier(0.3, 0, 1, 1)
+    animation-duration: 150ms
+
+@keyframes translateInX
+  0%
+    translate: var(--local-translate)
+    opacity: 0
+  100%
+    translate: 0
+    opacity: 1
+
+@keyframes translateOutX
+  0%
+    translate: 0
+    opacity: 1
+  100%
+    translate: var(--local-translate)
+    opacity: 0

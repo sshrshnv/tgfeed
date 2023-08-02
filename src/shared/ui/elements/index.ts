@@ -1,6 +1,7 @@
 export * from './article'
 export * from './aside'
 export * from './button'
+export * from './checkbox'
 export * from './dialog'
 export * from './form'
 export * from './header'

@@ -19,7 +19,7 @@ export const Radio: Component<RadioProps> = (_props) => {
 
   const handleChange = ev => {
     if (typeof props.onChange !== 'function') return
-    props.onChange?.(ev.currentTarget.value)
+    props.onChange?.(ev.target.value)
   }
 
   return (

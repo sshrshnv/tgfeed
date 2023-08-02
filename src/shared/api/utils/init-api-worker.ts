@@ -6,8 +6,7 @@ let apiWorkerInstance: Worker
 let [apiWorkerPromise, resolveApiWorkerPromise] = createPromise<API>()
 
 export const initApiWorker = (
-  mainApiMessageChannel: MessageChannel,
-  apiDbStorageMessageChannel: MessageChannel
+  mainApiMessageChannel: MessageChannel
 ) => {
   if (apiWorkerInstance) {
     try {
@@ -23,11 +22,9 @@ export const initApiWorker = (
   ))
 
   postMessage(apiWorkerInstance, {
-    mainPort: mainApiMessageChannel.port1,
-    dbStoragePort: apiDbStorageMessageChannel.port2
+    mainPort: mainApiMessageChannel.port1
   }, [
-    mainApiMessageChannel.port1,
-    apiDbStorageMessageChannel.port2
+    mainApiMessageChannel.port1
   ])
 
   resolveApiWorkerPromise(comlink.wrap(mainApiMessageChannel.port2) as API)

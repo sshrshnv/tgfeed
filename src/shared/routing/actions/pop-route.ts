@@ -1,12 +1,12 @@
 import type { Route } from '../routing.types'
-import { setRouting } from '../routing.state'
+import { setRoutingState } from '../routing-state'
 import { ignoreNativePopEvent, findRouteIndex } from '../utils'
 
 export const popRoute = (route: Route | undefined) => {
   if (!route) return
   ignoreNativePopEvent()
 
-  setRouting(state => {
+  setRoutingState(state => {
     const routeIndex = findRouteIndex(state.history, route)
 
     if (routeIndex < 0) return state

@@ -18,29 +18,6 @@ export type API = {
   ) => Promise<ExecMethodDeclMap[T]['res']>
 }
 
-export type APIError = ClientError & {
-  method: string
-}
-
-export type APIWorkerMessage = {
-  mainPort: MessagePort
-  dbStoragePort: MessagePort
-}
-
-export type APIMetaDBSchema = {
-  apiMeta: {
-    key: 'data'
-    value: ClientMetaData
-  }
-}
-
-export type APIRequestsDBSchema = {
-  apiRequests: {
-    key: keyof MethodDeclMap
-    value: number
-  }
-}
-
 export type ExecMethodDeclMap = {
   getPasswordKdf: {
     req: {
@@ -49,4 +26,16 @@ export type ExecMethodDeclMap = {
     }
     res: InputCheckPasswordSRP | undefined
   }
+}
+
+export type APIError = ClientError & {
+  method: string
+}
+
+export type APIWorkerMessage = {
+  mainPort: MessagePort
+}
+
+export type APIStorage = {
+  meta: { apiMeta: ClientMetaData }
 }

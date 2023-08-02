@@ -8,3 +8,7 @@ export type AuthState = {
   phone_number_formatted?: string
   meta: AuthSentCode.authSentCode | null
 }
+
+export type AuthStorage = {
+  state: { authState: AuthState }
+}

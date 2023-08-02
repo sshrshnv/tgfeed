@@ -1,0 +1,24 @@
+.base
+  flex-direction: column
+  min-width: 240px
+  overflow: hidden
+  background-color: var(--theme-color-surface-1)
+
+.menu
+  opacity: 1
+  transition: opacity 400ms ease-in-out
+  will-change: opacity
+
+  &._hidden
+    opacity: 0.25
+    transition-duration: 100ms
+
+.checkbox
+  opacity: 0.75
+
+.primaryButton
+  margin: 0 auto
+  width: calc(100% - 32px)
+  height: 36px
+  background-color: var(--theme-color-primary)
+  color: var(--theme-color-on-primary)

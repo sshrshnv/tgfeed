@@ -1,30 +1,20 @@
 import { comlink, createPromise, setDelay } from '~/shared/utils'
-import type { DBStorage } from '~/shared/storage/db-storage'
-import { initDbStorage } from '~/shared/storage/db-storage/utils/init-db-storage'
+import { dbStorage } from '~/shared/storage/db-storage'
 
 import type { API, APIWorkerMessage } from './api.types'
 import type { ClientMetaData, Updates } from './mtproto'
 import { Client } from './mtproto'
+import { DEFAULT_API_META, API_META_STORAGE_KEY } from './api.const'
 import { handleApiRes } from './utils/handle-api-res'
 
-const [dbStorageWorkerPromise, resolveDbStorageWorkerPromise] = createPromise<DBStorage>()
-const getDbStoragePromise = () => dbStorageWorkerPromise
-const dbStorage = initDbStorage(getDbStoragePromise)
+const getMeta = async () =>
+  (await dbStorage.get(API_META_STORAGE_KEY)) || DEFAULT_API_META
 
-const getMeta = async () => (await dbStorage.get('apiMeta', 'data')) || {
-  pfs: false,
-  baseDC: 2,
-  userID: '',
-  dcs: {}
-}
+const saveMeta = (meta: ClientMetaData) =>
+  dbStorage.set(API_META_STORAGE_KEY, meta)
 
-const saveMeta = (meta: ClientMetaData) => {
-  dbStorage.put('apiMeta', meta, 'data')
-}
-
-const deleteMeta = () => {
-  dbStorage.delete('apiMeta', 'data')
-}
+const deleteMeta = () =>
+  dbStorage.del(API_META_STORAGE_KEY)
 
 const apiPromise = new Promise<API>(async resolve => {
   let migratedDC: number
@@ -116,7 +106,7 @@ const apiWorker: API = {
   req: async (method, ...args) => {
     const api = await apiPromise
     const res = await api.req(method, ...args)
-    return handleApiRes(method, res, dbStorage)
+    return handleApiRes(method, res)
   },
 
   exec: async (...args) => {
@@ -126,9 +116,6 @@ const apiWorker: API = {
 }
 
 self.onmessage = (ev: MessageEvent<APIWorkerMessage>) => {
-  if (ev.data?.dbStoragePort) {
-    resolveDbStorageWorkerPromise(comlink.wrap(ev.data.dbStoragePort) as DBStorage)
-  }
   if (ev.data?.mainPort) {
     comlink.expose(apiWorker, ev.data.mainPort)
   }

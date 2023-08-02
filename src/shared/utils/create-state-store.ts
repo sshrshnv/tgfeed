@@ -2,18 +2,19 @@ import type { SetStoreFunction } from 'solid-js/store'
 import { createStore } from 'solid-js/store'
 import { createStaticStore } from '@solid-primitives/static-store'
 
+import type { StorageKeyValueMap } from '~/shared/storage/local-storage'
 import { localStorage } from '~/shared/storage/local-storage'
 
 type Params<T> = {
   defaultState: T
   staticState?: boolean
-  storageKey?: string
-  nonPersistedKeys?: string[]
+  storageKey?: keyof StorageKeyValueMap
+  nonPersistedKeys?: (keyof T)[]
   onCreate?: (state: T, set: SetStoreFunction<T>) => void
   onChange?: (prevState: T, state: T, set: SetStoreFunction<T>) => void
 }
 
-export const createStateStore = <T extends object = {}>({
+export const createStateStore = <T extends object>({
   defaultState,
   staticState,
   storageKey,
@@ -23,7 +24,7 @@ export const createStateStore = <T extends object = {}>({
 }: Params<T>) => {
   const state: T = storageKey ? {
     ...defaultState,
-    ...localStorage.getItem(storageKey)
+    ...localStorage.get(storageKey)
   } : defaultState
 
   // eslint-disable-next-line solid/reactivity
@@ -48,7 +49,7 @@ export const createStateStore = <T extends object = {}>({
     let persisted = true
 
     const changedState = Object.keys(store[0]).reduce((obj, key) => {
-      if (nonPersistedKeys?.includes(key)) {
+      if (nonPersistedKeys?.includes(key as keyof T)) {
         return obj
       }
       if (prevState[key] !== store[0][key]) {
@@ -56,10 +57,10 @@ export const createStateStore = <T extends object = {}>({
       }
       obj[key] = store[0][key]
       return obj
-    }, {})
+    }, {} as any)
 
     if (!persisted) {
-      localStorage.setItem(storageKey, changedState)
+      localStorage.set(storageKey, changedState)
     }
   }
 

@@ -1,17 +1,7 @@
 import { createStateStore } from '~/shared/utils'
 
-import type { LocaleState, LocaleLang } from './locale.types'
-import { detectPreferLocaleLang, setLocaleAttributes, loadLocaleTexts } from './utils'
-
-const LOCALE_LANGS = process.env.APP_LOCALE_LANGS as unknown as [LocaleLang]
-const FALLBACK_LOCALE_LANG = 'en'
-
-export const LOCALE_STATE_STORAGE_KEY = 'localeState'
-
-export const DEFAULT_LOCALE_STATE: LocaleState = {
-  lang: detectPreferLocaleLang(LOCALE_LANGS, FALLBACK_LOCALE_LANG),
-  texts: null
-}
+import { DEFAULT_LOCALE_STATE, LOCALE_STATE_STORAGE_KEY } from './locale.const'
+import { setLocaleAttributes, loadLocaleTexts } from './utils'
 
 export const [localeState, setLocaleState] = createStateStore({
   defaultState: DEFAULT_LOCALE_STATE,
