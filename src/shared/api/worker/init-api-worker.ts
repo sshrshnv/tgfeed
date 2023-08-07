@@ -17,7 +17,7 @@ export const initApiWorker = (
   }
 
   apiWorkerInstance = new Worker(new URL(
-    '../api.worker' /* webpackChunkName: 'api.worker' */,
+    './api.worker' /* webpackChunkName: 'api.worker' */,
     import.meta.url
   ))
 

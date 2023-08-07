@@ -1,20 +1,32 @@
+import type { MessagesDialogs, Message } from '~/shared/api/mtproto'
 import { api } from '~/shared/api'
 
-import type { Channel } from '../channels'
-import { normalizeChannel } from '../channels/utils'
+import type { Channels } from '../feed.types'
+import { feedState, setFeedState } from '../feed-state'
 
-let offset_date = 0
+import { dbStorage } from '~/shared/storage/db-storage'
 
-export const loadChannels = async (): Promise<Channel[]> => {
-  const channels: Channel[] = []
+const LIMIT = 100
+let channelsLoaded = false
 
+export const fetchChannels = async () => {
+  if (channelsLoaded) return
+  channelsLoaded = true
+  const channels = await loadChannels()
+  setFeedState({ channels })
+}
+
+const loadChannels = async (
+  channels: Channels = {},
+  offset_date = 0,
+): Promise<Channels> => {
   const res = await api.req('messages.getDialogs', {
     offset_peer: {
       _: 'inputPeerEmpty'
     },
     offset_id: 0,
     offset_date,
-    limit: 100,
+    limit: LIMIT,
     hash: ''
   })
 
@@ -22,20 +34,54 @@ export const loadChannels = async (): Promise<Channel[]> => {
     return channels
   }
 
-  const { messages, chats } = res
+  const data = parseChannelsRes(res)
 
-  for (let i = 0; i < messages.length; i++) {
-    const message = messages[i]
+  channels = {
+    ...channels,
+    ...data.channels
+  }
 
-    if (message._ !== 'message') continue
-    if (message.date < maxMessageDate) break
-    if (message.peer_id._ !== 'peerChannel') continue
-
-    const { channel_id } = message.peer_id
-    const channel = chats.find(chat => chat.id === channel_id)
-
-    if (channel) channels.push(normalizeChannel(channel))
+  if (data.date) {
+    return loadChannels(
+      channels,
+      data.date
+    )
   }
 
   return channels
+}
+
+const parseChannelsRes = (
+  res?: MessagesDialogs
+) => {
+  const data = {
+    channels: {} as Channels,
+    date: 0
+  }
+
+  if (
+    res?._ === 'messages.dialogsNotModified' ||
+    !res?.dialogs.length ||
+    !res?.chats.length
+  ) {
+    return data
+  }
+
+  const { chats, messages } = res
+
+  for (let i = 0; i < chats.length; i++) {
+    const chat = chats[i]
+
+    if (chat._ !== 'channel') continue
+    if (!chat.broadcast || chat.creator) continue
+
+    data.channels[chat.id] = chat
+  }
+
+  const lastMessage = messages.length >= LIMIT && messages.findLast(
+    message => !!(message as Message.message).date
+  ) as Message.message | null
+  data.date = lastMessage && lastMessage.date || 0
+
+  return data
 }

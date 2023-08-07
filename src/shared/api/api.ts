@@ -1,5 +1,7 @@
+import { logOut } from '~/core/account/actions'
+
 import type { API } from './api.types'
-import { getApiWorker } from './utils/init-api-worker'
+import { getApiWorker } from './worker/init-api-worker'
 
 export const api: API = {
   req: async (...args) => {
@@ -9,6 +11,10 @@ export const api: API = {
       .catch(err => {
         if (err.message === 'CONNECTION_NOT_INITED') {
           self.location.reload()
+          return
+        }
+        if (err.message === 'AUTH_KEY_UNREGISTERED') {
+          logOut()
           return
         }
         console.error(err)

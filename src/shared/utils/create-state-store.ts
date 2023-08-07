@@ -9,6 +9,7 @@ type Params<T> = {
   defaultState: T
   staticState?: boolean
   storageKey?: keyof StorageKeyValueMap
+  persistedKeys?: (keyof T)[]
   nonPersistedKeys?: (keyof T)[]
   onCreate?: (state: T, set: SetStoreFunction<T>) => void
   onChange?: (prevState: T, state: T, set: SetStoreFunction<T>) => void
@@ -18,6 +19,7 @@ export const createStateStore = <T extends object>({
   defaultState,
   staticState,
   storageKey,
+  persistedKeys,
   nonPersistedKeys,
   onCreate,
   onChange
@@ -49,7 +51,10 @@ export const createStateStore = <T extends object>({
     let persisted = true
 
     const changedState = Object.keys(store[0]).reduce((obj, key) => {
-      if (nonPersistedKeys?.includes(key as keyof T)) {
+      if (
+        (!!persistedKeys && !persistedKeys.includes(key as keyof T)) ||
+        nonPersistedKeys?.includes(key as keyof T)
+      ) {
         return obj
       }
       if (prevState[key] !== store[0][key]) {
@@ -69,5 +74,8 @@ export const createStateStore = <T extends object>({
   return [
     store[0],
     set
-  ] as typeof store
+  ] as [
+    T,
+    SetStoreFunction<T>
+  ]
 }

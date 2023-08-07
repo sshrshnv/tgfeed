@@ -10,14 +10,16 @@ import * as buttonCSS from './button.sss'
 
 export type ButtonProps = ComponentProps<'button'> & {
   route?: Route
+  stopPropagation?: boolean
 }
 
 export const Button: ParentComponent<ButtonProps> = (_props) => {
   const [props, buttonProps] = splitProps(_props, [
-    'route', 'class', 'type', 'onClick'
+    'route', 'stopPropagation', 'class', 'type', 'onClick'
   ])
 
   const handleClick = (ev) => {
+    if (props.stopPropagation) ev.stopPropagation()
     if (typeof props.onClick === 'function') {
       props.onClick(ev)
       return
@@ -35,7 +37,8 @@ export const Button: ParentComponent<ButtonProps> = (_props) => {
         layoutCSS.flexCenter
       )}
       type={props.type || 'button'}
-      onClick={handleClick}
+      // eslint-disable-next-line solid/reactivity
+      onClick={Array.isArray(props.onClick) ? props.onClick : handleClick}
     />
   )
 }

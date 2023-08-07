@@ -3,7 +3,7 @@ import { splitProps } from 'solid-js'
 import { clsx } from 'clsx'
 
 import type { IconProps } from '~/shared/ui/elements'
-import { Text, Icon } from '~/shared/ui/elements'
+import { Text, Icon, Input } from '~/shared/ui/elements'
 
 import * as layoutCSS from '../layout.sss'
 import * as checkboxCSS from './checkbox.sss'
@@ -32,7 +32,7 @@ export const Checkbox: Component<CheckboxProps> = (_props) => {
     )}>
       <Icon
         class={checkboxCSS.icon}
-        name={props.icon || (props.checked ? 'checkboxOn' : 'checkboxOff')}
+        name={props.icon || (`checkbox${props.checked ? 'On' : 'Off'}`)}
         size='medium'
       />
       <Text
@@ -42,14 +42,11 @@ export const Checkbox: Component<CheckboxProps> = (_props) => {
       >
         {props.text}
       </Text>
-      <input {...inputProps}
-        class={clsx(
-          checkboxCSS.input,
-          layoutCSS.outline
-        )}
+      <Input {...inputProps}
         type='checkbox'
         checked={props.checked}
         onChange={handleChange}
+        transparent
       />
     </label>
   )

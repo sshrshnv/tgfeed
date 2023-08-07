@@ -19,8 +19,7 @@ export const MenuHeader: ParentComponent<MenuHeaderProps> = (_props) => {
     'class', 'title', 'backRoute'
   ])
 
-  const handleBack = (ev) => {
-    ev.stopPropagation()
+  const handleBack = () => {
     popRoute(props.backRoute)
   }
 
@@ -41,6 +40,7 @@ export const MenuHeader: ParentComponent<MenuHeaderProps> = (_props) => {
         <Button
           class={menuHeaderCSS.button}
           onClick={handleBack}
+          stopPropagation
         >
           <Icon name='back' size='medium'/>
         </Button>

@@ -1,0 +1,19 @@
+._animated
+  --local-opacity-1: 0
+  --local-opacity-2: 0
+  --local-transition: opacity 300ms ease-in-out
+  animation: blink 1500ms ease infinite
+
+@keyframes blink
+  0%
+    --local-opacity-1: 0
+    --local-opacity-2: 0
+  50%
+    --local-opacity-1: 1
+    --local-opacity-2: 0
+  75%
+    --local-opacity-1: 1
+    --local-opacity-2: 1
+  100%
+    --local-opacity-1: 0
+    --local-opacity-2: 0

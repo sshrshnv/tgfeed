@@ -33,7 +33,7 @@ export const Image: Component<Props> = (props) => {
         imageCSS.base,
         props.fadeIn && imageCSS._faded,
         isLoaded() && imageCSS._loaded,
-        isReady() && imageCSS._ready
+        isReady() && [imageCSS._ready, 'ready']
       )}
       src={props.src}
       alt={props.alt}

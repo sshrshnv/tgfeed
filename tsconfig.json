@@ -4,7 +4,7 @@
     "allowUnreachableCode": false,
     "declaration": false,
     "strictPropertyInitialization": false,
-    "lib": ["DOM", "ESNext", "WebWorker"],
+    "lib": ["DOM", "DOM.Iterable", "ESNext", "WebWorker"],
     "moduleResolution": "node",
     "module": "ESNext",
     "target": "ESNext",

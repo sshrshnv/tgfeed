@@ -12,13 +12,14 @@ export const feedRoutes = {
     type: 'page'
   },
 
-  channelsMenuDialog: {
-    id: 'feedChannelsMenu',
+  managingDialog: {
+    id: 'feedManagingDialog',
     type: 'dialog'
   },
 
-  channelsFolderForm: {
-    id: 'feedChannelsFolderForm',
-    type: 'state'
+  managingDialogForm: {
+    id: 'feedManagingDialogForm',
+    type: 'state',
+    folderId: ''
   }
 } as const satisfies Record<string, Route>

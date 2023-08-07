@@ -1,11 +1,11 @@
 import { comlink, createPromise, setDelay } from '~/shared/utils'
 import { dbStorage } from '~/shared/storage/db-storage'
 
-import type { API, APIWorkerMessage } from './api.types'
-import type { ClientMetaData, Updates } from './mtproto'
-import { Client } from './mtproto'
-import { DEFAULT_API_META, API_META_STORAGE_KEY } from './api.const'
-import { handleApiRes } from './utils/handle-api-res'
+import type { API, APIWorkerMessage } from '../api.types'
+import type { ClientMetaData, Updates } from '../mtproto'
+import { Client } from '../mtproto'
+import { DEFAULT_API_META, API_META_STORAGE_KEY } from '../api.const'
+import { handleApiRes } from './utils'
 
 const getMeta = async () =>
   (await dbStorage.get(API_META_STORAGE_KEY)) || DEFAULT_API_META

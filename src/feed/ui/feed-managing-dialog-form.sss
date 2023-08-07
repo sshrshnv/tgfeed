@@ -1,3 +1,86 @@
 .base
+  --local-input-height: 40px
+  --local-button-height: 36px
+  position: relative
+  flex-direction: column
+  flex: 1 1 auto
+  padding: 0 0 16px
+  overflow: hidden
+
+  &::before, &::after
+    z-index: 2
+    left: 0
+    right: 0
+    height: 20px
+    background-image: linear-gradient(var(--local-gradient-direction), var(--theme-color-surface-1), transparent)
+
+  &::before
+    --local-gradient-direction: to bottom
+    top: var(--local-input-height)
+
+  &::after
+    --local-gradient-direction: to top
+    bottom: calc(var(--local-button-height) + 16px)
+
+.input
+  margin: 0 auto
+  height: var(--local-input-height)
+  width: calc(100% - 32px)
+  border-radius: 8px
+  background-color: var(--theme-color-surface-0)
+
+.loader
+  margin: 0 auto
+  padding: 20px 0 0
+  opacity: 0.5
+
+.title
+  padding-bottom: 16px
+
+.channels
+  flex: 1 1 auto
+  flex-direction: column
+  padding: 0 0 20px
+
+.buttonsWrapper
+  height: 36px
+  padding: 0 16px
+  gap: 16px
+
+.primaryButton
+  flex: 1 1 auto
+  background-color: var(--theme-color-primary)
+  color: var(--theme-color-on-primary)
+
+.deleteButton
+  width: 36px
+  background-color: var(--theme-color-tertiary)
+  color: var(--theme-color-on-tertiary)
+
+.confirmButton
+  background-color: var(--theme-color-error)
+  color: var(--theme-color-on-error)
+
+.buttonLoader
+  //
+
+.error
+  position: absolute
+  z-index: 3
+  right: 0
+  bottom: 0
+  left: 0
+  min-height: 56px
+  padding: 20px 16px
+  background-color: var(--theme-color-error)
+  color: var(--theme-color-on-error)
   border-radius: var(--layout-dialog-radius)
-  background-color: var(--theme-color-surface-1)
+  will-change: opacity, translate
+  transition: 300ms ease-in-out
+  transition-property: opacity, translate
+  opacity: 0
+  translate: 0 100%
+
+  &._visible
+    opacity: 1
+    translate: 0 0

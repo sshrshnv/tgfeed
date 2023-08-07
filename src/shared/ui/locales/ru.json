@@ -1,31 +1,61 @@
 {
   "account": {
-    "title": "Аккаунт",
-    "signIn": "Войти",
-    "signOut": "Выйти"
+    "title": "Account",
+    "signIn": "Sign In",
+    "signOut": "Log Out"
   },
 
   "theme": {
-    "title": "Тема интерфейса",
-    "system": "Системная",
-    "dark": "Тёмная",
-    "light": "Светлая"
+    "title": "Color theme",
+    "system": "System",
+    "dark": "Dark",
+    "light": "Light"
   },
 
   "locale": {
-    "title": "Язык интерфейса"
+    "title": "Language"
   },
 
-  "channels": "Каналы",
-  "messages": "Сообщения",
-  "channelSearch": "Найти канал…",
-  "channelSearchPlaceholder": "Ссылка или название канала…",
-  "configureChannels": "Список каналов",
-  "configureFilters": "Фильтр сообщений",
-
   "auth": {
-    "logIn": "Войти",
-    "logOut": "Выйти"
+    "title": "Sign In",
+    "phone": {
+      "description": "Please enter your Telegram\n phone number"
+    },
+    "code": {
+      "description": "Please enter the code that was sent\n to you in the Telegram app"
+    },
+    "password": {
+      "description": "Please enter your two-factor\n authentication password"
+    },
+    "button": {
+      "change": "Change phone number",
+      "resend": "Resend code",
+      "recover": "Recover account"
+    },
+    "error": {
+      "unknown": "Something went wrong",
+      "PHONE_NUMBER_BANNED": "Telegram's automatic protection has been triggered and your account has been banned. This is a one-time error, it will not happen again after recovering.",
+      "PHONE_NUMBER_INVALID": "Invalid phone number",
+      "PHONE_NUMBER_FLOOD": "Too many requests",
+      "PHONE_CODE_EMPTY": "Empty code",
+      "PHONE_CODE_EXPIRED": "Expired code, enter the new one",
+      "PHONE_CODE_INVALID": "Invalid code",
+      "PHONE_NUMBER_UNOCCUPIED": "User doesn't exist on Telegram",
+      "PASSWORD_HASH_INVALID": "Invalid password"
+    }
+  },
+
+  "feed": {
+    "routeTitle": "Feed",
+    "menuTitle": "Feed",
+    "newFolderTitle": "New folder",
+    "editFolderTitle": "Edit folder",
+    "foldersTitle": "Folders",
+    "defaultFolder": "All channels",
+    "emptyFoldersList": "No folders created",
+    "buttons": {
+      "newFolder": "Create new folder"
+    }
   },
 
   "intro": {

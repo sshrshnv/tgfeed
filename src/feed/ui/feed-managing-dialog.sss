@@ -1,6 +1,6 @@
 .base
   flex-direction: column
-  min-width: 240px
+  width: var(--layout-menu-width)
   overflow: hidden
   background-color: var(--theme-color-surface-1)
 
@@ -16,9 +16,21 @@
 .checkbox
   opacity: 0.75
 
+.folderButton
+  justify-content: flex-start
+  height: 32px
+  gap: 16px
+  padding: 0 16px
+  opacity: 0.75
+
 .primaryButton
   margin: 0 auto
   width: calc(100% - 32px)
   height: 36px
   background-color: var(--theme-color-primary)
   color: var(--theme-color-on-primary)
+
+.formMenu
+  border-radius: var(--layout-dialog-radius)
+  background-color: var(--theme-color-surface-1)
+  color: var(--theme-color-on-surface)

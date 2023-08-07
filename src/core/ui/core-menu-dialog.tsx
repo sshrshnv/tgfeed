@@ -15,6 +15,7 @@ import {
 } from '~/shared/ui/elements'
 
 import { coreRoutes } from '../core-routes'
+
 import * as layoutCSS from '../../shared/ui/elements/layout.sss'
 import * as coreMenuDialogCSS from './core-menu-dialog.sss'
 

@@ -5,8 +5,8 @@ import { clsx } from 'clsx'
 import * as layoutCSS from '../layout.sss'
 import * as formCSS from './form.sss'
 
-export type FormProps = ComponentProps<'form'> & {
-  onSubmit?: () => void
+export type FormProps = Omit<ComponentProps<'form'>, 'onSubmit'> & {
+  onSubmit?: (data: FormData) => void
 }
 
 export const Form: ParentComponent<FormProps> = (_props) => {
@@ -14,7 +14,8 @@ export const Form: ParentComponent<FormProps> = (_props) => {
 
   const handleSubmit = ev => {
     ev.preventDefault()
-    props.onSubmit?.()
+    const data = new self.FormData(ev.target)
+    props.onSubmit?.(data)
   }
 
   return (

@@ -1,6 +1,6 @@
 import { dbStorage } from '~/shared/storage/db-storage'
 
-import { MethodDeclMap } from '../mtproto'
+import { MethodDeclMap } from '../../mtproto'
 
 type Handlers = {
   [T in keyof MethodDeclMap]?: (

@@ -2,7 +2,7 @@ import type { Component, ComponentProps } from 'solid-js'
 import { splitProps } from 'solid-js'
 import { clsx } from 'clsx'
 
-import { Text, Icon } from '~/shared/ui/elements'
+import { Text, Icon, Input } from '~/shared/ui/elements'
 
 import * as layoutCSS from '../layout.sss'
 import * as radioCSS from './radio.sss'
@@ -31,7 +31,7 @@ export const Radio: Component<RadioProps> = (_props) => {
     )}>
       <Icon
         class={radioCSS.icon}
-        name={props.checked ? 'radioChecked' : 'radioUnchecked'}
+        name={`radio${props.checked ? 'On' : 'Off'}`}
         size='small'
       />
       <Text
@@ -41,13 +41,10 @@ export const Radio: Component<RadioProps> = (_props) => {
       >
         {props.text}
       </Text>
-      <input {...inputProps}
-        class={clsx(
-          radioCSS.input,
-          layoutCSS.outline
-        )}
+      <Input {...inputProps}
         type='radio'
         onChange={handleChange}
+        transparent
       />
     </label>
   )

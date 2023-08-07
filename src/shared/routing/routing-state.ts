@@ -29,6 +29,6 @@ export const [routingState, setRoutingState] = createStore({
     return this.history.filter(route => route.type === 'dialog')
   },
   get currentRoute() {
-    return this.history[this.history.length - 1] || this.initialPageRoute
+    return this.history.at(-1) || this.initialPageRoute
   }
 })

@@ -1,0 +1,41 @@
+.base
+  position: absolute
+  z-index: 1
+  height: 1px
+  overflow: hidden
+
+  &::before, &::after
+    width: 25%
+    height: 1px
+    background-color: var(--theme-color-primary)
+    translate: 0 0
+    scale: 0 1
+    animation-fill-mode: forwards
+    will-change: opacity, translate, scale
+
+  &::before
+    left: 50%
+    transform-origin: left
+    --translate-100: -190%
+
+  &::after
+    right: 50%
+    transform-origin: right
+    --translate-100: 190%
+
+._animated
+  &::before, &::after
+    animation: translate 1200ms ease-in infinite
+
+@keyframes translate
+  0%
+    translate: 0 0
+    scale: 0 1
+    opacity: 0.5
+  50%
+    scale: 1 1
+    opacity: 1
+  100%
+    translate: var(--translate-100) 0
+    scale: 0 1
+    opacity: 0

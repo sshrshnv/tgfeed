@@ -1,6 +1,8 @@
 import type { Component } from 'solid-js'
-import { For } from 'solid-js'
+import { Show, For, createMemo } from 'solid-js'
 import { clsx } from 'clsx'
+
+import { localeState } from '~/core/locale'
 
 import { feedState } from '../feed-state'
 import { FeedTabsItem } from './feed-tabs-item'
@@ -10,21 +12,12 @@ import * as scrollCSS from '../../shared/ui/elements/scroll.sss'
 import * as feedTabsCSS from './feed-tabs.sss'
 
 export const FeedTabs: Component = () => {
-  const folders = []
-  const folders2 = [
-    'Folder1',
-    'Folder 2',
-    'Folder name',
-    'Folder 4',
-    'Folder 5'
-  ]
-  const folders3 = [
-    'Folder1',
-    'Folder name',
-  ]
+  const hasFolders = createMemo(() => !!feedState.folders.length)
+
   return (
     <div class={clsx(
       feedTabsCSS.wrapper,
+      feedState.initialLoading && feedTabsCSS._hidden
     )}>
       <div
         class={clsx(
@@ -35,13 +28,15 @@ export const FeedTabs: Component = () => {
         )}
         role="tablist"
       >
-        <FeedTabsItem active>
-          All channels
-        </FeedTabsItem>
+        <Show when={feedState.defaultFolderVisibility || !hasFolders()}>
+          <FeedTabsItem active>
+            {localeState.texts?.feed.defaultFolderName}
+          </FeedTabsItem>
+        </Show>
 
-        <For each={folders}>{(folder) => (
+        <For each={feedState.folders}>{(folder) => (
           <FeedTabsItem>
-            {folder}
+            {folder.name}
           </FeedTabsItem>
         )}</For>
       </div>

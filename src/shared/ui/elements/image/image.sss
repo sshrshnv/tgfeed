@@ -1,14 +1,22 @@
 .base
+  z-index: -1
   display: block
 
 ._faded
   opacity: 0
-  transition: opacify 400ms ease-in
+  transition: opacity 300ms ease-in
   will-change: opacity
 
+._blured
+  z-index: 0
+
 ._loaded
+  z-index: 1
   opacity: 1
 
 ._ready
   transition: none
   will-change: unset
+
+  + ._blured
+    display: none

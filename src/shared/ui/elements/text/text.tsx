@@ -8,6 +8,7 @@ export type TextProps = ComponentProps<'span'> & {
   size: 'large' | 'medium' | 'small'
   center?: boolean
   uppercase?: boolean
+  ellipsis?: boolean
 }
 
 export const Text: FlowComponent<TextProps> = (props) => {
@@ -16,6 +17,7 @@ export const Text: FlowComponent<TextProps> = (props) => {
       props.class,
       props.center && textCSS._center,
       props.uppercase && textCSS._uppercase,
+      props.ellipsis && textCSS._ellipsis,
       textCSS.base,
       textCSS[`_${props.variant}`],
       textCSS[`_${props.size}`]

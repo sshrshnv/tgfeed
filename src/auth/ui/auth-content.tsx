@@ -8,6 +8,7 @@ import { authState } from '../auth-state'
 import { AuthPhoneNumberStep } from './auth-phone-number-step'
 import { AuthCodeStep } from './auth-code-step'
 import { AuthPasswordStep } from './auth-password-step'
+
 import * as authContentCSS from './auth-content.sss'
 
 export const AuthContent: Component = () => {

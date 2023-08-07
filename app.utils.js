@@ -5,7 +5,7 @@ const getLocaleLangs = () => {
 
   return glob.sync(localeLangsPath).map(file => {
     const pathParts = file.split('/')
-    const localeLang = pathParts[pathParts.length - 1].split('.')[0]
+    const localeLang = pathParts.at(-1).split('.')[0]
     return localeLang
   }).reverse()
 }

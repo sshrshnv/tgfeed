@@ -8,7 +8,7 @@ import * as iconCSS from './icon.sss'
 
 export type IconProps = ComponentProps<'svg'> & {
   name: keyof typeof icons
-  size: 'small' | 'medium' | 'large'
+  size?: 'small' | 'medium' | 'large'
 }
 
 export const Icon: Component<IconProps> = (props) => {

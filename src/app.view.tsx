@@ -5,9 +5,9 @@ import { CoreMenuButton, CoreMenuDialog } from '~/core/ui'
 import { routingState } from '~/shared/routing'
 import { Header, Main, Aside, HR } from '~/shared/ui/elements'
 
-import { introRoutes } from '~/intro'
-import { authRoutes } from '~/auth'
-import { feedRoutes } from '~/feed'
+import { introRoutes } from '~/intro/intro.routes'
+import { authRoutes } from '~/auth/auth-routes'
+import { feedRoutes } from '~/feed/feed-routes'
 
 import * as layoutCSS from './shared/ui/elements/layout.sss'
 import * as scrollCSS from './shared/ui/elements/scroll.sss'

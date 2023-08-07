@@ -51,10 +51,21 @@
     "newFolderTitle": "New folder",
     "editFolderTitle": "Edit folder",
     "foldersTitle": "Folders",
-    "defaultFolder": "All channels",
+    "folderNamePlaceholder": "Enter folder name",
+    "folderChannelsLoading": "Channels loading..",
+    "folderChannelsTitle": "Select channels",
+    "defaultFolderName": "All channels",
     "emptyFoldersList": "No folders created",
+    "emptyChannelsList": "No channels found",
     "buttons": {
-      "newFolder": "Create new folder"
+      "newFolder": "Create new folder",
+      "save": "Save",
+      "confirm": "Confirm"
+    },
+    "errors": {
+      "FOLDER_NAME_EMPTY": "You should enter the folder name",
+      "FOLDER_NAME_EXISTS": "This folder name already exists",
+      "FOLDER_CHANNELS_EMPTY": "You should select channels"
     }
   },
 
