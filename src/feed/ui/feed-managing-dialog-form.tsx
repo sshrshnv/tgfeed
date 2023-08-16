@@ -10,12 +10,12 @@ import { MenuDescription, Form, Input, Icon, Button, Text, MenuTitle } from '~/s
 import type { Folder } from '../feed.types'
 import { feedState } from '../feed-state'
 import { feedRoutes } from '../feed-routes'
-import { fetchChannels, createFolder, editFolder, deleteFolder } from '../actions'
+import { fetchChannels, createFolder, editFolder } from '../actions'
 import { FeedManagingDialogFormChannels } from './feed-managing-dialog-form-channels'
 
 import * as scrollCSS from '../../shared/ui/elements/scroll.sss'
 import * as layoutCSS from '../../shared/ui/elements/layout.sss'
-import * as animationsCSS from '../../shared/ui/elements/animations.sss'
+import * as animationsCSS from '../../shared/ui/animations/animations.sss'
 import * as feedManagingDialogFormCSS from './feed-managing-dialog-form.sss'
 
 export type FeedManagingDialogFormProps = {
@@ -30,7 +30,6 @@ export const FeedManagingDialogForm: Component<FeedManagingDialogFormProps> = (p
   const [channelsRes] = createResource(fetchChannels)
   const [getError, setError] = createSignal('')
   const [isSending, setSending] = createSignal(false)
-  const [isDeleting, setDeleting] = createSignal(false)
 
   const isReady = createMemo(() => {
     return channelsRes.state === 'ready'
@@ -61,20 +60,12 @@ export const FeedManagingDialogForm: Component<FeedManagingDialogFormProps> = (p
       setError('FOLDER_CHANNELS_EMPTY')
     } else {
       setSending(true)
-      await (!!props.folder ? editFolder(props.folder.id, data) : createFolder(data))
+      await (!!props.folder ?
+        editFolder({ ...data, id: props.folder.id }) :
+        createFolder({ ...data, index: feedState.folders.length })
+      )
       popRoute(feedRoutes.managingDialogForm)
     }
-  }
-
-  const handleDelete = () => {
-    setDeleting(true)
-  }
-
-  const handleConfirm = async () => {
-    if (!props.folder?.id) return
-    setSending(true)
-    await deleteFolder(props.folder.id)
-    popRoute(feedRoutes.managingDialogForm)
   }
 
   return (
@@ -126,70 +117,27 @@ export const FeedManagingDialogForm: Component<FeedManagingDialogFormProps> = (p
       </div>
 
       <Show when={isReady() && !isEmptyChannelsList()}>
-        <div class={clsx(
-          feedManagingDialogFormCSS.buttonsWrapper,
-          layoutCSS.flex
-        )}>
-          <Show when={!isDeleting()}>
-            <Show when={!!props.folder}>
-              <Button
-                class={feedManagingDialogFormCSS.deleteButton}
-                name='delete'
-                disabled={isSending()}
-                onClick={handleDelete}
-                stopPropagation
-              >
-                <Icon name='delete' size='large'/>
-              </Button>
-            </Show>
-
-            <Button
-              class={feedManagingDialogFormCSS.primaryButton}
-              type='submit'
-              name='submit'
-              disabled={isSending()}
-              stopPropagation
-            >
-              <Show when={!isSending()}
-                fallback={(
-                  <Icon
-                    class={animationsCSS.rotate}
-                    name='loader'
-                    size='large'
-                  />
-                )}
-              >
-                <Text variant='label' size='large'>
-                  {localeState.texts?.feed.buttons.save}
-                </Text>
-              </Show>
-            </Button>
+        <Button
+          class={feedManagingDialogFormCSS.button}
+          type='submit'
+          name='submit'
+          disabled={isSending()}
+          stopPropagation
+        >
+          <Show when={!isSending()}
+            fallback={(
+              <Icon
+                class={animationsCSS.rotate}
+                name='loader'
+                size='large'
+              />
+            )}
+          >
+            <Text variant='label' size='large'>
+              {localeState.texts?.feed.buttons.save}
+            </Text>
           </Show>
-
-          <Show when={isDeleting()}>
-            <Button
-              class={feedManagingDialogFormCSS.confirmButton}
-              name='confirm'
-              disabled={isSending()}
-              onClick={handleConfirm}
-              stopPropagation
-            >
-              <Show when={!isSending()}
-                fallback={(
-                  <Icon
-                    class={animationsCSS.rotate}
-                    name='loader'
-                    size='large'
-                  />
-                )}
-              >
-                <Text variant='label' size='large'>
-                  {localeState.texts?.feed.buttons.confirm}
-                </Text>
-              </Show>
-            </Button>
-          </Show>
-        </div>
+        </Button>
       </Show>
 
       <MenuDescription

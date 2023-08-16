@@ -1,10 +1,10 @@
 import type { MessagesMessages, Message } from '~/shared/api/mtproto'
 import { api } from '~/shared/api'
 
-import type { Channels, ChannelData, Posts, PostData, Folder, Filter } from '../feed.types'
-import { FEED_CONFIG_MESSAGE_TAG } from '../feed.const'
+import type { FeedState, Channels, ChannelData, Posts, PostData, Folder, Filter } from '../feed.types'
+import { FEED_CONFIG_MESSAGE_TAG, DEFAULT_FOLDER_ID } from '../feed.const'
 import { setFeedState } from '../feed-state'
-import { parseConfigMessage } from '../utils'
+import { parseConfigMessage, resolveCurrentFolderState } from '../utils'
 
 type Data = {
   postUuids: PostData['uuid'][]
@@ -24,15 +24,26 @@ export const fetchPosts = async (pageNumber: number) => {
       { postUuids, channels, posts, next }
     ] = await Promise.all([
       loadConfig(),
-      { postUuids: [], channels: {}, posts: {}, next: false }//loadPosts({ next: false })
+      loadPosts({ next: false })
     ])
-    setFeedState({
-      initialLoading: false,
-      postUuids,
-      channels,
-      posts,
-      folders,
-      filters,
+    setFeedState(state => {
+      const stateUpdates: Partial<FeedState> = {
+        initialLoading: false,
+        postUuids,
+        channels,
+        posts,
+        folders,
+        filters,
+      }
+
+      if (
+        state.currentFolderId !== DEFAULT_FOLDER_ID &&
+        !folders.some(folder => folder.id === state.currentFolderId)
+      ) {
+        resolveCurrentFolderState(state, stateUpdates)
+      }
+
+      return stateUpdates
     })
     initialLoading = false
     res.next = next
@@ -172,6 +183,7 @@ const parseConfigRes = (
     ) {
       config.folders.push({
         id: message.id,
+        index: params.index || 0,
         name: params.name,
         channelIds: params.channelIds
       })
@@ -183,6 +195,10 @@ const parseConfigRes = (
       })
     }
   }
+
+  config.folders.sort(
+    (folder1, folder2) => folder1.index - folder2.index
+  )
 
   return config
 }

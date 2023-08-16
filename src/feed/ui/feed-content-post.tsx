@@ -1,8 +1,12 @@
 import type { Component } from 'solid-js'
 import { createMemo, onMount } from 'solid-js'
 
+import { Text } from '~/shared/ui/elements'
+
 import type { PostData } from '../feed.types'
 import { feedState } from '../feed-state'
+
+import * as feedContentPostCSS from './feed-content-post.sss'
 
 export type FeedContentPostProps = {
   index: number
@@ -32,9 +36,14 @@ export const FeedContentPost: Component<FeedContentPostProps> = (props) => {
 
   return (
     <div
+      class={feedContentPostCSS.wrapper}
       ref={postEl}
     >
-      {getText()}
+      <div class={feedContentPostCSS.base}>
+        <Text variant='body' size='medium'>
+          {getText()}
+        </Text>
+      </div>
     </div>
   )
 }

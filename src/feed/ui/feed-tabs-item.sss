@@ -1,6 +1,6 @@
 .base
   --local-height: 32px
-
+  position: relative
   width: auto
   height: var(--local-height)
   padding: 0 16px
@@ -9,6 +9,10 @@
   border-radius: calc(var(--local-height) / 2)
   background-color: var(--theme-color-surface-0)
   color: var(--theme-color-on-surface)
+  transition-property: background-color
+
+  &:active:not(:disabled)
+    opacity: 1
 
   &:last-child
     margin-right: auto
@@ -16,6 +20,21 @@
   &:first-child
     margin-left: auto
 
-  &._active
+  &::after
+    top: 0
+    right: 0
+    bottom: 0
+    left: 0
+    scale: 0 1
+    transform-origin: 50% 0
     background-color: var(--theme-color-secondary-container)
+    will-change: scale
+
+  &._active
+    //background-color: transparent
     color: var(--theme-color-on-secondary-container)
+    cursor: default
+
+    &::after
+      transition: scale 300ms ease-in-out
+      scale: 1 1

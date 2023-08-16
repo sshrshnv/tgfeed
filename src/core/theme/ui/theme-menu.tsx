@@ -15,7 +15,7 @@ export const ThemeMenu: Component = () => {
   ])
 
   const handleChange = (mode: ThemeMode) => {
-    setThemeState({ mode })
+    setThemeState('mode', mode)
   }
 
   return (

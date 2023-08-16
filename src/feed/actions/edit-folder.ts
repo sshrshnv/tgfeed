@@ -5,18 +5,18 @@ import { setFeedState } from '../feed-state'
 import { stringifyConfigMessage } from '../utils'
 
 export const editFolder = async (
-  id: Folder['id'],
-  data: {
-    name: Folder['name']
-    channelIds: Folder['channelIds']
-  }
+  data: Folder,
+  {
+    skipStoreUpdate = false
+  } = {}
 ) => {
   await api.req('messages.editMessage', {
     peer: {
       _: 'inputPeerSelf'
     },
     message: stringifyConfigMessage(data),
-    id
+    id: data.id
   })
-  setFeedState('folders', folder => folder.id === id, data)
+  if (skipStoreUpdate) return
+  setFeedState('folders', folder => folder.id === data.id, data)
 }

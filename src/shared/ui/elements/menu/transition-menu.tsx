@@ -6,11 +6,12 @@ import { clsx } from 'clsx'
 
 import type { Route } from '~/shared/routing'
 import { isIOS } from '~/shared/utils'
+import { getTranslateInParams, getTranslateOutParams } from '~/shared/ui/animations'
 
 import type { MenuProps } from './menu'
 import { Menu } from './menu'
 
-import * as animationsCSS from '../animations.sss'
+import * as animationsCSS from '../../animations/animations.sss'
 import * as transitionMenuCSS from './transition-menu.sss'
 
 export type TransitionMenuProps = MenuProps & {
@@ -20,30 +21,6 @@ export type TransitionMenuProps = MenuProps & {
   onAfterEnter?: TransitionProps['onAfterEnter']
   onBeforeExit?: TransitionProps['onBeforeExit']
 }
-
-const getTranslateInParams = ({ translate }) => ({
-  keyframes: [
-    { translate, opacity: '0' },
-    { translate: '0', opacity: '1' }
-  ],
-  options: {
-    easing: 'cubic-bezier(0, 0, 0, 1)',
-    fill: 'forwards' as FillMode,
-    duration: 300
-  }
-})
-
-const getTranslateOutParams = ({ translate }) => ({
-  keyframes: [
-    { translate: '0', opacity: '1' },
-    { translate, opacity: '0' }
-  ],
-  options: {
-    easing: 'cubic-bezier(0.3, 0, 1, 1)',
-    fill: 'forwards' as FillMode,
-    duration: 150
-  }
-})
 
 const ANIMATION_PARAMS = {
   enter: getTranslateInParams({ translate: '48px' }),

@@ -17,9 +17,13 @@ export const feedRoutes = {
     type: 'dialog'
   },
 
+  managingDialogFolderMenu: {
+    id: 'feedManagingDialogFolderMenu',
+    type: 'state'
+  },
+
   managingDialogForm: {
     id: 'feedManagingDialogForm',
-    type: 'state',
-    folderId: ''
+    type: 'state'
   }
 } as const satisfies Record<string, Route>

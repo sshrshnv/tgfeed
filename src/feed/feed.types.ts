@@ -2,6 +2,7 @@ import type { Chat, Message, Peer } from '~/shared/api/mtproto'
 
 export type FeedState = {
   initialLoading: boolean
+  currentFolderId: Folder['id']
   defaultFolderVisibility: boolean
   postUuids: PostData['uuid'][]
   folders: Folder[]
@@ -31,6 +32,7 @@ export type PostData = Omit<Message.message, 'peer_id'> & {
 
 export type Folder = {
   id: Message.message['id']
+  index: number
   name: string
   channelIds: ChannelData['id'][]
 }

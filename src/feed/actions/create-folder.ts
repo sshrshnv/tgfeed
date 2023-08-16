@@ -7,6 +7,7 @@ import { stringifyConfigMessage } from '../utils'
 
 export const createFolder = async (data: {
   name: Folder['name']
+  index: Folder['index']
   channelIds: Folder['channelIds']
 }) => {
   const random_id = generateRandomId()

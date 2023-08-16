@@ -1,17 +1,17 @@
 import type { Component } from 'solid-js'
-import { For, createMemo, createSignal } from 'solid-js'
+import { createMemo, createSignal } from 'solid-js'
 import { clsx } from 'clsx'
 
 import { localeState } from '~/core/locale'
 import { routingState, pushRoute } from '~/shared/routing'
 import {
   Menu, TransitionMenu, MenuHeader, MenuTitle,
-  TransitionDialog, Text, Button, Checkbox, Icon
+  TransitionDialog, Text, Button
 } from '~/shared/ui/elements'
 
 import type { Folder } from '../feed.types'
-import { feedState, setFeedState } from '../feed-state'
 import { feedRoutes } from '../feed-routes'
+import { FeedManagingDialogFolders } from './feed-managing-dialog-folders'
 import { FeedManagingDialogForm } from './feed-managing-dialog-form'
 
 import * as layoutCSS from '../../shared/ui/elements/layout.sss'
@@ -26,14 +26,9 @@ export const FeedManagingDialog: Component<FeedManagingDialogProps> = (props) =>
   const [isFormTranstioning, setFormTransitioning] = createSignal(false)
   const isOpen = createMemo(() => routingState.currentDialogRoute?.id === feedRoutes.managingDialog.id)
   const isFormOpen = createMemo(() => routingState.currentRoute?.id === feedRoutes.managingDialogForm.id)
-  const hasFolders = createMemo(() => !!feedState.folders.length)
 
   const startFormTransitioning = () => setFormTransitioning(true)
   const endFormTransitioning = () => setFormTransitioning(false)
-
-  const toggleDefaultFolderVisibility = () => {
-    setFeedState(state => ({ defaultFolderVisibility: !state.defaultFolderVisibility }))
-  }
 
   const openNewFolderForm = () => {
     setEditingFolder()
@@ -84,27 +79,9 @@ export const FeedManagingDialog: Component<FeedManagingDialogProps> = (props) =>
           text={localeState.texts?.feed.foldersTitle}
         />
 
-        <Checkbox
-          class={feedManagingDialogCSS.checkbox}
-          text={localeState.texts?.feed.defaultFolderName}
-          icon={`folder${hasFolders() ? (feedState.defaultFolderVisibility ? '' : 'Off') : 'Zip'}`}
-          checked={feedState.defaultFolderVisibility || !hasFolders()}
-          disabled={!hasFolders()}
-          onChange={toggleDefaultFolderVisibility}
+        <FeedManagingDialogFolders
+          openEditingFolderForm={openEditingFolderForm}
         />
-
-        <For each={feedState.folders}>{(folder) => (
-          <Button
-            class={feedManagingDialogCSS.folderButton}
-            onClick={[openEditingFolderForm, folder]}
-            stopPropagation
-          >
-            <Icon name='folderManaged' size='medium'/>
-            <Text variant='label' size='large' ellipsis>
-              {folder.name}
-            </Text>
-          </Button>
-        )}</For>
       </Menu>
 
       <TransitionMenu

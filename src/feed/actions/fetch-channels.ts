@@ -2,9 +2,7 @@ import type { MessagesDialogs, Message } from '~/shared/api/mtproto'
 import { api } from '~/shared/api'
 
 import type { Channels } from '../feed.types'
-import { feedState, setFeedState } from '../feed-state'
-
-import { dbStorage } from '~/shared/storage/db-storage'
+import { setFeedState } from '../feed-state'
 
 const LIMIT = 100
 let channelsLoaded = false
@@ -13,7 +11,7 @@ export const fetchChannels = async () => {
   if (channelsLoaded) return
   channelsLoaded = true
   const channels = await loadChannels()
-  setFeedState({ channels })
+  setFeedState('channels', channels)
 }
 
 const loadChannels = async (
@@ -73,7 +71,10 @@ const parseChannelsRes = (
     const chat = chats[i]
 
     if (chat._ !== 'channel') continue
-    if (!chat.broadcast || chat.creator) continue
+    if (
+      !chat.broadcast || chat.creator || chat.left ||
+      chat.fake || chat.scam || chat.restricted
+    ) continue
 
     data.channels[chat.id] = chat
   }

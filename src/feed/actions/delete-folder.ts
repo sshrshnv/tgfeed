@@ -1,13 +1,24 @@
 import { api } from '~/shared/api'
 
-import type { Folder } from '../feed.types'
+import type { FeedState, Folder } from '../feed.types'
 import { setFeedState } from '../feed-state'
+import { resolveCurrentFolderState } from '../utils'
 
-export const deleteFolder = async (
-  id: Folder['id']
+export const deleteFolder = (
+  folder: Folder
 ) => {
-  await api.req('messages.deleteMessages', {
-    id: [id]
+  setFeedState(state => {
+    const stateUpdates: Partial<FeedState> = {}
+    stateUpdates.folders = state.folders.filter(({ id }) => id !== folder.id)
+
+    if (state.currentFolderId === folder.id) {
+      resolveCurrentFolderState(state, stateUpdates)
+    }
+
+    return stateUpdates
   })
-  setFeedState('folders', folders => folders.filter(folder => folder.id !== id))
+
+  return api.req('messages.deleteMessages', {
+    id: [folder.id]
+  })
 }

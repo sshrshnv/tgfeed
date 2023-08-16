@@ -7,48 +7,25 @@ import { clsx } from 'clsx'
 import type { Route } from '~/shared/routing'
 import { popRoute } from '~/shared/routing'
 import { isIOS } from '~/shared/utils'
+import { getTranslateScaleInParams, getTranslateScaleOutParams } from '~/shared/ui/animations'
 
 import { Dialog } from './dialog'
 
-import * as animationsCSS from '../animations.sss'
+import * as animationsCSS from '../../animations/animations.sss'
 import * as transitionDialogCSS from './transition-dialog.sss'
-
-const getTranslateInParams = ({ translate, x = false, y = false }) => ({
-  keyframes: [
-    { translate, scale: x ? '0.9 1' : y ? '1 0.9' : '1 1', opacity: '0' },
-    { translate: '0 0', scale: '1 1', opacity: '1' }
-  ],
-  options: {
-    easing: 'cubic-bezier(0, 0, 0, 1)',
-    fill: 'forwards' as FillMode,
-    duration: 300
-  }
-})
-
-const getTranslateOutParams = ({ translate }) => ({
-  keyframes: [
-    { translate: '0 0', opacity: '1' },
-    { translate, opacity: '0' }
-  ],
-  options: {
-    easing: 'cubic-bezier(0.3, 0, 1, 1)',
-    fill: 'forwards' as FillMode,
-    duration: 150
-  }
-})
 
 const ANIMATION_PARAMS = {
   slideInRightAnimation: {
-    enter: getTranslateInParams({ translate: '-48px 0', x: true }),
-    exit: getTranslateOutParams({ translate: '-24px 0' })
+    enter: getTranslateScaleInParams({ translate: '-48px 0', x: true }),
+    exit: getTranslateScaleOutParams({ translate: '-24px 0' })
   },
   slideInLeftAnimation: {
-    enter: getTranslateInParams({ translate: '48px 0', x: true }),
-    exit: getTranslateOutParams({ translate: '24px 0' })
+    enter: getTranslateScaleInParams({ translate: '48px 0', x: true }),
+    exit: getTranslateScaleOutParams({ translate: '24px 0' })
   },
   slideInBottomAnimation: {
-    enter: getTranslateInParams({ translate: '0 -24px', y: true }),
-    exit: getTranslateOutParams({ translate: '0 -12px' })
+    enter: getTranslateScaleInParams({ translate: '0 -24px', y: true }),
+    exit: getTranslateScaleOutParams({ translate: '0 -12px' })
   }
 }
 

@@ -60,6 +60,10 @@
     "buttons": {
       "newFolder": "Create new folder",
       "save": "Save",
+      "edit": "Edit",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "delete": "Delete",
       "confirm": "Confirm"
     },
     "errors": {

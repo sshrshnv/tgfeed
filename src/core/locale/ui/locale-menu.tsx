@@ -15,7 +15,7 @@ export const LocaleMenu: Component = () => {
   )
 
   const handleChange = (lang: LocaleLang) => {
-    setLocaleState({ lang })
+    setLocaleState('lang', lang)
   }
 
   return (

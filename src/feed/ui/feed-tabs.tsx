@@ -4,6 +4,7 @@ import { clsx } from 'clsx'
 
 import { localeState } from '~/core/locale'
 
+import { DEFAULT_FOLDER_ID } from '../feed.const'
 import { feedState } from '../feed-state'
 import { FeedTabsItem } from './feed-tabs-item'
 
@@ -29,13 +30,13 @@ export const FeedTabs: Component = () => {
         role="tablist"
       >
         <Show when={feedState.defaultFolderVisibility || !hasFolders()}>
-          <FeedTabsItem active>
+          <FeedTabsItem folderId={DEFAULT_FOLDER_ID}>
             {localeState.texts?.feed.defaultFolderName}
           </FeedTabsItem>
         </Show>
 
         <For each={feedState.folders}>{(folder) => (
-          <FeedTabsItem>
+          <FeedTabsItem folderId={folder.id}>
             {folder.name}
           </FeedTabsItem>
         )}</For>

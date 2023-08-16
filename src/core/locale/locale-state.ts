@@ -10,12 +10,12 @@ export const [localeState, setLocaleState] = createStateStore({
   nonPersistedKeys: ['texts'],
   onCreate: async (state, setState) => {
     const texts = await loadLocaleTexts(state)
-    setState({ texts })
+    setState('texts', texts)
   },
   onChange: async (prevState, state, setState) => {
     if (prevState.lang === state.lang) return
     const texts = await loadLocaleTexts(state)
-    setState({ texts })
+    setState('texts', texts)
     setLocaleAttributes(state)
   }
 })
