@@ -3,7 +3,6 @@
   opacity: 0.75
 
 .button
-  flex: 1 1 auto
   justify-content: flex-start
   height: 36px
   gap: 16px
@@ -23,9 +22,6 @@
     > svg:last-child
       rotate: -180deg
 
-  &._warning
-    color: var(--theme-color-error)
-
   &::after
     top: 0
     right: 0
@@ -37,17 +33,3 @@
   &._expanded
     &::after
       display: block
-
-.menu
-  position: absolute
-  z-index: 1
-  right: 0
-  left: 0
-  margin: 0 8px 8px
-  padding: 8px 0
-  border: solid var(--theme-color-surface-1)
-  border-radius: 16px
-  background-color: var(--theme-color-surface-2)
-  transform-origin: 0 0
-  opacity: 0
-  will-change: scale, opacity
