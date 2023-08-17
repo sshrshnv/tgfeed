@@ -13,7 +13,6 @@ import { feedRoutes } from '../feed-routes'
 import { fetchChannels, createFolder, editFolder } from '../actions'
 import { FeedManagingDialogFormChannels } from './feed-managing-dialog-form-channels'
 
-import * as scrollCSS from '../../shared/ui/elements/scroll.sss'
 import * as layoutCSS from '../../shared/ui/elements/layout.sss'
 import * as animationsCSS from '../../shared/ui/animations/animations.sss'
 import * as feedManagingDialogFormCSS from './feed-managing-dialog-form.sss'
@@ -89,8 +88,8 @@ export const FeedManagingDialogForm: Component<FeedManagingDialogFormProps> = (p
       <div
         class={clsx(
           feedManagingDialogFormCSS.channels,
-          scrollCSS.base,
-          scrollCSS._hidden,
+          layoutCSS.scroll,
+          layoutCSS.scrollHidden,
           layoutCSS.flex
         )}
         ref={channelsEl}

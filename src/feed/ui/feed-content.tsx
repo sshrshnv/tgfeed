@@ -1,15 +1,13 @@
 import type { Component } from 'solid-js'
-import { For, createSignal, createResource, createMemo } from 'solid-js'
-import { clsx } from 'clsx'
+import { createSignal, createResource, createMemo } from 'solid-js'
 
 import { Progress } from '~/shared/ui/elements'
 
 import { DEFAULT_FOLDER_ID } from '../feed.const'
 import { feedState } from '../feed-state'
 import { fetchPosts } from '../actions'
-import { FeedContentPost } from './feed-content-post'
+import { FeedPosts } from './feed-posts'
 
-import * as layoutCSS from '../../shared/ui/elements/layout.sss'
 import * as feedContentCSS from './feed-content.sss'
 
 export const FeedContent: Component = () => {
@@ -28,32 +26,16 @@ export const FeedContent: Component = () => {
     )
   })
 
-  const handlePostMount = (el: Element) => {
-    //
-  }
-
-  //const [offsetState, setOffsetState] = createStaticStore({ 0: 0 })
-
   return (
     <>
       <Progress
         class={feedContentCSS.progress}
         active={feedState.initialLoading}
       />
-      <div
-        class={clsx(
-          feedContentCSS.base,
-          layoutCSS.flex
-        )}
-      >
-        <For each={getPostUuids()}>{(uuid, getIndex) => (
-          <FeedContentPost
-            index={getIndex()}
-            uuid={uuid}
-            onMount={handlePostMount}
-          />
-        )}</For>
-      </div>
+      <FeedPosts
+        postUuids={getPostUuids()}
+        loading={!feedState.initialLoading && postsRes.loading}
+      />
     </>
   )
 }

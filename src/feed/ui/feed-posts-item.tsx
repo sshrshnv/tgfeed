@@ -1,21 +1,24 @@
 import type { Component } from 'solid-js'
-import { createMemo, onMount } from 'solid-js'
+import { createMemo, onMount, onCleanup } from 'solid-js'
 
 import { Text } from '~/shared/ui/elements'
 
 import type { PostData } from '../feed.types'
 import { feedState } from '../feed-state'
 
-import * as feedContentPostCSS from './feed-content-post.sss'
+import * as feedPostsItemCSS from './feed-posts-item.sss'
 
-export type FeedContentPostProps = {
+export type FeedPostsItemProps = {
   index: number
   uuid: PostData['uuid']
+  offset: number
+  hidden?: boolean
   onMount?: (el: Element) => void
+  onCleanup?: (el: Element) => void
 }
 
-export const FeedContentPost: Component<FeedContentPostProps> = (props) => {
-  let postEl!: HTMLDivElement
+export const FeedPostsItem: Component<FeedPostsItemProps> = (props) => {
+  let el!: HTMLDivElement
 
   const getText = createMemo(() =>
     feedState.posts[props.uuid].message
@@ -31,15 +34,26 @@ export const FeedContentPost: Component<FeedContentPostProps> = (props) => {
   })
 
   onMount(() => {
-    props.onMount?.(postEl)
+    props.onMount?.(el)
+  })
+
+  onCleanup(() => {
+    props.onCleanup?.(el)
   })
 
   return (
     <div
-      class={feedContentPostCSS.wrapper}
-      ref={postEl}
+      class={feedPostsItemCSS.wrapper}
+      style={{
+        top: `${props.offset}px`,
+        opacity: typeof props.offset === 'undefined' ? 0 : 1,
+        display: props.hidden ? 'none' : 'block'
+      }}
+      id={props.uuid}
+      // eslint-disable-next-line solid/reactivity
+      ref={el}
     >
-      <div class={feedContentPostCSS.base}>
+      <div class={feedPostsItemCSS.base}>
         <Text variant='body' size='medium'>
           {getText()}
         </Text>

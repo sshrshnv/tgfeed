@@ -21,7 +21,12 @@
   right: 0
 
 .main
+  flex: 1 1 auto
+  flex-direction: column
   border-radius: 16px 16px 0 0
+
+  &._overflowHidden
+    overflow: hidden
 
 .menu
   top: calc(var(--layout-header-top-offset) + var(--layout-header-size) + var(--layout-dialog-offset))
@@ -45,8 +50,6 @@
     border-color: transparent
 
   .main
-    flex-direction: column
-    flex-shrink: 1
     padding-top: calc(safe(top) + var(--layout-header-size) + 16px)
 
     border-radius: 0

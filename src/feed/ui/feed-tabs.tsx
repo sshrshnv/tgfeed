@@ -9,7 +9,6 @@ import { feedState } from '../feed-state'
 import { FeedTabsItem } from './feed-tabs-item'
 
 import * as layoutCSS from '../../shared/ui/elements/layout.sss'
-import * as scrollCSS from '../../shared/ui/elements/scroll.sss'
 import * as feedTabsCSS from './feed-tabs.sss'
 
 export const FeedTabs: Component = () => {
@@ -24,8 +23,8 @@ export const FeedTabs: Component = () => {
         class={clsx(
           feedTabsCSS.base,
           layoutCSS.flex,
-          scrollCSS.base,
-          scrollCSS._hidden
+          layoutCSS.scroll,
+          layoutCSS.scrollHidden
         )}
         role="tablist"
       >

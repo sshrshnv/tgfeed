@@ -10,7 +10,6 @@ import { authRoutes } from '~/auth/auth-routes'
 import { feedRoutes } from '~/feed/feed-routes'
 
 import * as layoutCSS from './shared/ui/elements/layout.sss'
-import * as scrollCSS from './shared/ui/elements/scroll.sss'
 import * as appViewCSS from './app.view.sss'
 
 const IntroMainContent = lazy(async () => ({ default: (await import('~/intro/ui')).IntroMainContent }))
@@ -52,7 +51,8 @@ export const View = () => {
 
       <Main class={clsx(
         appViewCSS.main,
-        !isFeed() && [layoutCSS.flex, scrollCSS.base, scrollCSS._hidden]
+        layoutCSS.flex,
+        isFeed() ? appViewCSS._overflowHidden : [layoutCSS.scroll, layoutCSS.scrollHidden]
       )}>
         <Switch>
           <Match when={routingState.currentPageRoute.id === introRoutes.page.id}>

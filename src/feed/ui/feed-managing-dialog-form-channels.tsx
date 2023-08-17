@@ -13,12 +13,12 @@ export type FeedManagingDialogFormChannelsProps = {
 }
 
 export const FeedManagingDialogFormChannels: Component<FeedManagingDialogFormChannelsProps> = (props) => {
-  const useVisibilityObserver = createVisibilityObserver({
-    root: props.parentEl
-  })
-
   const getChannelIds = createMemo(() => {
     return Object.keys(feedState.channels)
+  })
+
+  const useVisibilityObserver = createVisibilityObserver({
+    root: props.parentEl
   })
 
   return (

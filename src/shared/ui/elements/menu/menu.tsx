@@ -2,7 +2,6 @@ import type { Component, ComponentProps } from 'solid-js'
 import { splitProps } from 'solid-js'
 import { clsx } from 'clsx'
 
-import * as scrollCSS from '../scroll.sss'
 import * as layoutCSS from '../layout.sss'
 import * as menuCSS from './menu.sss'
 
@@ -19,7 +18,7 @@ export const Menu: Component<MenuProps> = (_props) => {
     <menu {...menuProps}
       class={clsx(
         props.class,
-        props.scrollable && [scrollCSS.base, scrollCSS._hidden],
+        props.scrollable && [layoutCSS.scroll, layoutCSS.scrollHidden],
         menuCSS.base,
         layoutCSS.flex
       )}
