@@ -14,5 +14,6 @@ export const DEFAULT_FEED_STATE: FeedState = {
   folders: [],
   filters: [],
   channels: {},
-  posts: {}
+  posts: {},
+  configId: 0
 }

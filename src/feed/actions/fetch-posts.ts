@@ -1,10 +1,11 @@
 import type { MessagesMessages, Message } from '~/shared/api/mtproto'
 import { api } from '~/shared/api'
 
-import type { FeedState, Channels, ChannelData, Posts, PostData, Folder, Filter } from '../feed.types'
-import { FEED_CONFIG_MESSAGE_TAG, DEFAULT_FOLDER_ID } from '../feed.const'
+import type { FeedState, Channels, ChannelData, Posts, PostData } from '../feed.types'
+import { DEFAULT_FOLDER_ID } from '../feed.const'
 import { setFeedState } from '../feed-state'
-import { parseConfigMessage, resolveCurrentFolderState } from '../utils'
+import { resolveCurrentFolderState } from '../utils'
+import { loadConfig } from './load-config'
 
 type Data = {
   postUuids: PostData['uuid'][]
@@ -18,16 +19,19 @@ let initialLoading = true
 
 export const fetchPosts = async (pageNumber: number) => {
   const res = { next: false }
+
   if (initialLoading) {
     const [
-      { folders, filters },
+      { config, folders, filters },
       { postUuids, channels, posts, next }
     ] = await Promise.all([
       loadConfig(),
       loadPosts({ next: false })
     ])
+
     setFeedState(state => {
       const stateUpdates: Partial<FeedState> = {
+        ...config,
         initialLoading: false,
         postUuids,
         channels,
@@ -49,13 +53,16 @@ export const fetchPosts = async (pageNumber: number) => {
     res.next = next
   } else {
     const { postUuids, channels, posts, next } = await loadPosts({ next: !!pageNumber })
+
     setFeedState(state => ({
       postUuids: pageNumber ? [...state.postUuids, ...postUuids] : postUuids,
       channels,
       posts
     }))
+
     res.next = next
   }
+
   return res
 }
 
@@ -136,69 +143,3 @@ const isValidPost = (message: Message) => (
   message.peer_id._ === 'peerChannel' &&
   !!message.post
 )
-
-const loadConfig = async () => {
-  const res = await api.req('messages.search', {
-    q: FEED_CONFIG_MESSAGE_TAG,
-    peer: {
-      _: 'inputPeerSelf'
-    },
-    filter: {
-      _: 'inputMessagesFilterEmpty'
-    },
-    min_date: 0,
-    max_date: 0,
-    min_id: 0,
-    max_id: 0,
-    offset_id: 0,
-    add_offset: 0,
-    limit: 100,
-    hash: ''
-  })
-
-  return parseConfigRes(res)
-}
-
-const parseConfigRes = (
-  res: MessagesMessages
-) => {
-  const config = {
-    folders: [] as Folder[],
-    filters: [] as Filter[]
-  }
-
-  if (res._ === 'messages.messagesNotModified') {
-    return config
-  }
-
-  for (let i = 0; i < res.messages.length; i++) {
-    const message = res.messages[i]
-    if (message._ !== 'message') continue
-
-    const params = parseConfigMessage(message)
-
-    if (
-      'name' in params && typeof params.name === 'string' &&
-      'channelIds' in params && Array.isArray(params.channelIds)
-    ) {
-      config.folders.push({
-        id: message.id,
-        index: params.index || 0,
-        name: params.name,
-        channelIds: params.channelIds
-      })
-    }
-    if ('text' in params) {
-      config.filters.push({
-        id: message.id,
-        ...params
-      })
-    }
-  }
-
-  config.folders.sort(
-    (folder1, folder2) => folder1.index - folder2.index
-  )
-
-  return config
-}

@@ -1,14 +1,18 @@
 import type { Chat, Message, Peer } from '~/shared/api/mtproto'
 
-export type FeedState = {
+export type FeedState = Config & {
   initialLoading: boolean
   currentFolderId: Folder['id']
-  defaultFolderVisibility: boolean
   postUuids: PostData['uuid'][]
   folders: Folder[]
   filters: Filter[]
   channels: Channels
   posts: Posts
+}
+
+export type Config = {
+  configId?: Message.message['id']
+  defaultFolderVisibility: boolean
 }
 
 export type FeedStorage = {
@@ -44,6 +48,7 @@ export type Filter = {
 }
 
 export type ConfigMessageParams = (
+  | Config
   | Omit<Folder, 'id'>
   | Omit<Filter, 'id'>
 )

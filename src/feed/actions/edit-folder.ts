@@ -7,7 +7,7 @@ import { stringifyConfigMessage } from '../utils'
 export const editFolder = async (
   data: Folder,
   {
-    skipStoreUpdate = false
+    skipStateUpdate = false
   } = {}
 ) => {
   await api.req('messages.editMessage', {
@@ -17,6 +17,6 @@ export const editFolder = async (
     message: stringifyConfigMessage(data),
     id: data.id
   })
-  if (skipStoreUpdate) return
+  if (skipStateUpdate) return
   setFeedState('folders', folder => folder.id === data.id, data)
 }

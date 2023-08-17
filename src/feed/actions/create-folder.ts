@@ -3,7 +3,7 @@ import { api } from '~/shared/api'
 
 import type { Folder } from '../feed.types'
 import { setFeedState } from '../feed-state'
-import { stringifyConfigMessage } from '../utils'
+import { stringifyConfigMessage, generateRandomId } from '../utils'
 
 export const createFolder = async (data: {
   name: Folder['name']
@@ -30,6 +30,3 @@ export const createFolder = async (data: {
   const folder = { id: update.id, ...data }
   setFeedState('folders', folders => [...folders, folder])
 }
-
-const generateRandomId = () =>
-  `${Math.floor(Math.random() * 0xFFFFFFFF)}${Math.floor(Math.random() * 0xFFFFFF)}`.slice(0, 16)

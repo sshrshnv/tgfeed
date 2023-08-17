@@ -25,6 +25,6 @@ export const resortFolders = (
   })
 
   return Promise.all(updatedFolders.map(folder =>
-    editFolder(folder, { skipStoreUpdate: true })
+    editFolder(folder, { skipStateUpdate: true })
   ))
 }
