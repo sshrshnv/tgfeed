@@ -37,7 +37,9 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
   const [getScroll, setScroll] = createSignal(0)
 
   const handleScroll = () => {
-    setScroll(Math.floor(scrollEl.scrollTop / 100) * 100)
+    self.requestAnimationFrame(() => {
+      setScroll(Math.floor(scrollEl.scrollTop / 100) * 100)
+    })
   }
 
   const addResizeObserverEl = (el: Element) => {

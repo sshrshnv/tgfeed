@@ -1,0 +1,25 @@
+.base
+  position: relative
+  width: var(--local-size)
+  height: var(--local-size)
+  border-radius: 50%
+  background-color: var(--theme-color-surface-0)
+
+  > canvas, > img
+    position: absolute
+    top: 0
+    right: 0
+    bottom: 0
+    left: 0
+    width: inherit
+    height: inherit
+    border-radius: inherit
+
+  > img
+    object-fit: cover
+
+  &._small
+    --local-size: 24px
+
+  &._medium
+    --local-size: 32px

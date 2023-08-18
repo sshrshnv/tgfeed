@@ -1,3 +1,5 @@
+export * from './format-date'
+export * from './format-post-text'
 export * from './generate-random-id'
 export * from './get-channel-cover'
 export * from './parse-config-message'
