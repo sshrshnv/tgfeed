@@ -1,3 +1,5 @@
+import { MessageMedia, DocumentAttribute, InputFileLocation } from '~/shared/api/mtproto'
+
 import type { FeedState, FeedStorage } from './feed.types'
 
 export const FEED_CONFIG_MESSAGE_TAG = '#tgfeedconfig'
@@ -15,5 +17,22 @@ export const DEFAULT_FEED_STATE: FeedState = {
   filters: [],
   channels: {},
   posts: {},
+  postGroups: {},
   configId: 0
 }
+
+export const SUPPORTED_MEDIA_TYPES: Partial<MessageMedia['_'][]> = [
+  'messageMediaPhoto',
+  'messageMediaDocument'
+]
+
+export const SUPPORTED_MEDIA_LOCATION_TYPES: Partial<InputFileLocation['_'][]> = [
+  'inputPhotoFileLocation',
+  'inputDocumentFileLocation'
+]
+
+export const SUPPORTED_MEDIA_DOCUMENT_TYPES: Partial<DocumentAttribute['_'][]> = [
+  'documentAttributeImageSize',
+  'documentAttributeVideo',
+  'documentAttributeAudio'
+]

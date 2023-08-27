@@ -18,7 +18,7 @@ export const Image: Component<Props> = (props) => {
 
   const handleLoad = () => {
     props.onLoad?.()
-    if (!props.fadeIn || props.onLoad) return
+    if (!props.fadeIn) return
     setLoaded(true)
   }
 

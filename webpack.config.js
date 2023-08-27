@@ -226,7 +226,7 @@ module.exports = [{
     liveReload: false,
     hot: isDev(),
     historyApiFallback: true,
-    compress: false,
+    compress: !isDev(),
     client: {
       overlay: {
         warnings: false,

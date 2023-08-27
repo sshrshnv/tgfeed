@@ -1,56 +1,32 @@
 .wrapper
   position: absolute
-  width: min(100%, 600px)
+  width: min(100%, var(--layout-article-max-width))
   padding: 0 16px
   opacity: 0
   transition: opacity 300ms ease-in-out
   will-change: top, opacity
 
 .base
-  padding: 0
+  padding: 0 0 16px
   border-radius: 16px
   background-color: var(--theme-color-surface-0)
 
-.header
-  align-items: center
-  height: var(--layout-header-size)
-  padding: 0 0 0 16px
-  gap: 12px
-
-.description
-  flex-shrink: 1
-  flex-direction: column
-  justify-content: center
-  overflow: hidden
-
-  > span
-    &:first-child
-      opacity: 0.75
-
-    &:last-child
-      opacity: 0.5
-
-.button
-  margin-left: auto
-  width: 40px
-  padding: 0
-
-  > svg
-    opacity: 0.5
-
 .text
-  padding: 4px 16px 16px
-  //opacity: 0.9
+  //max-height: calc(var(--local-line-height) * 3 + 16px)
+  padding: 16px 16px 0
+  user-select: text
 
   a
     color: var(--theme-color-primary)
     text-decoration: none
+    word-break: break-all
 
-  pre
-  code
+  pre, code
     margin: 0
-    padding: 1px 2px
-    background-color: var(--theme-color-surface-1)
     border-radius: 8px
     white-space: pre-wrap
-    font-family: monospace
+    font-weight: 500
+    opacity: 0.75
+
+.header + .text
+  border-top: 1px solid var(--theme-color-background)

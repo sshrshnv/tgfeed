@@ -18,9 +18,11 @@ export const FeedContent: Component = () => {
     if (feedState.currentFolderId === DEFAULT_FOLDER_ID) {
       return feedState.postUuids
     }
+
     const channelIds = feedState.folders.find(folder =>
       folder.id === feedState.currentFolderId
     )?.channelIds || []
+
     return feedState.postUuids.filter(postUuid =>
       channelIds.some(channelId => postUuid.indexOf(channelId) === 0)
     )

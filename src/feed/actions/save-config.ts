@@ -1,9 +1,10 @@
 import type { Update } from '~/shared/api/mtproto'
 import { api } from '~/shared/api'
+import { generateRandomId } from '~/shared/api/utils'
 
 import type { Config } from '../feed.types'
 import { feedState, setFeedState } from '../feed-state'
-import { stringifyConfigMessage, generateRandomId } from '../utils'
+import { stringifyConfigMessage } from '../utils'
 
 export const saveConfig = (
   data: Partial<Config>,

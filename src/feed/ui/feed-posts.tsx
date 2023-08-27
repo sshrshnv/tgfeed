@@ -4,10 +4,12 @@ import { createStore } from 'solid-js/store'
 import { createResizeObserver } from '@solid-primitives/resize-observer'
 import { clsx } from 'clsx'
 
+import { isIOS } from '~/shared/utils'
 import { Icon } from '~/shared/ui/elements'
 
-import type { PostData } from '../feed.types'
+import type { PostUuid, PostGroupUuid } from '../feed.types'
 import { feedState } from '../feed-state'
+import { isPostGroupUuid } from '../utils'
 import { FeedPostsItem } from './feed-posts-item'
 
 import * as layoutCSS from '../../shared/ui/elements/layout.sss'
@@ -15,16 +17,16 @@ import * as animationsCSS from '../../shared/ui/animations/animations.sss'
 import * as feedPostsCSS from './feed-posts.sss'
 
 export type FeedPostsProps = {
-  postUuids: PostData['uuid'][]
+  postUuids: (PostUuid | PostGroupUuid)[]
   loading?: boolean
 }
 
 type HeightState = {
-  [uuid in PostData['uuid']]: number
+  [uuid in PostUuid]: number
 }
 
 type OffsetState = {
-  [uuid in PostData['uuid']]: number
+  [uuid in PostUuid]: number
 }
 
 export const FeedPosts: Component<FeedPostsProps> = (props) => {
@@ -56,7 +58,7 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
   createResizeObserver(resizeObserverEls, ({ height }, el) => {
     self.requestAnimationFrame(() => {
       if (!height) return
-      setHeightState(el.id as PostData['uuid'], height)
+      setHeightState(el.id as PostUuid, height)
     })
   })
 
@@ -86,22 +88,40 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
         feedPostsCSS.base,
         layoutCSS.flex,
         layoutCSS.scroll,
-        layoutCSS.scrollCustom
+        layoutCSS.scrollCustom,
+        isIOS() && animationsCSS.forcedPerformance
       )}
       id={SCROLL_EL_ID}
       ref={scrollEl}
     >
-      <For each={props.postUuids}>{(uuid, getIndex) => {
-        const isHidden = createMemo(() => (
-          !!offsetState[uuid] &&
-          !!heightState[uuid] && (
-            (offsetState[uuid] + heightState[uuid] <= getScroll() - heightState[SCROLL_EL_ID]) ||
-            (offsetState[uuid] >= getScroll() + heightState[SCROLL_EL_ID] * 2)
-          )
+      <For each={props.postUuids}>{(unsafeUuid, getIndex) => {
+        const getPostUuid = createMemo(() => (
+          isPostGroupUuid(unsafeUuid) ? feedState.postGroups[unsafeUuid][0] : unsafeUuid as PostUuid
         ))
 
-        createEffect(() => {
+        const getPostGroupUuid = createMemo(() => (
+          getPostUuid() === unsafeUuid ? undefined : unsafeUuid
+        ))
+
+        const getPrevPostUuid = createMemo(() => {
           const prevUuid = props.postUuids[getIndex() - 1]
+          return (prevUuid && isPostGroupUuid(prevUuid)) ? feedState.postGroups[prevUuid][0] : prevUuid
+        })
+
+        const isVisible = createMemo(() => {
+          const uuid = getPostUuid()
+          return !(
+            !!offsetState[uuid] &&
+            !!heightState[uuid] && (
+              (offsetState[uuid] + heightState[uuid] <= getScroll() - heightState[SCROLL_EL_ID]) ||
+              (offsetState[uuid] >= getScroll() + heightState[SCROLL_EL_ID] * 2)
+            )
+          )
+        })
+
+        createEffect(() => {
+          const uuid = getPostUuid()
+          const prevUuid = getPrevPostUuid()
           const prevOffset = prevUuid && offsetState[prevUuid] || 0
           const prevHeight = prevUuid && heightState[prevUuid] || 0
           if (getIndex() && !prevHeight) return
@@ -110,10 +130,11 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
 
         return (
           <FeedPostsItem
-            uuid={uuid}
+            uuid={getPostUuid()}
+            groupUuid={getPostGroupUuid()}
             index={getIndex()}
-            offset={offsetState[uuid]}
-            hidden={isHidden()}
+            offset={offsetState[getPostUuid()]}
+            visible={isVisible()}
             onMount={addResizeObserverEl}
             onCleanup={removeResizeObserverEl}
           />

@@ -1,19 +1,27 @@
 export type UI = {
-  getImageUrlFromBytes: (
+  getThumbUrlFromBytes: (
     bytes: ArrayBuffer,
     params?: {
       stripped?: boolean
     }
-  ) => Promise<string>
+  ) => string | Promise<string>
 
-  getBluredImageData: (
-    data: ImageData,
+  getBluredImageBytes: (
+    bytes: ArrayBuffer,
     topX: number,
     topY: number,
     width: number,
     height: number,
     radius: number
-  ) => Promise<ImageData>
+  ) => ArrayBuffer | Promise<ArrayBuffer>
+
+  getMediaUrlFromFile: (
+    file: {
+      fileUuid: string
+      type: string
+      partsCount: number
+    }
+  ) => string | undefined | Promise<string | undefined>
 }
 
 export type UIWorkerMessage = {

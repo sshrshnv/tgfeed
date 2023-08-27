@@ -1,29 +1,35 @@
 import type { MessagesMessages, Message } from '~/shared/api/mtproto'
 import { api } from '~/shared/api'
 
-import type { FeedState, Channels, ChannelData, Posts, PostData } from '../feed.types'
+import type { FeedState, ChannelData, ChannelId, PostData, PostUuid, PostUuids, PostGroups } from '../feed.types'
 import { DEFAULT_FOLDER_ID } from '../feed.const'
 import { setFeedState } from '../feed-state'
-import { resolveCurrentFolderState } from '../utils'
-import { loadConfig } from './load-config'
+import {
+  resolveCurrentFolderState,
+  generatePostUuid,
+  generatePostGroupUuid,
+  loadConfig,
+  isSupportedMedia
+} from '../utils'
 
 type Data = {
-  postUuids: PostData['uuid'][]
-  channels: Channels
-  posts: Posts
+  postUuids: FeedState['postUuids']
+  channels: FeedState['channels']
+  posts: FeedState['posts']
+  postGroups: FeedState['postGroups']
   next: boolean
 }
 
 let offset_rate: number | undefined = 0
 let initialLoading = true
 
-export const fetchPosts = async (pageNumber: number) => {
+export const fetchPosts = async (pageNumber: number | true) => {
   const res = { next: false }
 
   if (initialLoading) {
     const [
       { config, folders, filters },
-      { postUuids, channels, posts, next }
+      { postUuids, channels, posts, postGroups, next }
     ] = await Promise.all([
       loadConfig(),
       loadPosts({ next: false })
@@ -36,6 +42,7 @@ export const fetchPosts = async (pageNumber: number) => {
         postUuids,
         channels,
         posts,
+        postGroups,
         folders,
         filters,
       }
@@ -49,13 +56,15 @@ export const fetchPosts = async (pageNumber: number) => {
 
       return stateUpdates
     })
+
     initialLoading = false
     res.next = next
   } else {
-    const { postUuids, channels, posts, next } = await loadPosts({ next: !!pageNumber })
+    const { postUuids, channels, posts, postGroups, next } = await loadPosts({ next: !!pageNumber })
 
     setFeedState(state => ({
-      postUuids: pageNumber ? [...state.postUuids, ...postUuids] : postUuids,
+      postUuids: pageNumber ? getPostUuidsUpdate(state, postUuids) : postUuids,
+      postGroups: pageNumber ? getPostGroupsUpdate(state, postGroups) : postGroups,
       channels,
       posts
     }))
@@ -109,9 +118,10 @@ const parsePostsRes = (
   res?: MessagesMessages
 ) => {
   const data = {
-    postUuids: [] as PostData['uuid'][],
-    channels: {} as Channels,
-    posts: {} as Posts,
+    postUuids: [] as FeedState['postUuids'],
+    channels: {} as FeedState['channels'],
+    posts: {} as FeedState['posts'],
+    postGroups: {} as FeedState['postGroups'],
     next: false
   }
 
@@ -121,12 +131,23 @@ const parsePostsRes = (
 
   for (let i = 0; i < res.messages.length; i++) {
     const post = res.messages[i] as PostData
-    const postUuid: PostData['uuid'] = `${post.peer_id.channel_id}-${post.id}`
-    const channelId: ChannelData['id'] = post.peer_id.channel_id
+    const postUuid: PostUuid = generatePostUuid(post)
+    const channelId: ChannelId = post.peer_id.channel_id
 
     if (!isValidPost(post)) continue
 
-    data.postUuids.push(postUuid)
+    if (post.grouped_id) {
+      const postGroupUuid = generatePostGroupUuid(post)
+
+      if (!data.postGroups[postGroupUuid]) {
+        data.postGroups[postGroupUuid] = []
+        data.postUuids.push(postGroupUuid)
+      }
+
+      data.postGroups[postGroupUuid].unshift(postUuid)
+    } else {
+      data.postUuids.push(postUuid)
+    }
     data.posts[postUuid] = post
 
     if (!data.channels.channelId) {
@@ -138,8 +159,27 @@ const parsePostsRes = (
   return data
 }
 
-const isValidPost = (message: Message) => (
+const getPostUuidsUpdate = (
+  state: FeedState,
+  postUuids: PostUuids
+) => ([
+  ...state.postUuids,
+  ...postUuids
+])
+
+const getPostGroupsUpdate = (
+  state: FeedState,
+  postGroups: PostGroups
+) => Object.entries(postGroups).reduce((obj, [key, value]) => {
+  obj[key] = [...value, ...(state.postGroups[key] || [])]
+  return obj
+}, {} as PostGroups)
+
+const isValidPost = (message: Message) => !!(
   message._ === 'message' &&
   message.peer_id._ === 'peerChannel' &&
-  !!message.post
+  message.post && (
+    message.message ||
+    isSupportedMedia(message.media)
+  )
 )

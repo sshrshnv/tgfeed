@@ -3,7 +3,7 @@ import { api } from '~/shared/api'
 
 import type { Config, Folder, Filter } from '../feed.types'
 import { FEED_CONFIG_MESSAGE_TAG } from '../feed.const'
-import { parseConfigMessage } from '../utils'
+import { parseConfigMessage } from './parse-config-message'
 
 export const loadConfig = async () => {
   const res = await api.req('messages.search', {

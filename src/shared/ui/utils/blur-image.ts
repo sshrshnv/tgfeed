@@ -1,5 +1,7 @@
 import { getUiWorker } from '~/shared/ui/worker'
 
+const bluredImageCache: Record<string, ImageData> = {}
+
 export const blurImage = ({
   canvasEl,
   src,
@@ -18,6 +20,11 @@ export const blurImage = ({
 
   const image = new Image()
   image.onload = async () => {
+    if (bluredImageCache[src]) {
+      canvasContext.putImageData(bluredImageCache[src], 0, 0)
+      return
+    }
+
     const uiWorker = await getUiWorker()
 
     const bufferCanvas = self.document.createElement('canvas')
@@ -29,8 +36,17 @@ export const blurImage = ({
     bufferCanvasContext.drawImage(image, ...imageParams, ...canvasParams)
 
     const imageData = bufferCanvasContext.getImageData(...canvasParams)
-    const bluredImageData = await uiWorker.getBluredImageData(imageData, ...canvasParams, radius)
-    canvasContext.putImageData(bluredImageData, 0, 0)
+    const bluredImageBytes = await uiWorker.getBluredImageBytes(
+      imageData.data.buffer,
+      ...canvasParams,
+      radius
+    )
+
+    const bluredImageClampedArray = new Uint8ClampedArray(bluredImageBytes)
+    const bluredImageData = new ImageData(bluredImageClampedArray, imageData.width, imageData.height)
+
+    bluredImageCache[src] = bluredImageData
+    canvasContext.putImageData(bluredImageCache[src], 0, 0)
   }
   image.src = src
 }

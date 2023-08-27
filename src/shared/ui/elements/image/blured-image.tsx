@@ -12,6 +12,7 @@ export type BluredImageProps = {
   width: number
   height: number
   radius: number
+  unnecessary?: boolean
 }
 
 export const BluredImage: Component<BluredImageProps> = (props) => {
@@ -32,6 +33,7 @@ export const BluredImage: Component<BluredImageProps> = (props) => {
     <canvas
       class={clsx(
         props.class,
+        props.unnecessary && imageCSS._unnecessary,
         imageCSS._blured
       )}
       ref={canvasEl}

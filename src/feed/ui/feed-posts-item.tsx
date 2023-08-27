@@ -2,22 +2,24 @@ import type { Component } from 'solid-js'
 import { Show, createMemo, onMount, onCleanup } from 'solid-js'
 import { clsx } from 'clsx'
 
-import { localeState } from '~/core/locale'
-import { Button, Icon, Text, Paragraph } from '~/shared/ui/elements'
+import { isIOS } from '~/shared/utils'
+import { Paragraph } from '~/shared/ui/elements'
 
-import type { PostData } from '../feed.types'
+import type { PostUuid, PostGroupUuid } from '../feed.types'
 import { feedState } from '../feed-state'
-import { formatDate, formatPostText } from '../utils'
-import { FeedChannelCover } from './feed-channel-cover'
+import { formatPostText, isSupportedMedia } from '../utils'
+import { FeedPostsItemHeader } from './feed-posts-item-header'
+import { FeedPostsItemMedia } from './feed-posts-item-media'
 
-import * as layoutCSS from '../../shared/ui/elements/layout.sss'
+import * as animationsCSS from '../../shared/ui/animations/animations.sss'
 import * as feedPostsItemCSS from './feed-posts-item.sss'
 
 export type FeedPostsItemProps = {
   index: number
-  uuid: PostData['uuid']
+  uuid: PostUuid
+  groupUuid?: PostGroupUuid
   offset: number
-  hidden?: boolean
+  visible?: boolean
   onMount?: (el: Element) => void
   onCleanup?: (el: Element) => void
 }
@@ -26,69 +28,64 @@ export const FeedPostsItem: Component<FeedPostsItemProps> = (props) => {
   let el!: HTMLDivElement
 
   const getPost = createMemo(() =>
-    feedState.posts[props.uuid]
+    feedState.posts[props.uuid] || {}
   )
-  const getPostDate = createMemo(() =>
-    formatDate(getPost().date, { time: true })
-  )
-  const getPostText = createMemo(() =>
+
+  const getText = createMemo(() =>
     formatPostText(getPost().message, getPost().entities)
   )
 
-  const getChannelTitle = createMemo(() =>
-    feedState.channels[getPost().peer_id.channel_id].title
+  const hasText = createMemo(() =>
+    !!getText().length
   )
 
-  onMount(() => props.onMount?.(el))
-  onCleanup(() => props.onCleanup?.(el))
+  const hasMedia = createMemo(() =>
+    !!props.groupUuid || isSupportedMedia(getPost().media)
+  )
+
+  onMount(() => {
+    props.onMount?.(el)
+  })
+
+  onCleanup(() => {
+    props.onCleanup?.(el)
+  })
 
   return (
     <div
-      class={feedPostsItemCSS.wrapper}
+      class={clsx(
+        feedPostsItemCSS.wrapper,
+        isIOS() && animationsCSS.forcedPerformance
+      )}
       style={{
         top: `${props.offset}px`,
         opacity: typeof props.offset === 'undefined' ? 0 : 1,
-        display: props.hidden ? 'none' : 'block'
+        display: props.visible ? 'block' : 'none'
       }}
       id={props.uuid}
       ref={el}
     >
       <article class={feedPostsItemCSS.base}>
-        <header class={clsx(
-          feedPostsItemCSS.header,
-          layoutCSS.flex
-        )}>
-          <FeedChannelCover
-            channelId={getPost().peer_id.channel_id}
-            size='medium'
-            visible={!props.hidden}
+        <FeedPostsItemHeader
+          class={feedPostsItemCSS.header}
+          uuid={props.uuid}
+          visible={props.visible}
+        />
+
+        <Show when={hasMedia()}>
+          <FeedPostsItemMedia
+            uuid={props.uuid}
+            groupUuid={props.groupUuid}
+            visible={props.visible}
           />
+        </Show>
 
-          <div class={clsx(
-            feedPostsItemCSS.description,
-            layoutCSS.flex
-          )}>
-            <Text variant='label' size='medium' ellipsis>
-              {getChannelTitle()}
-            </Text>
-            <Text variant='label' size='small'>
-              {getPostDate()}
-            </Text>
-          </div>
-
-          <Button
-            class={feedPostsItemCSS.button}
-          >
-            <Icon name='more' size='medium'/>
-          </Button>
-        </header>
-
-        <Show when={getPostText().length}>
+        <Show when={hasText()}>
           <Paragraph
             class={feedPostsItemCSS.text}
             size='medium'
             // eslint-disable-next-line solid/no-innerhtml
-            innerHTML={getPostText()}
+            innerHTML={getText()}
           />
         </Show>
       </article>

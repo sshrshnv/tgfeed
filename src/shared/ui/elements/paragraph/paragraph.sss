@@ -1,6 +1,6 @@
 .base
   --local-font-family: sans-serif
-  display: inline-block
+  display: block
   padding: 0
   font: var(--local-font)
   letter-spacing: var(--local-letter-spacing)
@@ -9,17 +9,20 @@
   &._large
     --local-font: var(--font-body-large)
     --local-letter-spacing: var(--font-body-large-tracking)
+    --local-line-height: 24px
     --local-padding: 16px
     font-family: var(--local-font-family)
 
   &._medium
     --local-font: var(--font-body-medium)
     --local-letter-spacing: var(--font-body-medium-tracking)
+    --local-line-height: 20px
     --local-padding: 12px
     font-family: var(--local-font-family)
 
   &._small
     --local-font: var(--font-body-small)
     --local-letter-spacing: var(--font-body-small-tracking)
+    --local-line-height: 16px
     --local-padding: 8px
     font-family: var(--local-font-family)

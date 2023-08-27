@@ -1,0 +1,24 @@
+.base
+  position: relative
+  aspect-ratio: var(--local-aspect-ratio)
+  overflow: hidden
+
+  &._enabled
+    cursor: grab
+
+.dots
+  padding: 8px 0 0
+  gap: 4px
+
+.dotsItem
+  width: 4px
+  height: 4px
+  border-radius: 2px
+  background-color: var(--theme-color-on-surface)
+  opacity: 0.25
+  transition: 300ms ease-in-out
+  transition-property: background-color, opacity
+
+  &._active
+    background-color: var(--theme-color-primary)
+    opacity: 1

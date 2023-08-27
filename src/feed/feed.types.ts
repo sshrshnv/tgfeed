@@ -3,11 +3,12 @@ import type { Chat, Message, Peer } from '~/shared/api/mtproto'
 export type FeedState = Config & {
   initialLoading: boolean
   currentFolderId: Folder['id']
-  postUuids: PostData['uuid'][]
+  postUuids: PostUuids
   folders: Folder[]
   filters: Filter[]
   channels: Channels
   posts: Posts
+  postGroups: PostGroups
 }
 
 export type Config = {
@@ -20,25 +21,39 @@ export type FeedStorage = {
 }
 
 export type Channels = {
-  [id in ChannelData['id']]: ChannelData
+  [id in ChannelId]: ChannelData
 }
 
 export type ChannelData = Chat.channel
 
+export type ChannelId = ChannelData['id']
+
 export type Posts = {
-  [uuid in PostData['uuid']]: PostData
+  [uuid in PostUuid]: PostData
 }
 
 export type PostData = Omit<Message.message, 'peer_id'> & {
-  uuid: `${Peer.peerChannel['channel_id']}-${Message.message['id']}`
+  uuid: PostUuid
   peer_id: Peer.peerChannel
+}
+
+export type PostId = PostData['id']
+
+export type PostUuid = `${Peer.peerChannel['channel_id']}-${Message.message['id']}`
+
+export type PostGroupUuid = `${Peer.peerChannel['channel_id']}-${string}`
+
+export type PostUuids = (PostUuid | PostGroupUuid)[]
+
+export type PostGroups = {
+  [postGroupUuid in PostGroupUuid]: PostUuid[]
 }
 
 export type Folder = {
   id: Message.message['id']
   index: number
   name: string
-  channelIds: ChannelData['id'][]
+  channelIds: ChannelId[]
 }
 
 export type Filter = {

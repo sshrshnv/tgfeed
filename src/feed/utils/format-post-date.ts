@@ -1,4 +1,4 @@
-export const formatDate = (
+export const formatPostDate = (
   value,
   {
     time = false
@@ -6,8 +6,7 @@ export const formatDate = (
 ) => {
   return new Intl.DateTimeFormat(self.navigator.languages as string[], time ? {
     hour: '2-digit',
-    minute: '2-digit',
-    hour12: false
+    minute: '2-digit'
   } : {
 
   }).format(value * 1000)

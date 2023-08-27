@@ -1,11 +1,16 @@
 import { comlink } from '~/shared/utils'
 
 import type { UIWorkerMessage } from './ui.types'
-import { getBluredImageData, getImageUrlFromBytes } from './utils'
+import {
+  getBluredImageBytes,
+  getThumbUrlFromBytes,
+  getMediaUrlFromFile
+} from './utils'
 
 const uiWorker = {
-  getBluredImageData,
-  getImageUrlFromBytes
+  getBluredImageBytes,
+  getThumbUrlFromBytes,
+  getMediaUrlFromFile
 }
 
 self.onmessage = (ev: MessageEvent<UIWorkerMessage>) => {

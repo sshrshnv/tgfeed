@@ -1,5 +1,5 @@
 type TranslateScaleArgs = {
-  translate: `${number} ${number}`
+  translate: `${string} ${string}`
   x?: boolean
   y?: boolean
 }

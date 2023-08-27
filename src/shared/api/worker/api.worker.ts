@@ -106,7 +106,7 @@ const apiWorker: API = {
   req: async (method, ...args) => {
     const api = await apiPromise
     const res = await api.req(method, ...args)
-    return handleApiRes(method, res)
+    return handleApiRes(method, res, args[0])
   },
 
   exec: async (...args) => {

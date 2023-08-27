@@ -4,7 +4,7 @@ import { clsx } from 'clsx'
 
 import { Input, Text } from '~/shared/ui/elements'
 
-import type { ChannelData } from '../feed.types'
+import type { ChannelId } from '../feed.types'
 import { feedState } from '../feed-state'
 import { FeedChannelCover } from './feed-channel-cover'
 
@@ -12,7 +12,7 @@ import * as layoutCSS from '../../shared/ui/elements/layout.sss'
 import * as feedManagingDialogFormChannelsItemCSS from './feed-managing-dialog-form-channels-item.sss'
 
 export type FeedManagingDialogFormChannelProps = {
-  channelId: ChannelData['id']
+  channelId: ChannelId
   name: string
   ref: HTMLLabelElement
   visible: boolean

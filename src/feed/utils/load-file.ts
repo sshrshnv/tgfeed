@@ -1,264 +1,188 @@
+import { unwrap } from 'solid-js/store'
 import createSyncTaskQueue from 'sync-task-queue'
 
-import type { InputFileLocation } from '~/shared/api/mtproto'
-import { api } from '~/shared/api'
-import { setDelay } from '~/shared/utils'
+import type { UploadFile, InputFileLocation } from '~/shared/api/mtproto'
+import type { APIError } from '~/shared/api'
+import {
+  API_LOADING_PART_SIZE,
+  API_LOADING_TIMEOUT,
+  API_MAX_LOADING_COUNT,
+  API_MAX_LOADING_THREAD_COUNT,
+  api
+} from '~/shared/api'
+import { generateFileUuid } from '~/shared/api/utils'
+import { setDelay, createPromise } from '~/shared/utils'
 
-const LOADING_PART_SIZE = 1024 * 1024
-const LOADING_TIMEOUT = 400
-const LOADING_THREAD_COUNT = 2
-const MAX_LOADING_COUNT = 8
+import type { ChannelId, PostUuid } from '../feed.types'
+import { feedState } from '../feed-state'
+import { refreshFileReference } from './refresh-file-reference'
+
+type FileResponse = {
+  fileUuid: string
+  type: string
+  partsCount: number
+}
+
+const loadingPartsCountCache: Record<string, number> = {}
+const loadingPauseCache: Record<string, boolean> = {}
+const loadingQueueIndexes = [...Array(API_MAX_LOADING_COUNT * API_MAX_LOADING_THREAD_COUNT).keys()]
 
 const loadingQueue = {
   nextIndex: 0,
 
-  queues: [...Array(MAX_LOADING_COUNT).keys()].reduce((queue, index) => {
+  queues: loadingQueueIndexes.reduce((queue, index) => {
     queue[index] = createSyncTaskQueue()
     return queue
   }, {}),
 
-  add: fn => {
+  add: (fn: (queueIndex: number) => void) => {
     const currentIndex = loadingQueue.nextIndex
+
     loadingQueue.queues[currentIndex].enqueue(async () => {
-      await fn()
-      return setDelay(LOADING_TIMEOUT)
+      await fn(currentIndex)
+      return setDelay(API_LOADING_TIMEOUT)
     })
-    loadingQueue.nextIndex = currentIndex === MAX_LOADING_COUNT - 1 ? 0 : currentIndex + 1
+
+    loadingQueue.nextIndex =
+      currentIndex === API_MAX_LOADING_COUNT - 1 ? 0 :
+      currentIndex + 1
   }
 }
 
 export const loadFile = async (
-  messageId: number,
-  file: LoadingFile
-) => {
-  const channel = getActiveChannel() as Channel
-  let loadingFile: LoadingFile | undefined = getLoadingFile(file) || file
+  uuid: ChannelId | PostUuid,
+  location: InputFileLocation,
+  dc: number,
+  size?: number
+): Promise<FileResponse | undefined> => {
+  const fileUuid = generateFileUuid(location)
 
-  if (
-    loadingFile.fileKey ||
-    loadingFile.loading
-  ) return
-
-  loadingFile = {
-    ...loadingFile,
-    file_reference: file.file_reference,
-    dc_id: file.dc_id,
-    access_hash: file.access_hash,
-    sizeType: file.sizeType,
-    loading: true,
-    ...(!loadingFile.partsCount ? {
-      partSize: LOADING_PART_SIZE,
-      partsCount: Math.ceil(file.size / LOADING_PART_SIZE)
-    } : {})
+  if (loadingPauseCache[fileUuid]) {
+    loadingPauseCache[fileUuid] = false
   }
 
-  setLoadingFile(loadingFile)
+  if (!size || size <= API_LOADING_PART_SIZE) {
+    const res = await loadFilePart(uuid, location, dc)
+    if (!res) return
 
-  loadingQueue.add(async () => {
-    const loadingFile = getLoadingFile(file)
-    if (!loadingFile?.loading) return
-
-    const { partsCount = 0 } = loadingFile
-    const threadCount = Math.min(LOADING_THREAD_COUNT, partsCount)
-
-    const loadPart = async (part: number, thread: number) => {
-      const loadingFile = getLoadingFile(file)
-      if (!loadingFile?.loading || part > partsCount - 1) return
-
-      await loadFilePart(messageId, channel, file, part, thread)
-      return loadPart(part + threadCount, thread)
+    return {
+      fileUuid,
+      type: parseFileType(res),
+      partsCount: 1
     }
+  }
 
-    await Promise.all([...Array(threadCount).keys()].map(index =>
-      loadPart((loadingFile[`lastLoadedPart${index}`] || (index - 1)) + 1, index)
-    ))
-  })
-}
+  const [promise, resolve] = createPromise<FileResponse | undefined>()
+  const partsCount = Math.ceil(size / API_LOADING_PART_SIZE)
+  const startIndex = loadingPartsCountCache[fileUuid] || 0
+  const threadsCount = Math.max(Math.min(API_MAX_LOADING_THREAD_COUNT, partsCount - startIndex), 0)
+  const threadIndexes = [...Array(threadsCount).keys()]
 
-const DONWLOADED_PARTS_COUNT: {
-  [fileKey: string]: number
-} = {}
+  threadIndexes.map(async threadIndex => {
+    for (let i = 0; i <= Math.ceil(partsCount / threadsCount); i++) {
+      if (loadingPauseCache[fileUuid]) {
+        return resolve()
+      }
 
-export const loadFilePart = async (
-  messageId: number,
-  channel: Channel,
-  file: LoadingFile,
-  part: number,
-  thread: number
-) => {
-  let loadingFile = getLoadingFile(file)
-  if (!loadingFile?.loading) return
+      if ((loadingPartsCountCache[fileUuid] || 0) === partsCount) break
 
-  const {
-    id,
-    partSize = 0,
-    dc_id,
-    access_hash,
-    file_reference,
-    sizeType,
-    originalSizeType
-  } = loadingFile
+      const loadingIndex = startIndex + threadIndex + i
+      const offset = `${loadingIndex * API_LOADING_PART_SIZE || ''}`
 
-  const offsetSize = part * partSize
+      const res = await loadFilePart(
+        uuid,
+        location,
+        dc,
+        offset
+      )
 
-  let bytes = await api.loadFilePart({
-    id,
-    partSize,
-    offsetSize,
-    dc_id,
-    access_hash,
-    file_reference,
-    sizeType,
-    originalSizeType,
-    thread
-  }).catch(({ message }) => {
-    if (loadingFile && message === 'FILE_REFERENCE_EXPIRED') {
-      pauseLoadingFile(loadingFile)
-      refreshMessage(channel, messageId)
+      loadingPartsCountCache[fileUuid] = (loadingPartsCountCache[fileUuid] || 0) + 1
+
+      if (loadingPartsCountCache[fileUuid] === partsCount) {
+        if (!res) {
+          return resolve()
+        }
+
+        return resolve({
+          fileUuid,
+          type: parseFileType(res),
+          partsCount
+        })
+      }
     }
   })
 
-  if (!bytes) return
-
-  loadingFile = getLoadingFile(file)
-  if (!loadingFile) return
-
-  let fileKey: string|undefined = generateFileKey(loadingFile)
-
-  DONWLOADED_PARTS_COUNT[fileKey] = (DONWLOADED_PARTS_COUNT[fileKey] || 0) + 1
-  const loadedPartsCount = DONWLOADED_PARTS_COUNT[fileKey]
-
-  const { type, partsCount = 0 } = loadingFile
-  const isLastPart = loadedPartsCount === partsCount
-
-  await setBytes(fileKey, part, bytes)
-  bytes = undefined
-
-  fileKey = isLastPart ?
-    await createFile(fileKey, partsCount, sizeType ? 'image/jpeg' : type === 'v' ? 'video/mp4' : type) :
-    undefined
-
-  if (isLastPart && type === 'v') {
-    const videoParams = await parseVideoFile(fileKey)
-    fileKey = videoParams?.thumbFileKey
-  }
-
-  loadingFile = getLoadingFile(file)
-  if (!loadingFile) return
-
-  setLoadingFile({
-    ...loadingFile,
-    ...(fileKey ? {
-      fileKey,
-      loading: false
-    } : {}),
-    loadedPartsCount,
-    [`lastLoadedPart${thread}`]: part,
-    progress: Math.round(loadedPartsCount / partsCount * 100)
-  })
+  return promise
 }
 
-export const getStreamingFile = (
-  fileKey: string
+const loadFilePart = (
+  uuid: ChannelId | PostUuid,
+  location: InputFileLocation,
+  dc: number,
+  offset = '',
+  limit = API_LOADING_PART_SIZE,
+  updateLocation = false
 ) => {
-  return store.getState().streamingFiles.get(fileKey)
-}
+  const fileUuid = generateFileUuid(location)
+  const [promise, resolve, reject] = createPromise<UploadFile | void>()
 
-export const setStreamingFile = (
-  file: StreamingFile
-) => {
-  const streamingFiles = new Map(store.getState().streamingFiles)
-  const fileKey = generateFileKey(file)
-  streamingFiles.set(fileKey, file)
-  store.setState({
-    streamingFiles
-  })
-}
-
-export const streamFile = (
-  messageId: number,
-  file: LoadingFile,
-  save?: boolean
-) => {
-  const channel = getActiveChannel() as Channel
-  const fileKey = generateFileKey(file)
-  let streamingFile: StreamingFile | undefined =
-    getStreamingFile(fileKey) ||
-    { ...file, channel, messageId }
-
-  streamingFile = {
-    ...streamingFile,
-    file_reference: file.file_reference,
-    dc_id: file.dc_id,
-    access_hash: file.access_hash,
-    streaming: true,
-    channel,
-    messageId
-  }
-  setStreamingFile(streamingFile)
-
-  return save ?
-    generateSaveFileStreamUrl(streamingFile) :
-    generateFileStreamUrl(streamingFile)
-}
-
-export const loadStreamFilePart = async ({
-  fileKey,
-  offsetSize,
-  partSize,
-  file_reference
-}: {
-  fileKey: string
-  offsetSize: number
-  partSize: number
-  file_reference?: ArrayBuffer
-}): Promise<Uint8Array|undefined> => {
-  let streamingFile = getStreamingFile(fileKey) as StreamingFile
-  if (!streamingFile) return
-
-  if (file_reference) {
-    streamingFile = {
-      ...streamingFile,
-      file_reference
+  loadingQueue.add(async (queueIndex) => {
+    if (loadingPauseCache[fileUuid]) {
+      return resolve()
     }
-    setStreamingFile(streamingFile)
-  }
 
-  const bytes = await api.loadFilePart({
-    ...streamingFile,
-    offsetSize,
-    partSize,
-    precise: false
-  }).catch(({ message }) => {
-    if (message === 'FILE_REFERENCE_EXPIRED') {
-      const { channel, messageId } = streamingFile
-      if (!channel || !messageId) return
-
-      return refreshMessage(channel, messageId, 0, () => {
-        const file_reference = getFileReference(streamingFile)
-        return loadStreamFilePart({ fileKey, offsetSize, partSize, file_reference })
-      }) as Promise<Uint8Array|undefined>
+    if (updateLocation) {
+      const { photo, document } = unwrap(feedState).posts[fileUuid].media
+      location = (photo || document).file_reference
     }
+
+    const res = await api.req('upload.getFile', {
+      location,
+      cdn_supported: false,
+      offset,
+      limit
+    }, {
+      thread: queueIndex + 2,
+      dc
+    }).catch(async (err: APIError) => {
+      if (err.message !== 'FILE_REFERENCE_EXPIRED') {
+        return reject(err)
+      }
+
+      await refreshFileReference(
+        uuid as PostUuid
+      )
+
+      return loadFilePart(
+        uuid,
+        location,
+        dc,
+        offset,
+        limit,
+        true
+      )
+    })
+
+    resolve(res)
   })
 
-  return bytes
+  return promise
 }
 
-export const getFileReference = ({
-  channel,
-  messageId,
-  id
-}: {
-  channel: Channel
-  messageId: number
-  id: string
-}) => {
-  const state = store.getState()
-  const channelMessages = state.channelsMessages.get(channel.id)
-  const message = channelMessages?.get(messageId)
-  const media = [
-    message?.media,
-    ...(message?.mediaMessages?.map(({ media }) => media) || [])
-  ].find(media => media?.id === id)
-  return media?.file_reference
+const parseFileType = (res: UploadFile) => {
+  return res._.replace('storage.file', '').toLowerCase()
+}
+
+export const pauseFileLoading = (
+  location: InputFileLocation,
+) => {
+  const fileUuid = generateFileUuid(location)
+  loadingPauseCache[fileUuid] = true
+}
+
+export const isFileLoadingPaused = (
+  location: InputFileLocation,
+) => {
+  const fileUuid = generateFileUuid(location)
+  return loadingPauseCache[fileUuid]
 }
