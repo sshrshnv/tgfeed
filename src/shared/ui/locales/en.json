@@ -57,6 +57,12 @@
     "defaultFolderName": "All channels",
     "emptyFoldersList": "No folders created",
     "emptyChannelsList": "No channels found",
+    "fontSize": {
+      "title": "Font size",
+      "large": "Large",
+      "medium": "Medium",
+      "small": "Small"
+    },
     "buttons": {
       "newFolder": "Create new folder",
       "save": "Save",

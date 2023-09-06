@@ -1,11 +1,11 @@
 import type { Component } from 'solid-js'
 import { Switch, Match } from 'solid-js'
 
-import { localeState } from '~/core/locale'
-import { authRoutes } from '~/auth'
-import { MenuTitle, MenuRouteButton, MenuButton } from '~/shared/ui/elements'
+import { localeState } from '~/core/locale/locale-state'
+import { authRoutes } from '~/auth/auth-routes'
+import { MenuTitle, MenuRouteButton, MenuButton } from '~/shared/ui/elements/menu'
 
-import { logOut } from '../actions'
+import { logOut } from '../actions/log-out'
 import { accountState } from '../account-state'
 
 export const AccountMenu: Component = () => {

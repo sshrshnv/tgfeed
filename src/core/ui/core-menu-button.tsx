@@ -1,6 +1,7 @@
 import type { Component } from 'solid-js'
 
-import { Button, Icon } from '~/shared/ui/elements'
+import { Button } from '~/shared/ui/elements/button'
+import { Icon } from '~/shared/ui/elements/icon'
 
 import { coreRoutes } from '../core-routes'
 

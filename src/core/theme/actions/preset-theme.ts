@@ -1,7 +1,8 @@
 import { localStorage } from '~/shared/storage/local-storage'
 
 import { THEME_STATE_STORAGE_KEY, DEFAULT_THEME_STATE } from '../theme.const'
-import { getThemeModeMQ, setThemeAttributes, setThemeColorAttribute } from '../utils'
+import { getThemeModeMQ } from '../utils/get-theme-mode-mq'
+import { setThemeAttributes, setThemeColorAttribute } from '../utils/set-theme-attributes'
 
 export const presetTheme = () => {
   const persistedThemeState = localStorage.get(THEME_STATE_STORAGE_KEY) || DEFAULT_THEME_STATE

@@ -2,7 +2,7 @@ import { api } from '~/shared/api'
 
 import type { Folder } from '../feed.types'
 import { setFeedState } from '../feed-state'
-import { stringifyConfigMessage } from '../utils'
+import { stringifyConfigMessage } from '../utils/stringify-config-message'
 
 export const editFolder = async (
   data: Folder,

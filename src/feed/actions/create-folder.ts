@@ -1,10 +1,10 @@
 import type { Update } from '~/shared/api/mtproto'
 import { api } from '~/shared/api'
-import { generateRandomId } from '~/shared/api/utils'
+import { generateRandomId } from '~/shared/api/utils/generate-random-id'
 
 import type { Folder } from '../feed.types'
 import { setFeedState } from '../feed-state'
-import { stringifyConfigMessage } from '../utils'
+import { stringifyConfigMessage } from '../utils/stringify-config-message'
 
 export const createFolder = async (data: {
   name: Folder['name']

@@ -2,12 +2,13 @@ import type { ParentComponent } from 'solid-js'
 import { createMemo } from 'solid-js'
 import { clsx } from 'clsx'
 
-import { ButtonProps } from '~/shared/ui/elements'
-import { Button, Text } from '~/shared/ui/elements'
+import { ButtonProps } from '~/shared/ui/elements/button'
+import { Button } from '~/shared/ui/elements/button'
+import { Text } from '~/shared/ui/elements/text'
 
 import type { Folder } from '../feed.types'
 import { feedState } from '../feed-state'
-import { selectFolder } from '../actions'
+import { selectFolder } from '../actions/select-folder'
 
 import * as layoutCSS from '../../shared/ui/elements/layout.sss'
 import * as feedTabsItemCSS from './feed-tabs-item.sss'

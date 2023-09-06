@@ -1,8 +1,9 @@
 import type { Component } from 'solid-js'
 import { Switch, Match, createMemo } from 'solid-js'
 
-import { localeState } from '~/core/locale'
-import { Text, Icon } from '~/shared/ui/elements'
+import { localeState } from '~/core/locale/locale-state'
+import { Text } from '~/shared/ui/elements/text'
+import { Icon } from '~/shared/ui/elements/icon'
 
 import { authState } from '../auth-state'
 import { AuthPhoneNumberStep } from './auth-phone-number-step'

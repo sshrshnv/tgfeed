@@ -17,7 +17,7 @@ let storageCache: Record<string, any>
 const getStorageCache = () => {
   if (!storageCache) {
     try {
-      const storageJSON = self.localStorage.getItem(STORAGE_KEY)
+      const storageJSON = self.localStorage?.getItem(STORAGE_KEY)
       storageCache = storageJSON && JSON.parse(storageJSON)
     } finally {
       storageCache ??= {}
@@ -31,7 +31,7 @@ export const localStorage = {
     getStorageCache()[key] = value
     self.setTimeout(() => {
       try {
-        self.localStorage.setItem(STORAGE_KEY, JSON.stringify(getStorageCache()))
+        self.localStorage?.setItem(STORAGE_KEY, JSON.stringify(getStorageCache()))
       } catch {}
     }, 0)
   },
@@ -44,14 +44,14 @@ export const localStorage = {
     delete getStorageCache()[key]
     self.setTimeout(() => {
       try {
-        self.localStorage.setItem(STORAGE_KEY, JSON.stringify(getStorageCache()))
+        self.localStorage?.setItem(STORAGE_KEY, JSON.stringify(getStorageCache()))
       } catch {}
     }, 0)
   },
 
   clear: () => {
     try {
-      self.localStorage.clear()
+      self.localStorage?.clear()
     } catch {}
   }
 }

@@ -1,7 +1,7 @@
 import type { Component } from 'solid-js'
 import { clsx } from 'clsx'
 
-import { Text } from '~/shared/ui/elements'
+import { Text } from '~/shared/ui/elements/text'
 
 import * as menuTitleCSS from './menu-title.sss'
 

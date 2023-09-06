@@ -34,6 +34,7 @@ export type APIError = ClientError & {
 
 export type APIWorkerMessage = {
   mainPort: MessagePort
+  swPort: MessagePort
 }
 
 export type APIStorage = {

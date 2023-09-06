@@ -1,0 +1,129 @@
+//import { checkIsSafari } from '~/tools/detect-platform'
+import { comlink } from '~/shared/utils/comlink'
+import { createPromise } from '~/shared/utils/create-promise'
+import { setDelay } from '~/shared/utils/set-delay'
+import { postMessage } from '~/shared/utils/post-message'
+
+import type { Service } from '../service.types'
+import { SERVICE_WORKER_SKIP_WAITING_MESSAGE } from '../service.const'
+
+const WAITING_TIMEOUT_DURATION = 200
+
+const [servicePromise, resolveServicePromise] = createPromise<Service>()
+const [serviceWorkerPromise, resolveServiceWorkerPromise] = createPromise<ServiceWorker>()
+let serviceWorker: ServiceWorker
+let controllingServiceWorker: ServiceWorker | null
+let updateFoundCount = 0
+let waitingTimeoutId = 0
+let registration: ServiceWorkerRegistration | undefined
+let registrationStarted = false
+
+export const registerServiceWorker = async (
+  mainServiceMessageChannel: MessageChannel
+) => {
+  if (!('serviceWorker' in navigator)) return
+  if (process.env.NODE_ENV !== 'production' && registrationStarted) return
+
+  registrationStarted = true
+
+  if (document.readyState !== 'complete') {
+    await new Promise(resolve => self.addEventListener('load', resolve))
+  }
+
+  controllingServiceWorker = navigator.serviceWorker.controller
+
+  registration = await navigator.serviceWorker.register(new URL(
+    './service-worker.ts' /* webpackChunkName: 'service-worker' */,
+    import.meta.url
+  ))
+
+  if (controllingServiceWorker) {
+    serviceWorker = controllingServiceWorker
+    controllingServiceWorker.addEventListener('statechange', handleStateChange, { once: true })
+  }
+
+  const waitingServiceWorker = registration!.waiting
+
+  if (waitingServiceWorker) {
+    serviceWorker = waitingServiceWorker
+    await setDelay(0)
+    startUpdate()
+  }
+
+  if (serviceWorker) {
+    resolveServiceWorkerPromise(serviceWorker)
+  }
+
+  registration!.addEventListener('updatefound', handleUpdateFound)
+  navigator.serviceWorker.addEventListener('controllerchange', handleControllerChange)
+
+  const serviceWorkerInstance = await serviceWorkerPromise
+
+  postMessage(serviceWorkerInstance, {
+    mainPort: mainServiceMessageChannel.port1
+  }, [
+    mainServiceMessageChannel.port1
+  ])
+
+  resolveServicePromise(
+    comlink.wrap(mainServiceMessageChannel.port2) as Service
+  )
+}
+
+export const unregisterServiceWorker = () =>
+  registration?.unregister()
+
+export const checkIsServiceWorkerRegistered = () =>
+  !!registration
+
+export const getService = () => servicePromise
+
+const endUpdate = () => {
+  postMessage(serviceWorker, {
+    type: SERVICE_WORKER_SKIP_WAITING_MESSAGE
+  })
+}
+
+const startUpdate = () => {
+  if (process.env.NODE_ENV === 'production') {
+    //waitAppUpdateAccepted(update)
+    //setAppUpdateExists()
+  } else {
+    endUpdate()
+  }
+}
+
+const handleUpdateFound = () => {
+  const installingServiceWorker = registration!.installing!
+
+  if (updateFoundCount > 0) {
+    registration!.removeEventListener('updatefound', handleUpdateFound)
+  }
+  else {
+    serviceWorker = installingServiceWorker
+    resolveServiceWorkerPromise(installingServiceWorker)
+  }
+
+  updateFoundCount += 1
+  installingServiceWorker.addEventListener('statechange', handleStateChange)
+}
+
+const handleStateChange = ev => {
+  const serviceWorker = ev.target as ServiceWorker
+  const { state } = serviceWorker
+
+  if (state === 'installed') {
+    waitingTimeoutId = self.setTimeout(() => {
+      if (state === 'installed' && registration?.waiting === serviceWorker) {
+        startUpdate()
+      }
+    }, WAITING_TIMEOUT_DURATION)
+  }
+  else if (state === 'activating') {
+    self.clearTimeout(waitingTimeoutId)
+  }
+}
+
+const handleControllerChange = () => {
+  self.location.reload()
+}

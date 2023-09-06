@@ -9,6 +9,7 @@ export type FeedState = Config & {
   channels: Channels
   posts: Posts
   postGroups: PostGroups
+  fontSize: FontSize
 }
 
 export type Config = {
@@ -67,3 +68,5 @@ export type ConfigMessageParams = (
   | Omit<Folder, 'id'>
   | Omit<Filter, 'id'>
 )
+
+export type FontSize = 'large' | 'medium' | 'small'

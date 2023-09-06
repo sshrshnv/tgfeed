@@ -1,9 +1,9 @@
 import { createStore } from 'solid-js/store'
 
-import { getPersistedAccountState } from '~/core/account'
-import { introRoutes } from '~/intro'
-import { authRoutes } from '~/auth'
-import { feedRoutes } from '~/feed'
+import { getPersistedAccountState } from '~/core/account/account-state'
+import { introRoutes } from '~/intro/intro-routes'
+import { authRoutes } from '~/auth/auth-routes'
+import { feedRoutes } from '~/feed/feed-routes'
 
 import type { Route } from './routing.types'
 

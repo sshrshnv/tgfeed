@@ -1,14 +1,19 @@
 import type { Component } from 'solid-js'
 import { createMemo } from 'solid-js'
 
-import { localeState } from '~/core/locale'
-import { MenuTitle, MenuRadioGroup } from '~/shared/ui/elements'
+import { localeState } from '~/core/locale/locale-state'
+import { MenuTitle, MenuRadioGroup } from '~/shared/ui/elements/menu'
 
 import type { ThemeMode } from '../theme.types'
 import { themeState, setThemeState } from '../theme-state'
 
+type ThemeItem = {
+  value: ThemeMode
+  text?: string
+}
+
 export const ThemeMenu: Component = () => {
-  const getItems = createMemo(() => [
+  const getItems = createMemo<ThemeItem[]>(() => [
     { value: 'system', text: localeState.texts?.theme.system },
     { value: 'light', text: localeState.texts?.theme.light },
     { value: 'dark', text: localeState.texts?.theme.dark }

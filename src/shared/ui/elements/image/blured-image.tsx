@@ -2,7 +2,7 @@ import type { Component } from 'solid-js'
 import { createEffect } from 'solid-js'
 import { clsx } from 'clsx'
 
-import { blurImage } from '~/shared/ui/utils'
+import { blurImage } from '~/shared/ui/utils/blur-image'
 
 import * as imageCSS from './image.sss'
 

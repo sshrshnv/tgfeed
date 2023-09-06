@@ -1,4 +1,6 @@
-import { comlink, createPromise, postMessage } from '~/shared/utils'
+import { comlink } from '~/shared/utils/comlink'
+import { createPromise } from '~/shared/utils/create-promise'
+import { postMessage } from '~/shared/utils/post-message'
 
 import type { API } from '../api.types'
 
@@ -17,7 +19,7 @@ export const initApiWorker = (
   }
 
   apiWorkerInstance = new Worker(new URL(
-    './api.worker' /* webpackChunkName: 'api.worker' */,
+    './api-worker' /* webpackChunkName: 'api-worker' */,
     import.meta.url
   ))
 
@@ -27,7 +29,9 @@ export const initApiWorker = (
     mainApiMessageChannel.port1
   ])
 
-  resolveApiWorkerPromise(comlink.wrap(mainApiMessageChannel.port2) as API)
+  resolveApiWorkerPromise(
+    comlink.wrap(mainApiMessageChannel.port2) as API
+  )
 }
 
 export const getApiWorker = () => apiWorkerPromise

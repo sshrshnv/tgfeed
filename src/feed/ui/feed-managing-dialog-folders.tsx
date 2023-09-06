@@ -1,12 +1,14 @@
 import type { Component } from 'solid-js'
 import { For, createMemo } from 'solid-js'
 
-import { localeState } from '~/core/locale'
-import { Checkbox } from '~/shared/ui/elements'
+import { localeState } from '~/core/locale/locale-state'
+import { Checkbox } from '~/shared/ui/elements/checkbox'
 
 import type { Folder } from '../feed.types'
 import { feedState } from '../feed-state'
-import { toggleDefaultFolder, resortFolders, deleteFolder } from '../actions'
+import { toggleDefaultFolder } from '../actions/toggle-default-folder'
+import { resortFolders } from '../actions/resort-folders'
+import { deleteFolder } from '../actions/delete-folder'
 import { FeedManagingDialogFoldersItem } from './feed-managing-dialog-folders-item'
 
 import * as feedManagingDialogFoldersItemCSS from './feed-managing-dialog-folders-item.sss'

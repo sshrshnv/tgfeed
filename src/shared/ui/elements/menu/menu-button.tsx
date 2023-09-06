@@ -1,8 +1,11 @@
 import type { Component } from 'solid-js'
 
 import type { Route } from '~/shared/routing'
-import type { ButtonProps, IconProps } from '~/shared/ui/elements'
-import { Button, Icon, Text } from '~/shared/ui/elements'
+import type { ButtonProps } from '~/shared/ui/elements/button'
+import { Button } from '~/shared/ui/elements/button'
+import type { IconProps } from '~/shared/ui/elements/icon'
+import { Icon } from '~/shared/ui/elements/icon'
+import { Text } from '~/shared/ui/elements/text'
 
 import * as menuButtonCSS from './menu-button.sss'
 

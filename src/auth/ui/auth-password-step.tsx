@@ -1,9 +1,9 @@
 import type { Component } from 'solid-js'
 import { createSignal, createResource } from 'solid-js'
 
-import { localeState } from '~/core/locale'
+import { localeState } from '~/core/locale/locale-state'
 
-import { checkPassword } from '../actions'
+import { checkPassword } from '../actions/check-password'
 import { AuthStep } from './auth-step'
 
 export const AuthPasswordStep: Component = () => {

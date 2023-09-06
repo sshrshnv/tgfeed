@@ -2,11 +2,13 @@ import type { Component } from 'solid-js'
 import { createMemo } from 'solid-js'
 import { clsx } from 'clsx'
 
-import { Button, Icon, Text } from '~/shared/ui/elements'
+import { Button } from '~/shared/ui/elements/button'
+import { Icon } from '~/shared/ui/elements/icon'
+import { Text } from '~/shared/ui/elements/text'
 
 import type { PostUuid } from '../feed.types'
 import { feedState } from '../feed-state'
-import { formatPostDate } from '../utils'
+import { formatPostDate } from '../utils/format-post-date'
 import { FeedChannelCover } from './feed-channel-cover'
 
 import * as layoutCSS from '../../shared/ui/elements/layout.sss'

@@ -5,8 +5,7 @@ import { Transition } from 'solid-transition-group'
 import { clsx } from 'clsx'
 
 import type { Route } from '~/shared/routing'
-import { popRoute } from '~/shared/routing'
-import { isIOS } from '~/shared/utils'
+import { popRoute } from '~/shared/routing/actions/pop-route'
 import { getTranslateScaleInParams, getTranslateScaleOutParams } from '~/shared/ui/animations'
 
 import { Dialog } from './dialog'
@@ -79,7 +78,7 @@ export const TransitionDialog: ParentComponent<TransitionDialogProps> = (props) 
           <div class={clsx(
             props.class,
             transitionDialogCSS.animated,
-            isIOS() && animationsCSS.forcedPerformance
+            animationsCSS.forcedPerformance
           )}>
             {props.children}
           </div>

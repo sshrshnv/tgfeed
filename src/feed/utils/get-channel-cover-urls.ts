@@ -1,7 +1,7 @@
 import { createStore } from 'solid-js/store'
 
 import { InputFileLocation } from '~/shared/api/mtproto'
-import { getUiWorker } from '~/shared/ui/worker'
+import { getUiWorker } from '~/shared/ui/worker/init-ui-worker'
 
 import type { ChannelData, ChannelId } from '../feed.types'
 import { loadFile } from './load-file'
@@ -78,6 +78,8 @@ const loadChannelCoverFile = async (
 
   return loadFile(
     channel_id,
+    access_hash,
+    0,
     location,
     dc
   )

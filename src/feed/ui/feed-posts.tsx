@@ -1,15 +1,15 @@
 import type { Component } from 'solid-js'
 import { Show, For, createEffect, onMount, onCleanup, createSignal, createMemo } from 'solid-js'
-import { createStore } from 'solid-js/store'
+import { createStore, unwrap } from 'solid-js/store'
 import { createResizeObserver } from '@solid-primitives/resize-observer'
 import { clsx } from 'clsx'
 
-import { isIOS } from '~/shared/utils'
-import { Icon } from '~/shared/ui/elements'
+import { Icon } from '~/shared/ui/elements/icon'
 
 import type { PostUuid, PostGroupUuid } from '../feed.types'
+import { FONT_SIZE_LINE_HEIGHT_VALUES, VISIBLE_LINES_COUNT } from '../feed.const'
 import { feedState } from '../feed-state'
-import { isPostGroupUuid } from '../utils'
+import { isPostGroupUuid } from '../utils/generate-post-uuid'
 import { FeedPostsItem } from './feed-posts-item'
 
 import * as layoutCSS from '../../shared/ui/elements/layout.sss'
@@ -38,10 +38,18 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
   const [offsetState, setOffsetState] = createStore<OffsetState>({})
   const [getScroll, setScroll] = createSignal(0)
 
-  const handleScroll = () => {
-    self.requestAnimationFrame(() => {
-      setScroll(Math.floor(scrollEl.scrollTop / 100) * 100)
-    })
+  const getStyles = createMemo(() => ({
+    '--js-line-height': `${FONT_SIZE_LINE_HEIGHT_VALUES[feedState.fontSize]}px`,
+    '--js-lines-count': VISIBLE_LINES_COUNT
+  }))
+
+  const updateScroll = () => {
+    setScroll(Math.floor(scrollEl.scrollTop / 100) * 100)
+  }
+
+  const handleScroll = (ev) => {
+    ev.stopPropagation()
+    self.requestAnimationFrame(updateScroll)
   }
 
   const addResizeObserverEl = (el: Element) => {
@@ -55,10 +63,12 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
     )
   }
 
-  createResizeObserver(resizeObserverEls, ({ height }, el) => {
+  createResizeObserver(resizeObserverEls, ({ height }, el: Element) => {
     self.requestAnimationFrame(() => {
-      if (!height) return
-      setHeightState(el.id as PostUuid, height)
+      const id = el.id as PostUuid
+      height = Math.round(height)
+      if (!height || unwrap(heightState)[id] === height) return
+      setHeightState(id as PostUuid, height)
     })
   })
 
@@ -74,7 +84,7 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
 
   onMount(() => {
     addResizeObserverEl(scrollEl)
-    scrollEl.addEventListener('scroll', handleScroll, { passive: true })
+    scrollEl.addEventListener('scroll', handleScroll, { capture: true, passive: true })
   })
 
   onCleanup(() => {
@@ -88,9 +98,9 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
         feedPostsCSS.base,
         layoutCSS.flex,
         layoutCSS.scroll,
-        layoutCSS.scrollCustom,
-        isIOS() && animationsCSS.forcedPerformance
+        layoutCSS.scrollCustom
       )}
+      style={getStyles()}
       id={SCROLL_EL_ID}
       ref={scrollEl}
     >
@@ -110,11 +120,22 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
 
         const isVisible = createMemo(() => {
           const uuid = getPostUuid()
-          return !(
+          return (
+            !offsetState[uuid] ||
+            !heightState[uuid] || (
+              (offsetState[uuid] + heightState[uuid] >= getScroll() - heightState[SCROLL_EL_ID]) &&
+              (offsetState[uuid] <= getScroll() + heightState[SCROLL_EL_ID] * 2)
+            )
+          )
+        })
+
+        const isOnScreen = createMemo(() => {
+          const uuid = getPostUuid()
+          return (
             !!offsetState[uuid] &&
             !!heightState[uuid] && (
-              (offsetState[uuid] + heightState[uuid] <= getScroll() - heightState[SCROLL_EL_ID]) ||
-              (offsetState[uuid] >= getScroll() + heightState[SCROLL_EL_ID] * 2)
+              (offsetState[uuid] >= getScroll() - heightState[SCROLL_EL_ID] / 4) &&
+              (offsetState[uuid] <= getScroll() + heightState[SCROLL_EL_ID])
             )
           )
         })
@@ -125,7 +146,7 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
           const prevOffset = prevUuid && offsetState[prevUuid] || 0
           const prevHeight = prevUuid && heightState[prevUuid] || 0
           if (getIndex() && !prevHeight) return
-          setOffsetState(uuid, prevOffset + prevHeight + 16)
+          setOffsetState(uuid, prevOffset + prevHeight + 24)
         })
 
         return (
@@ -135,6 +156,7 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
             index={getIndex()}
             offset={offsetState[getPostUuid()]}
             visible={isVisible()}
+            onScreen={isOnScreen()}
             onMount={addResizeObserverEl}
             onCleanup={removeResizeObserverEl}
           />

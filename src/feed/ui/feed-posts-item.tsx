@@ -1,17 +1,14 @@
 import type { Component } from 'solid-js'
-import { Show, createMemo, onMount, onCleanup } from 'solid-js'
+import { Show, createMemo, createSignal, createEffect, onMount, onCleanup } from 'solid-js'
 import { clsx } from 'clsx'
-
-import { isIOS } from '~/shared/utils'
-import { Paragraph } from '~/shared/ui/elements'
 
 import type { PostUuid, PostGroupUuid } from '../feed.types'
 import { feedState } from '../feed-state'
-import { formatPostText, isSupportedMedia } from '../utils'
+import { isSupportedMedia } from '../utils/detect-post-media'
 import { FeedPostsItemHeader } from './feed-posts-item-header'
 import { FeedPostsItemMedia } from './feed-posts-item-media'
+import { FeedPostsItemText } from './feed-posts-item-text'
 
-import * as animationsCSS from '../../shared/ui/animations/animations.sss'
 import * as feedPostsItemCSS from './feed-posts-item.sss'
 
 export type FeedPostsItemProps = {
@@ -20,28 +17,34 @@ export type FeedPostsItemProps = {
   groupUuid?: PostGroupUuid
   offset: number
   visible?: boolean
+  onScreen?: boolean
   onMount?: (el: Element) => void
   onCleanup?: (el: Element) => void
 }
 
 export const FeedPostsItem: Component<FeedPostsItemProps> = (props) => {
   let el!: HTMLDivElement
+  const [isReady, setReady] = createSignal(false)
 
   const getPost = createMemo(() =>
-    feedState.posts[props.uuid] || {}
-  )
-
-  const getText = createMemo(() =>
-    formatPostText(getPost().message, getPost().entities)
+    feedState.posts[props.uuid]
   )
 
   const hasText = createMemo(() =>
-    !!getText().length
+    !!getPost().message.length
   )
 
   const hasMedia = createMemo(() =>
     !!props.groupUuid || isSupportedMedia(getPost().media)
   )
+
+  createEffect((prevOffset) => {
+    if (typeof prevOffset !== 'undefined') return
+    self.setTimeout(() => {
+      setReady(true)
+    }, 50)
+    return props.offset
+  })
 
   onMount(() => {
     props.onMount?.(el)
@@ -55,11 +58,10 @@ export const FeedPostsItem: Component<FeedPostsItemProps> = (props) => {
     <div
       class={clsx(
         feedPostsItemCSS.wrapper,
-        isIOS() && animationsCSS.forcedPerformance
+        !isReady() && feedPostsItemCSS._transparent
       )}
       style={{
-        top: `${props.offset}px`,
-        opacity: typeof props.offset === 'undefined' ? 0 : 1,
+        translate: `0px ${props.offset}px`,
         display: props.visible ? 'block' : 'none'
       }}
       id={props.uuid}
@@ -67,25 +69,23 @@ export const FeedPostsItem: Component<FeedPostsItemProps> = (props) => {
     >
       <article class={feedPostsItemCSS.base}>
         <FeedPostsItemHeader
-          class={feedPostsItemCSS.header}
           uuid={props.uuid}
-          visible={props.visible}
+          visible={props.visible && isReady()}
         />
 
         <Show when={hasMedia()}>
           <FeedPostsItemMedia
             uuid={props.uuid}
             groupUuid={props.groupUuid}
-            visible={props.visible}
+            visible={props.visible && isReady()}
+            onScreen={props.onScreen && isReady()}
           />
         </Show>
 
         <Show when={hasText()}>
-          <Paragraph
-            class={feedPostsItemCSS.text}
-            size='medium'
-            // eslint-disable-next-line solid/no-innerhtml
-            innerHTML={getText()}
+          <FeedPostsItemText
+            uuid={props.uuid}
+            visible={props.visible}
           />
         </Show>
       </article>

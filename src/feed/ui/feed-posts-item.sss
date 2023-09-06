@@ -1,32 +1,18 @@
 .wrapper
   position: absolute
+  top: 0
   width: min(100%, var(--layout-article-max-width))
   padding: 0 16px
-  opacity: 0
-  transition: opacity 300ms ease-in-out
-  will-change: top, opacity
+  will-change: translate
+
+  &:last-child
+    padding-bottom: 32px
+
+  &._transparent
+    opacity: 0
 
 .base
-  padding: 0 0 16px
+  padding: 0
   border-radius: 16px
   background-color: var(--theme-color-surface-0)
-
-.text
-  //max-height: calc(var(--local-line-height) * 3 + 16px)
-  padding: 16px 16px 0
-  user-select: text
-
-  a
-    color: var(--theme-color-primary)
-    text-decoration: none
-    word-break: break-all
-
-  pre, code
-    margin: 0
-    border-radius: 8px
-    white-space: pre-wrap
-    font-weight: 500
-    opacity: 0.75
-
-.header + .text
-  border-top: 1px solid var(--theme-color-background)
+  overflow: hidden

@@ -1,11 +1,11 @@
 import type { Component } from 'solid-js'
 import { createSignal, createResource, createMemo } from 'solid-js'
 
-import { Progress } from '~/shared/ui/elements'
+import { Progress } from '~/shared/ui/elements/progress'
 
 import { DEFAULT_FOLDER_ID } from '../feed.const'
 import { feedState } from '../feed-state'
-import { fetchPosts } from '../actions'
+import { fetchPosts } from '../actions/fetch-posts'
 import { FeedPosts } from './feed-posts'
 
 import * as feedContentCSS from './feed-content.sss'

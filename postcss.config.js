@@ -19,7 +19,9 @@ module.exports = {
       ]
     }],
     ['postcss-custom-media'],
-    ...(utils.isProd() ? ['postcss-variable-compress/splitFiles.js'] : []),
+    ...(utils.isProd() ? [['postcss-variable-compress/splitFiles.js', [
+      variableName => variableName.startsWith('--js')
+    ]]] : []),
     ['postcss-dark-theme-class', {
       darkSelector: '[data-theme-mode="dark"]',
       lightSelector: '[data-theme-mode="light"]'

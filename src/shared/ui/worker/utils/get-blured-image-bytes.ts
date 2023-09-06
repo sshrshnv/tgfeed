@@ -1,6 +1,6 @@
 import { imageDataRGB } from 'stackblur-canvas'
 
-import { comlink } from '~/shared/utils'
+import { comlink } from '~/shared/utils/comlink'
 
 import type { UI } from '../ui.types'
 

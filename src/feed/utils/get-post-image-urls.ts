@@ -1,9 +1,11 @@
 import { createStore } from 'solid-js/store'
 
 import { InputFileLocation, MessageMedia, Photo, PhotoSize, Document } from '~/shared/api/mtproto'
-import { getUiWorker } from '~/shared/ui/worker'
+import { generateFileUuid } from '~/shared/api/utils/generate-file-uuid'
+import { getUiWorker } from '~/shared/ui/worker/init-ui-worker'
 
-import type { PostUuid } from '../feed.types'
+import type { PostUuid, ChannelId, PostId } from '../feed.types'
+import { feedState } from '../feed-state'
 import { loadFile, pauseFileLoading, isFileLoadingPaused } from './load-file'
 import { getMediaImage, getMediaVideo, getMediaImageSize } from './detect-post-media'
 
@@ -12,9 +14,7 @@ type ImageUrls = {
   imageUrl: string
 }
 
-type ImageUrlsCache = {
-  [key in (Photo.photo['id'] | Document.document['id'])]: ImageUrls
-}
+type ImageUrlsCache = Record<string, ImageUrls>
 
 const [imageUrlsCache, setImageUrlsCache] = createStore<ImageUrlsCache>({})
 
@@ -23,34 +23,46 @@ export const getPostImageUrls = (
   media: MessageMedia
 ): ImageUrls => {
   const image = getMediaImage(media) || getMediaVideo(media)!
-
+  const [channelId, postId] = uuid.split('-').map((value, index) =>
+    index ? +value : value
+  ) as [ChannelId, PostId]
+  const { access_hash: accessHash } = feedState.channels[channelId]
   const { id, dc_id } = image
   const { thumbs = [] } = image as Document.document
   const { sizes = thumbs } = image as Photo.photo
   const strippedThumb = sizes.find(size => size._ === 'photoStrippedSize') as PhotoSize.photoStrippedSize
+  const size = getMediaImageSize(media) as PhotoSize.photoSize
   const location = getPostImageLocation(media)
+  const fileUuid = generateFileUuid(location || { id })
 
-  if (imageUrlsCache[image.id] && !isFileLoadingPaused(location)) {
-    return imageUrlsCache[image.id]
+  if (imageUrlsCache[fileUuid] && !isFileLoadingPaused(location)) {
+    return imageUrlsCache[fileUuid]
   }
 
-  if (!imageUrlsCache[image.id]) {
+  if (!imageUrlsCache[fileUuid]) {
     setImageUrlsCache({
-      [image.id]: { thumbUrl: '', imageUrl: '' }
+      [fileUuid]: { thumbUrl: '', imageUrl: '' }
     })
   }
 
-  if (!imageUrlsCache[image.id].thumbUrl && strippedThumb) {
+  if (!imageUrlsCache[fileUuid].thumbUrl && strippedThumb) {
     getUiWorker().then(async uiWorker => {
       const thumbUrl = await uiWorker.getThumbUrlFromBytes(strippedThumb.bytes, { stripped: true })
-      setImageUrlsCache(id, 'thumbUrl', thumbUrl)
+      setImageUrlsCache(fileUuid, 'thumbUrl', thumbUrl)
     })
+  }
+
+  if (!location) {
+    return imageUrlsCache[fileUuid]
   }
 
   loadFile(
-    uuid,
+    channelId,
+    accessHash!,
+    postId,
     location,
-    dc_id
+    dc_id,
+    size?.size
   ).then(async file => {
     if (!file) return
 
@@ -58,16 +70,17 @@ export const getPostImageUrls = (
     const imageUrl = await uiWorker.getMediaUrlFromFile(file)
     if (!imageUrl) return
 
-    setImageUrlsCache(id, 'imageUrl', imageUrl)
+    setImageUrlsCache(fileUuid, 'imageUrl', imageUrl)
   })
 
-  return imageUrlsCache[image.id]
+  return imageUrlsCache[fileUuid]
 }
 
 export const pausePostImageLoading = (
   media: MessageMedia
 ) => {
   const location = getPostImageLocation(media)
+  if (!location) return
   pauseFileLoading(location)
 }
 
@@ -79,6 +92,8 @@ const getPostImageLocation = (
   const { id, access_hash, file_reference } = image
   const type = image._ === 'photo' ? 'inputPhotoFileLocation' : 'inputDocumentFileLocation'
   const size = getMediaImageSize(media) as PhotoSize
+
+  if (!size) return
 
   const location: InputFileLocation = {
     _: type,

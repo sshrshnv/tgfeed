@@ -3,8 +3,10 @@ import { Show, splitProps } from 'solid-js'
 import { clsx } from 'clsx'
 
 import type { Route } from '~/shared/routing'
-import { popRoute } from '~/shared/routing'
-import { Button, Text, Icon } from '~/shared/ui/elements'
+import { popRoute } from '~/shared/routing/actions/pop-route'
+import { Button } from '~/shared/ui/elements/button'
+import { Text } from '~/shared/ui/elements/text'
+import { Icon } from '~/shared/ui/elements/icon'
 
 import * as layoutCSS from '../layout.sss'
 import * as menuHeaderCSS from './menu-header.sss'

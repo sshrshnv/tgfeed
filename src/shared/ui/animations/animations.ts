@@ -27,12 +27,12 @@ export const getTranslateScaleOutParams = ({ translate }: TranslateScaleArgs) =>
 })
 
 type TranslateArgs = {
-  translate: `${number} ${number}`
+  translate: `${string} ${string}`
 }
 export const getTranslateInParams = ({ translate }: TranslateArgs) => ({
   keyframes: [
     { translate, opacity: '0' },
-    { translate: '0', opacity: '1' }
+    { translate: '0 0', opacity: '1' }
   ],
   options: {
     easing: 'cubic-bezier(0, 0, 0, 1)',
@@ -42,7 +42,7 @@ export const getTranslateInParams = ({ translate }: TranslateArgs) => ({
 })
 export const getTranslateOutParams = ({ translate }: TranslateArgs) => ({
   keyframes: [
-    { translate: '0', opacity: '1' },
+    { translate: '0 0', opacity: '1' },
     { translate, opacity: '0' }
   ],
   options: {

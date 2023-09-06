@@ -1,7 +1,7 @@
 import type { Component } from 'solid-js'
 import { For } from 'solid-js'
 
-import { Radio, RadioProps } from '~/shared/ui/elements'
+import { Radio, RadioProps } from '~/shared/ui/elements/radio'
 
 import * as menuRadioGroupCSS from './menu-radio-group.sss'
 

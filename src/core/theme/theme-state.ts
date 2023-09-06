@@ -1,7 +1,7 @@
 import { localStorage } from '~/shared/storage/local-storage'
-import { createStateStore } from '~/shared/utils'
+import { createStateStore } from '~/shared/utils/create-state-store'
 
-import { setThemeAttributes } from './utils'
+import { setThemeAttributes } from './utils/set-theme-attributes'
 
 import { DEFAULT_THEME_STATE, THEME_STATE_STORAGE_KEY } from './theme.const'
 

@@ -1,4 +1,4 @@
-import type { Route } from '~/shared/routing'
+import type { Route } from '~/shared/routing/routing.types'
 
 export const authRoutes = {
   page: {

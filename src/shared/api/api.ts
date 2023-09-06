@@ -1,4 +1,4 @@
-import { logOut } from '~/core/account/actions'
+import { logOut } from '~/core/account/actions/log-out'
 
 import type { API } from './api.types'
 import { getApiWorker } from './worker/init-api-worker'

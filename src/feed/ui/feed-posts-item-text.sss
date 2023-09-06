@@ -1,0 +1,45 @@
+.base
+  position: relative
+  padding: 16px
+
+  &:nth-child(2)
+    padding-top: 0
+
+.text
+  overflow: hidden
+  padding: 0
+  user-select: text
+
+  &._collapsed
+    max-height: calc(var(--js-line-height) * var(--js-lines-count))
+
+  a
+    color: var(--theme-color-primary)
+    text-decoration: none
+    word-wrap: break-word
+
+  pre, code
+    margin: 0
+    border-radius: 8px
+    white-space: pre-wrap
+    font-weight: 500
+    opacity: 0.75
+
+.button
+  position: absolute
+  right: 0
+  bottom: 0
+  width: 40px
+  height: calc(var(--js-line-height) * 2 + 16px)
+  padding: calc(var(--js-line-height) + 2px) 0 16px
+  overflow: visible
+
+  &::after
+    right: 0
+    bottom: 0
+    width: 80px
+    height: calc(var(--js-line-height) + 16px)
+    background-image: linear-gradient(to right, transparent, var(--theme-color-surface-0) 48px)
+
+  > svg
+    opacity: 0.5

@@ -1,8 +1,8 @@
 import type { AuthAuthorization } from '~/shared/api/mtproto'
 
-import { setAccountState } from '~/core/account'
-import { feedRoutes } from '~/feed'
-import { pushRoute } from '~/shared/routing'
+import { setAccountState } from '~/core/account/account-state'
+import { feedRoutes } from '~/feed/feed-routes'
+import { pushRoute } from '~/shared/routing/actions/push-route'
 
 import { DEFAULT_AUTH_STATE } from '../auth.const'
 import { setAuthState } from '../auth-state'

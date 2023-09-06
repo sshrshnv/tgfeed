@@ -1,6 +1,7 @@
 import type { Route } from '../routing.types'
 import { setRoutingState } from '../routing-state'
-import { listenNativePopEvent, findRouteIndex } from '../utils'
+import { listenNativePopEvent } from '../utils/native-pop-event'
+import { findRouteIndex } from '../utils/find-route-index'
 
 let nativePopEventListenerAdded = false
 

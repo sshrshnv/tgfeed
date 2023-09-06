@@ -1,21 +1,18 @@
-import { unwrap } from 'solid-js/store'
 import createSyncTaskQueue from 'sync-task-queue'
 
-import type { UploadFile, InputFileLocation } from '~/shared/api/mtproto'
-import type { APIError } from '~/shared/api'
+import type { InputFileLocation } from '~/shared/api/mtproto'
 import {
   API_LOADING_PART_SIZE,
   API_LOADING_TIMEOUT,
   API_MAX_LOADING_COUNT,
   API_MAX_LOADING_THREAD_COUNT,
-  api
-} from '~/shared/api'
-import { generateFileUuid } from '~/shared/api/utils'
-import { setDelay, createPromise } from '~/shared/utils'
+} from '~/shared/api/api.const'
+import { generateFileUuid } from '~/shared/api/utils/generate-file-uuid'
+import { loadFilePart, parseFileType } from '~/shared/api/utils/load-file-part'
+import { setDelay } from '~/shared/utils/set-delay'
+import { createPromise } from '~/shared/utils/create-promise'
 
-import type { ChannelId, PostUuid } from '../feed.types'
-import { feedState } from '../feed-state'
-import { refreshFileReference } from './refresh-file-reference'
+import type { ChannelId } from '../feed.types'
 
 type FileResponse = {
   fileUuid: string
@@ -50,11 +47,14 @@ const loadingQueue = {
 }
 
 export const loadFile = async (
-  uuid: ChannelId | PostUuid,
+  channelId: ChannelId,
+  accessHash: string,
+  messageId: number,
   location: InputFileLocation,
   dc: number,
   size?: number
 ): Promise<FileResponse | undefined> => {
+  const [promise, resolve] = createPromise<FileResponse | undefined>()
   const fileUuid = generateFileUuid(location)
 
   if (loadingPauseCache[fileUuid]) {
@@ -62,17 +62,30 @@ export const loadFile = async (
   }
 
   if (!size || size <= API_LOADING_PART_SIZE) {
-    const res = await loadFilePart(uuid, location, dc)
-    if (!res) return
+    loadingQueue.add(async () => {
+      const res = await loadFilePart(
+        channelId,
+        accessHash,
+        messageId,
+        location,
+        dc,
+        2
+      )
 
-    return {
-      fileUuid,
-      type: parseFileType(res),
-      partsCount: 1
-    }
+      if (!res) {
+        return resolve()
+      }
+
+      return resolve({
+        fileUuid,
+        type: parseFileType(res),
+        partsCount: 1
+      })
+    })
+
+    return promise
   }
 
-  const [promise, resolve] = createPromise<FileResponse | undefined>()
   const partsCount = Math.ceil(size / API_LOADING_PART_SIZE)
   const startIndex = loadingPartsCountCache[fileUuid] || 0
   const threadsCount = Math.max(Math.min(API_MAX_LOADING_THREAD_COUNT, partsCount - startIndex), 0)
@@ -87,90 +100,37 @@ export const loadFile = async (
       if ((loadingPartsCountCache[fileUuid] || 0) === partsCount) break
 
       const loadingIndex = startIndex + threadIndex + i
-      const offset = `${loadingIndex * API_LOADING_PART_SIZE || ''}`
+      const offset = loadingIndex * API_LOADING_PART_SIZE
 
-      const res = await loadFilePart(
-        uuid,
-        location,
-        dc,
-        offset
-      )
+      loadingQueue.add(async (queueIndex) => {
+        const res = await loadFilePart(
+          channelId,
+          accessHash,
+          messageId,
+          location,
+          dc,
+          queueIndex + 3,
+          offset
+        )
 
-      loadingPartsCountCache[fileUuid] = (loadingPartsCountCache[fileUuid] || 0) + 1
+        loadingPartsCountCache[fileUuid] = (loadingPartsCountCache[fileUuid] || 0) + 1
 
-      if (loadingPartsCountCache[fileUuid] === partsCount) {
-        if (!res) {
-          return resolve()
+        if (loadingPartsCountCache[fileUuid] === partsCount) {
+          if (!res) {
+            return resolve()
+          }
+
+          return resolve({
+            fileUuid,
+            type: parseFileType(res),
+            partsCount
+          })
         }
-
-        return resolve({
-          fileUuid,
-          type: parseFileType(res),
-          partsCount
-        })
-      }
+      })
     }
   })
 
   return promise
-}
-
-const loadFilePart = (
-  uuid: ChannelId | PostUuid,
-  location: InputFileLocation,
-  dc: number,
-  offset = '',
-  limit = API_LOADING_PART_SIZE,
-  updateLocation = false
-) => {
-  const fileUuid = generateFileUuid(location)
-  const [promise, resolve, reject] = createPromise<UploadFile | void>()
-
-  loadingQueue.add(async (queueIndex) => {
-    if (loadingPauseCache[fileUuid]) {
-      return resolve()
-    }
-
-    if (updateLocation) {
-      const { photo, document } = unwrap(feedState).posts[fileUuid].media
-      location = (photo || document).file_reference
-    }
-
-    const res = await api.req('upload.getFile', {
-      location,
-      cdn_supported: false,
-      offset,
-      limit
-    }, {
-      thread: queueIndex + 2,
-      dc
-    }).catch(async (err: APIError) => {
-      if (err.message !== 'FILE_REFERENCE_EXPIRED') {
-        return reject(err)
-      }
-
-      await refreshFileReference(
-        uuid as PostUuid
-      )
-
-      return loadFilePart(
-        uuid,
-        location,
-        dc,
-        offset,
-        limit,
-        true
-      )
-    })
-
-    resolve(res)
-  })
-
-  return promise
-}
-
-const parseFileType = (res: UploadFile) => {
-  return res._.replace('storage.file', '').toLowerCase()
 }
 
 export const pauseFileLoading = (
@@ -181,8 +141,9 @@ export const pauseFileLoading = (
 }
 
 export const isFileLoadingPaused = (
-  location: InputFileLocation,
+  location?: InputFileLocation,
 ) => {
+  if (!location) return
   const fileUuid = generateFileUuid(location)
   return loadingPauseCache[fileUuid]
 }

@@ -1,19 +1,23 @@
 import { Switch, Match, Show, createMemo, createEffect, lazy } from 'solid-js'
 import { clsx } from 'clsx'
 
-import { CoreMenuButton, CoreMenuDialog } from '~/core/ui'
-import { routingState } from '~/shared/routing'
-import { Header, Main, Aside, HR } from '~/shared/ui/elements'
+import { CoreMenuButton } from '~/core/ui/core-menu-button'
+import { CoreMenuDialog } from '~/core/ui/core-menu-dialog'
+import { routingState } from '~/shared/routing/routing-state'
+import { Header } from '~/shared/ui/elements/header'
+import { Main } from '~/shared/ui/elements/main'
+import { Aside } from '~/shared/ui/elements/aside'
+import { HR } from '~/shared/ui/elements/hr'
 
-import { introRoutes } from '~/intro/intro.routes'
+import { introRoutes } from '~/intro/intro-routes'
 import { authRoutes } from '~/auth/auth-routes'
 import { feedRoutes } from '~/feed/feed-routes'
 
 import * as layoutCSS from './shared/ui/elements/layout.sss'
 import * as appViewCSS from './app.view.sss'
 
-const IntroMainContent = lazy(async () => ({ default: (await import('~/intro/ui')).IntroMainContent }))
-const AuthContent = lazy(async () => ({ default: (await import('~/auth/ui')).AuthContent }))
+const IntroMainContent = lazy(async () => ({ default: (await import('~/intro/ui/intro-main-content')).IntroMainContent }))
+const AuthContent = lazy(async () => ({ default: (await import('~/auth/ui/auth-content')).AuthContent }))
 const FeedTabs = lazy(async () => ({ default: (await import('~/feed/ui')).FeedTabs }))
 const FeedManagingButton = lazy(async () => ({ default: (await import('~/feed/ui')).FeedManagingButton }))
 const FeedManagingDialog = lazy(async () => ({ default: (await import('~/feed/ui')).FeedManagingDialog }))

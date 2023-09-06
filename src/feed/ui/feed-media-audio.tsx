@@ -10,7 +10,9 @@ import * as feedMediaAudioCSS from './feed-media-audio.sss'
 export type FeedMadiaAudioProps = {
   uuid: PostUuid
   media: MessageMedia.messageMediaDocument
+  playing: boolean
   visible?: boolean
+  onEnded: () => void
 }
 
 export const FeedMediaAudio: Component<FeedMadiaAudioProps> = (props) => {

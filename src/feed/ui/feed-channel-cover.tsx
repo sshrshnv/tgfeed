@@ -2,11 +2,11 @@ import type { Component } from 'solid-js'
 import { Show, createMemo } from 'solid-js'
 import { clsx } from 'clsx'
 
-import { Image, BluredImage } from '~/shared/ui/elements'
+import { Image, BluredImage } from '~/shared/ui/elements/image'
 
 import type { ChannelId } from '../feed.types'
 import { feedState } from '../feed-state'
-import { getChannelCoverUrls } from '../utils'
+import { getChannelCoverUrls } from '../utils/get-channel-cover-urls'
 
 import * as feedChannelCoverCSS from './feed-channel-cover.sss'
 
@@ -60,7 +60,6 @@ export const FeedChannelCover: Component<FeedChannelCoverProps> = (props) => {
         <Image
           src={props.visible || isLoadStarted() ? getCoverUrls().coverUrl : ''}
           alt=''
-          fadeIn
         />
       </Show>
     </div>

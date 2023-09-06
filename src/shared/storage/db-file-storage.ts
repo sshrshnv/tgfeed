@@ -7,7 +7,7 @@ export const dbFileStorage = {
 
   getBytes: (keys: string[]) => {
     keys = keys.map(generateFileKey)
-    return getMany(keys).catch(() => []) as Promise<ArrayBuffer[] | undefined>
+    return getMany(keys) as Promise<Uint8Array[] | undefined>
   }
 }
 

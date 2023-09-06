@@ -1,5 +1,5 @@
 import type { LocaleLang, LocaleState, LocaleStorage } from './locale.types'
-import { detectPreferLocaleLang } from './utils'
+import { detectPreferLocaleLang } from './utils/detect-prefer-locale-lang'
 
 const LOCALE_LANGS = process.env.APP_LOCALE_LANGS as unknown as [LocaleLang]
 const FALLBACK_LOCALE_LANG = 'en'

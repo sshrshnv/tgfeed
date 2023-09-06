@@ -2,8 +2,10 @@ import type { Component } from 'solid-js'
 import { clsx } from 'clsx'
 
 import type { Route } from '~/shared/routing'
-import type { IconProps } from '~/shared/ui/elements'
-import { Button, Icon, Text } from '~/shared/ui/elements'
+import { Button } from '~/shared/ui/elements/button'
+import type { IconProps } from '~/shared/ui/elements/icon'
+import { Icon } from '~/shared/ui/elements/icon'
+import { Text } from '~/shared/ui/elements/text'
 
 import * as menuButtonCSS from './menu-route-button.sss'
 

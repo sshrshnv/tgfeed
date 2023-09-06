@@ -9,12 +9,12 @@ export type ParagraphProps = ComponentProps<'p'> & {
 }
 
 export const Paragraph: Component<ParagraphProps> = (_props) => {
-  const [props, pProps] = splitProps(_props, [
+  const [props, paragraphProps] = splitProps(_props, [
     'class', 'size'
   ])
 
   return (
-    <p {...pProps} class={clsx(
+    <p {...paragraphProps} class={clsx(
       props.class,
       paragraphCSS.base,
       paragraphCSS[`_${props.size}`]

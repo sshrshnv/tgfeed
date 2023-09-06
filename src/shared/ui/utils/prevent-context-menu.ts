@@ -1,5 +1,5 @@
 export const preventContextMenu = () => {
-  const availableTags = ['a', 'img', 'input']
+  const availableTags = ['a', 'input']
 
   const handleContextMenu = ev => {
     if (availableTags.includes(ev.target.tagName.toLowerCase())) return

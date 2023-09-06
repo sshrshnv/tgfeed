@@ -2,12 +2,19 @@ import type { ParentComponent, Ref } from 'solid-js'
 import { Show } from 'solid-js'
 import { clsx } from 'clsx'
 
-import { localeState } from '~/core/locale'
-import type { FormProps, InputProps, IconProps } from '~/shared/ui/elements'
-import { Text, Form, Input, Button, Icon } from '~/shared/ui/elements'
+import { localeState } from '~/core/locale/locale-state'
+
+import type { FormProps } from '~/shared/ui/elements/form'
+import { Form } from '~/shared/ui/elements/form'
+import type { InputProps } from '~/shared/ui/elements/input'
+import { Input } from '~/shared/ui/elements/input'
+import { Button } from '~/shared/ui/elements/button'
+import { Text } from '~/shared/ui/elements/text'
+import type { IconProps } from '~/shared/ui/elements/icon'
+import { Icon } from '~/shared/ui/elements/icon'
 
 import { authState, setAuthState } from '../auth-state'
-import { generateRecoverLink } from '../utils'
+import { generateRecoverLink } from '../utils/generate-recover-link'
 
 import * as layoutCSS from '../../shared/ui/elements/layout.sss'
 import * as animationsCSS from '../../shared/ui/animations/animations.sss'

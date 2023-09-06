@@ -1,5 +1,5 @@
 import { localStorage } from '~/shared/storage/local-storage'
-import { createStateStore } from '~/shared/utils'
+import { createStateStore } from '~/shared/utils/create-state-store'
 
 import { DEFAULT_AUTH_STATE, AUTH_STATE_STORAGE_KEY } from './auth.const'
 

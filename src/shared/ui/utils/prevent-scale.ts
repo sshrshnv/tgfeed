@@ -1,4 +1,4 @@
-import { isIOS } from '~/shared/utils'
+import { isIOS } from '~/shared/utils/detect-platform'
 
 export const preventScale = () => {
   const passive = !isIOS()
@@ -9,7 +9,7 @@ export const preventScale = () => {
 
   const handleTouchMove = ev => {
     if (ev.scale <= 1) return
-    ev.preventDefault()
+    !passive && ev.preventDefault()
   }
 
   self.document.addEventListener('gesturestart', handleGestureStart, { passive })

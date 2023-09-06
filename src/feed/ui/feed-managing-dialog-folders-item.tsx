@@ -4,8 +4,11 @@ import type { TransitionProps } from 'solid-transition-group'
 import { Transition } from 'solid-transition-group'
 import { clsx } from 'clsx'
 
-import { routingState, pushRoute } from '~/shared/routing'
-import { Button, Icon, Text } from '~/shared/ui/elements'
+import { routingState } from '~/shared/routing/routing-state'
+import { pushRoute } from '~/shared/routing/actions/push-route'
+import { Button } from '~/shared/ui/elements/button'
+import { Icon } from '~/shared/ui/elements/icon'
+import { Text } from '~/shared/ui/elements/text'
 import { getScaleInParams, getScaleOutParams } from '~/shared/ui/animations'
 
 import type { Folder } from '../feed.types'

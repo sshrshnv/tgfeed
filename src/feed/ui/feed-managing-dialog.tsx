@@ -2,17 +2,19 @@ import type { Component } from 'solid-js'
 import { createMemo, createSignal } from 'solid-js'
 import { clsx } from 'clsx'
 
-import { localeState } from '~/core/locale'
-import { routingState, pushRoute } from '~/shared/routing'
-import {
-  Menu, TransitionMenu, MenuHeader, MenuTitle,
-  TransitionDialog, Text, Button
-} from '~/shared/ui/elements'
+import { localeState } from '~/core/locale/locale-state'
+import { routingState } from '~/shared/routing/routing-state'
+import { pushRoute } from '~/shared/routing/actions/push-route'
+import { Menu, TransitionMenu, MenuHeader, MenuTitle } from '~/shared/ui/elements/menu'
+import { TransitionDialog } from '~/shared/ui/elements/dialog'
+import { Text } from '~/shared/ui/elements/text'
+import { Button } from '~/shared/ui/elements/button'
 
 import type { Folder } from '../feed.types'
 import { feedRoutes } from '../feed-routes'
 import { FeedManagingDialogFolders } from './feed-managing-dialog-folders'
 import { FeedManagingDialogForm } from './feed-managing-dialog-form'
+import { FeedManagingDialogFontSize } from './feed-managing-dialog-font-size'
 
 import * as layoutCSS from '../../shared/ui/elements/layout.sss'
 import * as feedManagingDialogCSS from './feed-managing-dialog.sss'
@@ -82,6 +84,8 @@ export const FeedManagingDialog: Component<FeedManagingDialogProps> = (props) =>
         <FeedManagingDialogFolders
           openEditingFolderForm={openEditingFolderForm}
         />
+
+        <FeedManagingDialogFontSize/>
       </Menu>
 
       <TransitionMenu

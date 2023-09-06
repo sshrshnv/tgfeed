@@ -1,6 +1,6 @@
 import { api } from '~/shared/api'
-import { pushRoute } from '~/shared/routing'
-import { authRoutes } from '~/auth'
+import { pushRoute } from '~/shared/routing/actions/push-route'
+import { authRoutes } from '~/auth/auth-routes'
 
 import { setAccountState } from '../account-state'
 

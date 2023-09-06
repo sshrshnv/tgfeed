@@ -1,7 +1,9 @@
 import type { ParentComponent } from 'solid-js'
-import { Show, For, onMount, onCleanup, createSignal, children, untrack } from 'solid-js'
+import { Show, For, onMount, onCleanup, createSignal, children, untrack, createMemo } from 'solid-js'
 import PointerTracker from 'pointer-tracker'
 import { clsx } from 'clsx'
+
+import { isAndroid } from '~/shared/utils/detect-platform'
 
 import { SliderItem } from './slider-item'
 
@@ -13,6 +15,7 @@ export type SliderProps = {
   activeIndex: number
   aspectRatio?: number
   onChange?: (index: number) => void
+  onClick?: () => void
 }
 
 export const Slider: ParentComponent<SliderProps> = (props) => {
@@ -20,9 +23,34 @@ export const Slider: ParentComponent<SliderProps> = (props) => {
   const items = children(() => props.children).toArray()
   const [getTranslateX, setTranslateX] = createSignal(0)
 
+  const isSingle = createMemo(() =>
+    items.length <= 1
+  )
+
+  const handleKey = (ev: KeyboardEvent) => {
+    ev.stopPropagation()
+    ev.preventDefault()
+
+    switch (ev.key.toLowerCase()) {
+    case ' ':
+    case 'enter':
+      props.onClick?.()
+      break
+    case 'arrowleft':
+      props.onChange?.(-1)
+      break
+    case 'arrowright':
+      props.onChange?.(1)
+      break
+    }
+  }
+
   onMount(() => {
     const pointerTracker = new PointerTracker(sliderEl, {
-      start: (_pointer, _ev) => items.length > 1,
+      start: (_pointer, ev) => {
+        ev.stopPropagation()
+        return true
+      },
 
       move: (_prevPointers, _changedPointers, ev) => {
         const { startPointers, currentPointers } = pointerTracker
@@ -30,7 +58,7 @@ export const Slider: ParentComponent<SliderProps> = (props) => {
 
         const x = currentPointers[0].clientX - startPointers[0].clientX
         const y = currentPointers[0].clientY - startPointers[0].clientY
-        if (Math.abs(y) > Math.abs(x)) return
+        if ((Math.abs(y) > Math.abs(x)) && !getTranslateX()) return
 
         ev.stopPropagation()
         ev.preventDefault()
@@ -39,13 +67,17 @@ export const Slider: ParentComponent<SliderProps> = (props) => {
 
       end: () => {
         const translateX = untrack(getTranslateX)
+        if (!translateX) {
+          props.onClick?.()
+          return
+        }
         if (Math.abs(translateX) >= 50) {
           props.onChange?.(translateX < 0 ? 1 : -1)
         }
         setTranslateX(0)
       },
 
-      avoidPointerEvents: true
+      avoidPointerEvents: isAndroid()
     })
 
     onCleanup(() => {
@@ -58,27 +90,35 @@ export const Slider: ParentComponent<SliderProps> = (props) => {
       <div
         class={clsx(
           props.class,
-          sliderCSS.base,
-          items.length > 1 && sliderCSS._enabled
+          sliderCSS.base
         )}
         style={{
-          '--local-aspect-ratio': props.aspectRatio || 'auto',
-          '--local-translate': `${getTranslateX()}px 0`
+          'aspect-ratio': props.aspectRatio || 'unset'
         }}
-        ref={sliderEl}
       >
-        <For each={items}>{(child, getIndex) => {
-          return (
-            <SliderItem
-              previous={getIndex() === props.activeIndex - 1}
-              active={getIndex() === props.activeIndex}
-              next={getIndex() === props.activeIndex + 1}
-              transitionable={!getTranslateX()}
-            >
-              {child}
-            </SliderItem>
-          )
-        }}</For>
+        <For each={items}>{(child, getIndex) => (
+          <SliderItem
+            single={isSingle()}
+            previous={!isSingle() && getIndex() === props.activeIndex - 1}
+            active={!isSingle() && getIndex() === props.activeIndex}
+            next={!isSingle() && getIndex() === props.activeIndex + 1}
+            translateX={getTranslateX()}
+          >
+            {child}
+          </SliderItem>
+        )}</For>
+
+        <div
+          class={clsx(
+            sliderCSS.overlay,
+            !isSingle() && sliderCSS._translatable,
+            layoutCSS.outline
+          )}
+          role='button'
+          tabIndex={0}
+          ref={sliderEl}
+          onKeyDown={handleKey}
+        />
       </div>
 
       <Show when={items.length > 1}>

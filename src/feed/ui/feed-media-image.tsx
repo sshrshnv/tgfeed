@@ -1,12 +1,13 @@
 import type { Component } from 'solid-js'
-import { createEffect } from 'solid-js'
+import { createSignal, createEffect } from 'solid-js'
 import { createStore } from 'solid-js/store'
 
 import type { MessageMedia } from '~/shared/api/mtproto'
-import { Image, BluredImage } from '~/shared/ui/elements'
+import { Image, BluredImage } from '~/shared/ui/elements/image'
 
 import type { PostUuid } from '../feed.types'
-import { getPostImageUrls, pausePostImageLoading } from '../utils'
+import { getPostImageUrls, pausePostImageLoading } from '../utils/get-post-image-urls'
+import { FeedMediaControls } from './feed-media-controls'
 
 import * as feedMediaImageCSS from './feed-media-image.sss'
 
@@ -26,9 +27,12 @@ type LoadingCache = {
 const [loadingCache, setLoadingCache] = createStore<LoadingCache>({})
 
 export const FeedMediaImage: Component<FeedMediaItemProps> = (props) => {
+  const [isLoading, setLoading] = createSignal(false)
+
   const getImageUrls = () => {
     if (!isLoadStarted()) {
       setLoadingCache(props.uuid, { started: true })
+      setLoading(true)
     }
     return getPostImageUrls(props.uuid, props.media)
   }
@@ -41,6 +45,7 @@ export const FeedMediaImage: Component<FeedMediaItemProps> = (props) => {
 
   const handleLoad = () => {
     setLoadingCache(props.uuid, { ended: true })
+    setLoading(false)
   }
 
   const isLoadStarted = () => (
@@ -69,8 +74,10 @@ export const FeedMediaImage: Component<FeedMediaItemProps> = (props) => {
       <Image
         src={props.visible || isLoadStarted() ? getImageUrls().imageUrl : ''}
         alt=''
-        fadeIn
         onLoad={handleLoad}
+      />
+      <FeedMediaControls
+        loading={isLoading()}
       />
     </div>
   )

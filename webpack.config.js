@@ -26,7 +26,7 @@ try {
   appEnv = process.env
 }
 
-module.exports = [{
+module.exports = {
   mode: isDev() ? 'development' : 'production',
 
   entry: isDev() ? {
@@ -49,7 +49,7 @@ module.exports = [{
   output: {
     path: path.resolve('./build'),
     filename: isDev() ? '[name].js' : '[name].[contenthash].js',
-    chunkFilename: isDev() ? '[name].js' : '[name].[contenthash].js',
+    chunkFilename: ({ chunk }) => isDev() || chunk.name?.startsWith('sw') ? '[name].js' : '[name].[contenthash].js',
     assetModuleFilename: '[name].[hash][ext]',
     publicPath: process.env.ASSETS_HOST || '/',
     hashDigestLength: 8
@@ -188,8 +188,33 @@ module.exports = [{
   optimization: {
     nodeEnv: isDev() ? 'development' : 'production',
     splitChunks: {
-      chunks: 'all',
-      minSize: 1024
+      cacheGroups: {
+        'vendors.core-js': {
+          name: 'vendors.core-js',
+          test: /[\\/]node_modules[\\/]core-js[\\/]/,
+          chunks: 'all',
+          reuseExistingChunk: true
+        },
+        'vendors.workers': {
+          name: 'vendors.workers',
+          test: /[\\/]node_modules[\\/](comlink|idb|idb-keyval)[\\/]/,
+          chunks: 'all',
+          reuseExistingChunk: true
+        },
+        'vendors.workbox': {
+          name: 'vendors.workbox',
+          test: /[\\/]node_modules[\\/]workbox/,
+          chunks: 'all',
+          reuseExistingChunk: true
+        },
+        'vendors.solid-js': {
+          name: 'vendors.solid-js',
+          test: /[\\/]node_modules[\\/]@?solid/,
+          chunks: 'all',
+          reuseExistingChunk: true
+        }
+      },
+      minSize: 10 * 1024
     },
     providedExports: true,
     usedExports: true,
@@ -240,59 +265,4 @@ module.exports = [{
     modules: isBundleAnalyzer(),
     errorDetails: true
   }
-},/* {
-  mode: isDev() ? 'development' : 'production',
-
-  target: 'webworker',
-
-  entry: {
-    sw: { import: './src/sw/sw.ts', filename: 'sw.js' }
-  },
-
-  output: {
-    path: path.resolve('./build'),
-    filename: isDev() ? `sw.[name].js` : `sw.[name].[contenthash].js`,
-    chunkFilename: isDev() ? `sw.[name].js` : `sw.[name].[contenthash].js`,
-    publicPath: process.env.ASSETS_HOST || '/'
-  },
-
-  resolve: resolveOptions,
-
-  module: {
-    rules: [{
-      test: /\.m?[jt]sx?$/,
-      resolve: { mainFields },
-      use: [{
-        loader: 'babel-loader'
-      }]
-    }]
-  },
-
-  plugins: [
-    new webpack.DefinePlugin(defineEnvConfig),
-
-    isBundleAnalyzer() ? new BundleAnalyzerPlugin({
-      analyzerHost: '0.0.0.0',
-      analyzerPort: 5003
-    }) : () => {}
-  ],
-
-  optimization: {
-    nodeEnv: isDev() ? 'development' : 'production',
-    //chunkIds: 'named',
-    splitChunks: {
-      chunks: 'all'
-    },
-    concatenateModules: false,
-    minimize: isProd(),
-    minimizer: isProd() ? [
-      new TerserPlugin({ terserOptions })
-    ] : []
-  },
-
-  stats: {
-    children: isBundleAnalyzer(),
-    modules: isBundleAnalyzer(),
-    errorDetails: true
-  }
-}*/]
+}

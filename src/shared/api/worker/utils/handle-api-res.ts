@@ -2,7 +2,7 @@ import { dbStorage } from '~/shared/storage/db-storage'
 import { dbFileStorage } from '~/shared/storage/db-file-storage'
 
 import { MethodDeclMap } from '../../mtproto'
-import { generateFilePartUuid } from '../../utils'
+import { generateFilePartUuid } from '../../utils/generate-file-part-uuid'
 
 type Handlers = {
   [T in keyof MethodDeclMap]?: (

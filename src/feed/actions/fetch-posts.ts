@@ -4,13 +4,10 @@ import { api } from '~/shared/api'
 import type { FeedState, ChannelData, ChannelId, PostData, PostUuid, PostUuids, PostGroups } from '../feed.types'
 import { DEFAULT_FOLDER_ID } from '../feed.const'
 import { setFeedState } from '../feed-state'
-import {
-  resolveCurrentFolderState,
-  generatePostUuid,
-  generatePostGroupUuid,
-  loadConfig,
-  isSupportedMedia
-} from '../utils'
+import { resolveCurrentFolderState } from '../utils/resolve-current-folder-state'
+import { generatePostUuid, generatePostGroupUuid } from '../utils/generate-post-uuid'
+import { loadConfig } from '../utils/load-config'
+import { isSupportedMedia } from '../utils/detect-post-media'
 
 type Data = {
   postUuids: FeedState['postUuids']
@@ -44,7 +41,7 @@ export const fetchPosts = async (pageNumber: number | true) => {
         posts,
         postGroups,
         folders,
-        filters,
+        filters
       }
 
       if (
@@ -178,7 +175,8 @@ const getPostGroupsUpdate = (
 const isValidPost = (message: Message) => !!(
   message._ === 'message' &&
   message.peer_id._ === 'peerChannel' &&
-  message.post && (
+  message.post &&
+  !message.out && (
     message.message ||
     isSupportedMedia(message.media)
   )

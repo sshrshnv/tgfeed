@@ -8,30 +8,23 @@
   border-radius: 8px
   overflow: hidden
 
+._single
+  display: block
+
 ._active, ._previous, ._next
   display: block
   transform-origin: 50% 50%
-  will-change: translate, scale
+  will-change: translate
+
+  &._transitionable
+    transition: translate 300ms ease-in-out
 
 ._previous, ._next
   border-radius: 16px
-  scale: 0.75 0.75
-  translate: calc(var(--local-k) * 75% - var(--local-k) * 16px) 0
+  translate: calc(var(--local-k) * 100%) 0
 
 ._previous
   --local-k: -1
 
 ._next
   --local-k: 1
-
-._active
-  z-index: 2
-  scale: 1 1
-  translate: var(--local-translate)
-  transition: 10ms ease
-  transition-property: translate, scale
-
-._active, ._previous, ._next
-  &._transitionable
-    transition-duration: 300ms
-    transition-timing-function: ease-in-out

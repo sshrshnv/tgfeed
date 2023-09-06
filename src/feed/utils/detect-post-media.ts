@@ -45,9 +45,17 @@ export const getMediaImageSize = (media: MessageMedia) => {
   const document = getMediaDocument(media)
   const photo = getMediaPhoto(media)
 
-  const size = (photo?.sizes || document?.thumbs)?.findLast(size =>
+  let size = (photo?.sizes || document?.thumbs)?.findLast(size =>
     ['photoSizeProgressive', 'photoSize'].includes(size._)
   ) as PhotoSize.photoSizeProgressive | PhotoSize.photoSize | undefined
+
+  if (size?._ === 'photoSizeProgressive') {
+    size = {
+      ...size,
+      _: 'photoSize',
+      size: Math.max(...size.sizes)
+    } as PhotoSize.photoSize
+  }
 
   return size
 }
@@ -64,7 +72,7 @@ export const getMediaVideoSize = (media: MessageMedia) => {
 
 export const getMediaAspectRatio = (media: MessageMedia) => {
   const size = getMediaImageSize(media)
-  return size ? size.w / size.h : 0
+  return size ? (size.w / size.h) : 0
 }
 
 export const isSupportedMedia = (media?: MessageMedia) => media && ((

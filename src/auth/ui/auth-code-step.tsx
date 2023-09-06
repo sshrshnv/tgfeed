@@ -2,11 +2,11 @@ import type { Component } from 'solid-js'
 import { createSignal, createResource, createMemo } from 'solid-js'
 import { createInputMask } from '@solid-primitives/input-mask'
 
-import { localeState } from '~/core/locale'
+import { localeState } from '~/core/locale/locale-state'
 
 import { authState } from '../auth-state'
-import { signIn } from '../actions'
-import { getCodeMask } from '../utils'
+import { signIn } from '../actions/sign-in'
+import { getCodeMask } from '../utils/get-code-mask'
 import { AuthStep } from './auth-step'
 
 export const AuthCodeStep: Component = () => {

@@ -2,17 +2,16 @@ import type { Component } from 'solid-js'
 import { Show } from 'solid-js'
 import { clsx } from 'clsx'
 
-import { accountState } from '~/core/account'
-import { AccountMenu } from '~/core/account/ui'
-import { localeState } from '~/core/locale'
-import { LocaleMenu } from '~/core/locale/ui'
-import { ThemeMenu } from '~/core/theme/ui'
-import { feedRoutes } from '~/feed'
-import { routingState } from '~/shared/routing'
-import {
-  Menu, MenuHeader, MenuRouteButton, MenuFooter,
-  TransitionDialog, Text
-} from '~/shared/ui/elements'
+import { accountState } from '~/core/account/account-state'
+import { AccountMenu } from '~/core/account/ui/account-menu'
+import { localeState } from '~/core/locale/locale-state'
+import { LocaleMenu } from '~/core/locale/ui/locale-menu'
+import { ThemeMenu } from '~/core/theme/ui/theme-menu'
+import { feedRoutes } from '~/feed/feed-routes'
+import { routingState } from '~/shared/routing/routing-state'
+import { Menu, MenuHeader, MenuRouteButton, MenuFooter } from '~/shared/ui/elements/menu'
+import { TransitionDialog } from '~/shared/ui/elements/dialog'
+import { Text } from '~/shared/ui/elements/text'
 
 import { coreRoutes } from '../core-routes'
 

@@ -1,6 +1,6 @@
 import { localStorage } from '~/shared/storage/local-storage'
 import { dbStorage } from '~/shared/storage/db-storage'
-import { createStateStore } from '~/shared/utils'
+import { createStateStore } from '~/shared/utils/create-state-store'
 
 import {
   DEFAULT_ACCOUNT_STATE,

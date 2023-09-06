@@ -1,4 +1,4 @@
-import { getUiWorker } from '~/shared/ui/worker'
+import { getUiWorker } from '~/shared/ui/worker/init-ui-worker'
 
 const bluredImageCache: Record<string, ImageData> = {}
 

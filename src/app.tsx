@@ -1,6 +1,8 @@
 import { render } from 'solid-js/web'
 
-import { preventContextMenu, preventDragAndDrop, preventScale } from '~/shared/ui/utils'
+import { preventContextMenu } from '~/shared/ui/utils/prevent-context-menu'
+import { preventDragAndDrop } from '~/shared/ui/utils/prevent-drag-and-drop'
+import { preventScale } from '~/shared/ui/utils/prevent-scale'
 preventContextMenu()
 preventDragAndDrop()
 preventScale()

@@ -5,7 +5,6 @@ import { Transition } from 'solid-transition-group'
 import { clsx } from 'clsx'
 
 import type { Route } from '~/shared/routing'
-import { isIOS } from '~/shared/utils'
 import { getTranslateInParams, getTranslateOutParams } from '~/shared/ui/animations'
 
 import type { MenuProps } from './menu'
@@ -23,8 +22,8 @@ export type TransitionMenuProps = MenuProps & {
 }
 
 const ANIMATION_PARAMS = {
-  enter: getTranslateInParams({ translate: '48px' }),
-  exit: getTranslateOutParams({ translate: '24px' })
+  enter: getTranslateInParams({ translate: '48px 0' }),
+  exit: getTranslateOutParams({ translate: '24px 0' })
 }
 
 export const TransitionMenu: ParentComponent<TransitionMenuProps> = (_props) => {
@@ -58,7 +57,7 @@ export const TransitionMenu: ParentComponent<TransitionMenuProps> = (_props) => 
           class={clsx(
             props.class,
             transitionMenuCSS.animated,
-            isIOS() && animationsCSS.forcedPerformance
+            animationsCSS.forcedPerformance
           )}
         />
       </Show>

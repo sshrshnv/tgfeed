@@ -1,11 +1,11 @@
 import type { Component } from 'solid-js'
 import { createMemo } from 'solid-js'
 
-import { MenuTitle, MenuRadioGroup } from '~/shared/ui/elements'
+import { MenuTitle, MenuRadioGroup } from '~/shared/ui/elements/menu'
 
 import type { LocaleLang } from '../locale.types'
 import { localeState, setLocaleState } from '../locale-state'
-import { formatLocaleLang } from '../utils'
+import { formatLocaleLang } from '../utils/format-locale-lang'
 
 export const LocaleMenu: Component = () => {
   const getItems = createMemo(() =>

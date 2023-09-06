@@ -1,29 +1,17 @@
-import type { InputFileLocation } from '~/shared/api/mtproto'
+import type { InputFileLocation } from '../mtproto'
 
-import { API_LOADING_PART_SIZE } from '../api.const'
-
-export const generateFileUuid = (
-  location: InputFileLocation
-) => {
-  switch (location._) {
-  case 'inputPeerPhotoFileLocation':
-    return location.photo_id
-  case 'inputPhotoFileLocation':
-  case 'inputDocumentFileLocation':
-    return location.id
-  default:
-    return ''
-  }
+export type PartialLocation = InputFileLocation | {
+  id: string
 }
 
-export const generateFilePartUuid = (
-  location: InputFileLocation,
-  offset = ''
+export const generateFileUuid = (
+  location: PartialLocation
 ) => {
-  const fileUuid = generateFileUuid(location)
-  if (typeof offset === undefined) {
-    return fileUuid
+  if ('photo_id' in location){
+    return location.photo_id
   }
-  const index = +offset / API_LOADING_PART_SIZE
-  return `${fileUuid}-${index}`
+  if ('id' in location){
+    return location.id
+  }
+  return ''
 }

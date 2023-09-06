@@ -2,11 +2,14 @@ import type { Component } from 'solid-js'
 import { createSignal, createResource, createEffect } from 'solid-js'
 import { createInputMask } from '@solid-primitives/input-mask'
 
-import { localeState } from '~/core/locale'
+import { localeState } from '~/core/locale/locale-state'
 
 import { authState, setAuthState } from '../auth-state'
-import { getNearestDc, getCountriesList, sendCode } from '../actions'
-import { getPhoneNumberCode, getPhoneNumberMask } from '../utils'
+import { getNearestDc } from '../actions/get-nearest-dc'
+import { getCountriesList } from '../actions/get-countries-list'
+import { sendCode } from '../actions/send-code'
+import { getPhoneNumberCode } from '../utils/get-phone-number-code'
+import { getPhoneNumberMask } from '../utils/get-phone-number-mask'
 import { AuthStep } from './auth-step'
 
 export const AuthPhoneNumberStep: Component = () => {

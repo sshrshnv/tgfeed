@@ -3,7 +3,7 @@ import { splitProps } from 'solid-js'
 import { clsx } from 'clsx'
 
 import type { Route } from '~/shared/routing'
-import { pushRoute } from '~/shared/routing'
+import { pushRoute } from '~/shared/routing/actions/push-route'
 
 import * as layoutCSS from '../layout.sss'
 import * as buttonCSS from './button.sss'

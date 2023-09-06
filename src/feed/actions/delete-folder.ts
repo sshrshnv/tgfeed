@@ -2,7 +2,7 @@ import { api } from '~/shared/api'
 
 import type { FeedState, Folder } from '../feed.types'
 import { setFeedState } from '../feed-state'
-import { resolveCurrentFolderState } from '../utils'
+import { resolveCurrentFolderState } from '../utils/resolve-current-folder-state'
 
 export const deleteFolder = (
   folder: Folder

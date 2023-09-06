@@ -1,0 +1,2 @@
+export const SERVICE_WORKER_SKIP_WAITING_MESSAGE = 'SKIP_WAITING'
+export const SERVICE_STREAM_URL = '/sw/stream'

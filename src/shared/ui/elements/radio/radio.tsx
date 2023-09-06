@@ -2,7 +2,9 @@ import type { Component, ComponentProps } from 'solid-js'
 import { splitProps } from 'solid-js'
 import { clsx } from 'clsx'
 
-import { Text, Icon, Input } from '~/shared/ui/elements'
+import { Text } from '~/shared/ui/elements/text'
+import { Icon } from '~/shared/ui/elements/icon'
+import { Input } from '~/shared/ui/elements/input'
 
 import * as layoutCSS from '../layout.sss'
 import * as radioCSS from './radio.sss'

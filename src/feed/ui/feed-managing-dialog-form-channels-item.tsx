@@ -2,7 +2,8 @@ import type { Component } from 'solid-js'
 import { createMemo } from 'solid-js'
 import { clsx } from 'clsx'
 
-import { Input, Text } from '~/shared/ui/elements'
+import { Input } from '~/shared/ui/elements/input'
+import { Text } from '~/shared/ui/elements/text'
 
 import type { ChannelId } from '../feed.types'
 import { feedState } from '../feed-state'

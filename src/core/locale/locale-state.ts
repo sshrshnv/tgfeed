@@ -1,7 +1,8 @@
-import { createStateStore } from '~/shared/utils'
+import { createStateStore } from '~/shared/utils/create-state-store'
 
 import { DEFAULT_LOCALE_STATE, LOCALE_STATE_STORAGE_KEY } from './locale.const'
-import { setLocaleAttributes, loadLocaleTexts } from './utils'
+import { setLocaleAttributes } from './utils/set-locale-attributes'
+import { loadLocaleTexts } from './utils/load-locale-texts'
 
 export const [localeState, setLocaleState] = createStateStore({
   defaultState: DEFAULT_LOCALE_STATE,

@@ -1,24 +1,37 @@
 .base
   position: relative
-  aspect-ratio: var(--local-aspect-ratio)
   overflow: hidden
 
-  &._enabled
+.overlay
+  position: absolute
+  z-index: 1
+  top: 0
+  right: 0
+  bottom: 0
+  left: 0
+
+  &._translatable
     cursor: grab
 
 .dots
-  padding: 8px 0 0
+  position: absolute
+  z-index: 1
+  left: 50%
+  translate: -50% -24px
+  height: 12px
+  padding: 0 6px
   gap: 4px
+  border-radius: 8px
+  background-color: rgba(0,0,0,0.05)
 
 .dotsItem
   width: 4px
   height: 4px
-  border-radius: 2px
-  background-color: var(--theme-color-on-surface)
-  opacity: 0.25
+  border-radius: 50%
+  background-color: white
+  opacity: 0.5
   transition: 300ms ease-in-out
-  transition-property: background-color, opacity
+  transition-property: opacity
 
   &._active
-    background-color: var(--theme-color-primary)
     opacity: 1

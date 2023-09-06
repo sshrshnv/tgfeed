@@ -1,5 +1,5 @@
 export function postMessage<T>(
-  target: Worker,
+  target: Worker | ServiceWorker,
   message: T,
   transfer?: Transferable[]
 ) {

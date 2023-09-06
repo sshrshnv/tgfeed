@@ -2,7 +2,7 @@ import type { Component } from 'solid-js'
 import { Show, For, createMemo } from 'solid-js'
 import { clsx } from 'clsx'
 
-import { localeState } from '~/core/locale'
+import { localeState } from '~/core/locale/locale-state'
 
 import { DEFAULT_FOLDER_ID } from '../feed.const'
 import { feedState } from '../feed-state'

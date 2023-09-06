@@ -1,7 +1,7 @@
 import type { Component } from 'solid-js'
 import { clsx } from 'clsx'
 
-import { Icon } from '~/shared/ui/elements'
+import { Icon } from '~/shared/ui/elements/icon'
 
 import * as logoCSS from './logo.sss'
 

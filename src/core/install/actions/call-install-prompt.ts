@@ -1,10 +1,10 @@
 //import { trackError } from '~/shared/tracking/errors'
-import { isIOSSafari } from '~/shared/utils'
+import { isIOSSafari } from '~/shared/utils/detect-platform'
 
-import { setInstall } from '../install.state'
+import { setInstallState } from '../install-state'
 import { getCapturedInstallPrompt } from './capture-install-prompt'
 
-self.addEventListener('appinstalled', () => setInstall('completed', true))
+self.addEventListener('appinstalled', () => setInstallState('completed', true))
 
 export const callInstallPrompt = async () => {
   if (isIOSSafari()) {
@@ -16,7 +16,7 @@ export const callInstallPrompt = async () => {
     const installPromptEvent = await getCapturedInstallPrompt()
     installPromptEvent.prompt()
     const { outcome } = await installPromptEvent.userChoice
-    setInstall('completed', outcome === 'accepted')
+    setInstallState('completed', outcome === 'accepted')
   } catch(error: any) {
     //trackError(error)
   }
