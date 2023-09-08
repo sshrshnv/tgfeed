@@ -1,17 +1,21 @@
 declare const self: ServiceWorkerGlobalScope
 
 import { comlink } from '~/shared/utils/comlink'
+import { createPromise } from '~/shared/utils/create-promise'
 
 import type { Service } from '../service.types'
 import { SERVICE_WORKER_SKIP_WAITING_MESSAGE, SERVICE_STREAM_URL } from '../service.const'
 import { workbox } from './utils/workbox'
-import { getStreamUrl } from './utils/get-stream-url'
-import { handleStream } from './utils/handle-stream'
+import { handleStreamRoute } from './utils/handle-stream-route'
+import { handleStreamFilePartLoad } from './utils/handle-stream-file-part-load'
+
+const [streamsStatePromise, resolveStreamsStatePromise] = createPromise()
+let loadStreamFilePart: Parameters<Service['handleStreams']>[0]
 
 workbox.setCacheNameDetails({ prefix: 'tgfeed' })
 workbox.clientsClaim()
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production' && self.__WB_MANIFEST) {
   workbox.precacheAndRoute(self.__WB_MANIFEST)
   workbox.cleanupOutdatedCaches()
 
@@ -37,18 +41,30 @@ if (process.env.NODE_ENV === 'production') {
 
 workbox.registerRoute(
   new RegExp(SERVICE_STREAM_URL),
-  handleStream
+  async (params) => {
+    await streamsStatePromise
+    return handleStreamRoute(params, loadStreamFilePart)
+  }
 )
 
 const service: Service = {
-  getStreamUrl
+  handleStreams: async (load) => {
+    loadStreamFilePart = load
+    resolveStreamsStatePromise()
+  },
+
+  handleStreamFilePartLoad: async (...args) => {
+    handleStreamFilePartLoad(...args)
+  }
 }
 
 self.onmessage = (ev) => {
+  if (ev.data?.port) {
+    comlink.expose(service, ev.data.port)
+    return
+  }
   if (ev.data?.type === SERVICE_WORKER_SKIP_WAITING_MESSAGE) {
     self.skipWaiting()
-  }
-  if (ev.data?.mainPort) {
-    comlink.expose(service, ev.data.mainPort)
+    return
   }
 }

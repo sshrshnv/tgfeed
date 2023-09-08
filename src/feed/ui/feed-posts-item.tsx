@@ -3,7 +3,7 @@ import { Show, createMemo, createSignal, createEffect, onMount, onCleanup } from
 import { clsx } from 'clsx'
 
 import type { PostUuid, PostGroupUuid } from '../feed.types'
-import { feedState } from '../feed-state'
+import { feedCache } from '../feed-cache'
 import { isSupportedMedia } from '../utils/detect-post-media'
 import { FeedPostsItemHeader } from './feed-posts-item-header'
 import { FeedPostsItemMedia } from './feed-posts-item-media'
@@ -27,7 +27,7 @@ export const FeedPostsItem: Component<FeedPostsItemProps> = (props) => {
   const [isReady, setReady] = createSignal(false)
 
   const getPost = createMemo(() =>
-    feedState.posts[props.uuid]
+    feedCache.posts[props.uuid]
   )
 
   const hasText = createMemo(() =>
@@ -61,7 +61,7 @@ export const FeedPostsItem: Component<FeedPostsItemProps> = (props) => {
         !isReady() && feedPostsItemCSS._transparent
       )}
       style={{
-        translate: `0px ${props.offset}px`,
+        translate: `0 ${props.offset}px`,
         display: props.visible ? 'block' : 'none'
       }}
       id={props.uuid}

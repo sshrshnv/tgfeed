@@ -1,18 +1,18 @@
-import { API_LOADING_PART_SIZE } from '../api.const'
-
-import type { PartialLocation } from './generate-file-uuid'
+import type { InputFileLocation } from '../mtproto'
 import { generateFileUuid } from './generate-file-uuid'
 
 export const generateFilePartUuid = (
-  location: PartialLocation,
-  offset: string | number = 0
+  location: InputFileLocation,
+  offset: number | string,
+  limit: number
 ) => {
   const fileUuid = generateFileUuid(location)
-  if (typeof offset === undefined) {
-    return fileUuid
-  } else if (typeof offset === 'string') {
+  if (typeof offset === 'string') {
     offset = parseInt(offset, 16)
   }
-  const index = offset / API_LOADING_PART_SIZE
-  return `${fileUuid}-${index}`
+  const index = Math.floor(offset / limit)
+
+  return ('thumb_size' in location) ?
+    `${fileUuid}-${location.thumb_size}-${index}` :
+    `${fileUuid}-${index}`
 }

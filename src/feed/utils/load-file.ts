@@ -15,8 +15,9 @@ import { createPromise } from '~/shared/utils/create-promise'
 import type { ChannelId } from '../feed.types'
 
 type FileResponse = {
-  fileUuid: string
+  location: InputFileLocation
   type: string
+  limit: number
   partsCount: number
 }
 
@@ -77,8 +78,9 @@ export const loadFile = async (
       }
 
       return resolve({
-        fileUuid,
+        location,
         type: parseFileType(res),
+        limit: API_LOADING_PART_SIZE,
         partsCount: 1
       })
     })
@@ -121,8 +123,9 @@ export const loadFile = async (
           }
 
           return resolve({
-            fileUuid,
+            location,
             type: parseFileType(res),
+            limit: API_LOADING_PART_SIZE,
             partsCount
           })
         }

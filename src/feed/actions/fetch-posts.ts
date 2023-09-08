@@ -1,9 +1,10 @@
 import type { MessagesMessages, Message } from '~/shared/api/mtproto'
 import { api } from '~/shared/api'
 
-import type { FeedState, ChannelData, ChannelId, PostData, PostUuid, PostUuids, PostGroups } from '../feed.types'
+import type { FeedState, ChannelData, ChannelId, PostData, PostUuid, PostUuids, PostGroups, FeedCache } from '../feed.types'
 import { DEFAULT_FOLDER_ID } from '../feed.const'
-import { setFeedState } from '../feed-state'
+import { feedState, setFeedState } from '../feed-state'
+import { setFeedCache } from '../feed-cache'
 import { resolveCurrentFolderState } from '../utils/resolve-current-folder-state'
 import { generatePostUuid, generatePostGroupUuid } from '../utils/generate-post-uuid'
 import { loadConfig } from '../utils/load-config'
@@ -11,8 +12,8 @@ import { isSupportedMedia } from '../utils/detect-post-media'
 
 type Data = {
   postUuids: FeedState['postUuids']
-  channels: FeedState['channels']
-  posts: FeedState['posts']
+  channels: FeedCache['channels']
+  posts: FeedCache['posts']
   postGroups: FeedState['postGroups']
   next: boolean
 }
@@ -32,39 +33,31 @@ export const fetchPosts = async (pageNumber: number | true) => {
       loadPosts({ next: false })
     ])
 
-    setFeedState(state => {
-      const stateUpdates: Partial<FeedState> = {
-        ...config,
-        initialLoading: false,
-        postUuids,
-        channels,
-        posts,
-        postGroups,
-        folders,
-        filters
-      }
+    if (
+      feedState.currentFolderId !== DEFAULT_FOLDER_ID &&
+      !folders.some(folder => folder.id === feedState.currentFolderId)
+    ) {
+      resolveCurrentFolderState(feedState, config)
+    }
 
-      if (
-        state.currentFolderId !== DEFAULT_FOLDER_ID &&
-        !folders.some(folder => folder.id === state.currentFolderId)
-      ) {
-        resolveCurrentFolderState(state, stateUpdates)
-      }
-
-      return stateUpdates
-    })
+    setFeedCache({ channels, posts })
+    setFeedState('configId', config.configId)
+    setFeedState('defaultFolderVisibility', config.defaultFolderVisibility)
+    setFeedState('folders', folders)
+    setFeedState('filters', filters)
+    setFeedState('postGroups', postGroups)
+    setFeedState('postUuids', postUuids)
+    setFeedState('initialLoading', false)
 
     initialLoading = false
     res.next = next
-  } else {
+  }
+  else {
     const { postUuids, channels, posts, postGroups, next } = await loadPosts({ next: !!pageNumber })
 
-    setFeedState(state => ({
-      postUuids: pageNumber ? getPostUuidsUpdate(state, postUuids) : postUuids,
-      postGroups: pageNumber ? getPostGroupsUpdate(state, postGroups) : postGroups,
-      channels,
-      posts
-    }))
+    setFeedCache({ channels, posts })
+    setFeedState('postGroups', getPostGroupsUpdate(feedState.postGroups, postGroups))
+    setFeedState('postUuids', getPostUuidsUpdate(feedState.postUuids, postUuids))
 
     res.next = next
   }
@@ -116,8 +109,8 @@ const parsePostsRes = (
 ) => {
   const data = {
     postUuids: [] as FeedState['postUuids'],
-    channels: {} as FeedState['channels'],
-    posts: {} as FeedState['posts'],
+    channels: {} as FeedCache['channels'],
+    posts: {} as FeedCache['posts'],
     postGroups: {} as FeedState['postGroups'],
     next: false
   }
@@ -157,18 +150,18 @@ const parsePostsRes = (
 }
 
 const getPostUuidsUpdate = (
-  state: FeedState,
+  state: PostUuids,
   postUuids: PostUuids
-) => ([
-  ...state.postUuids,
+) => [
+  ...(state || []),
   ...postUuids
-])
+]
 
 const getPostGroupsUpdate = (
-  state: FeedState,
+  state: PostGroups,
   postGroups: PostGroups
 ) => Object.entries(postGroups).reduce((obj, [key, value]) => {
-  obj[key] = [...value, ...(state.postGroups[key] || [])]
+  obj[key] = [...value, ...(state?.[key] || [])]
   return obj
 }, {} as PostGroups)
 

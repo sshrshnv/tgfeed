@@ -5,8 +5,13 @@ import type { APIError } from '../api.types'
 import { api } from '../api'
 import { API_LOADING_PART_SIZE } from '../api.const'
 import { generateFileUuid } from './generate-file-uuid'
+import { generateFilePartUuid } from './generate-file-part-uuid'
 import { refreshFileReference } from './refresh-file-reference'
 import { getRefreshedFileReference } from './refresh-file-reference'
+
+type ResponseCache = Record<string, UploadFile>
+
+const resCache: ResponseCache = {}
 
 export const loadFilePart = async (
   channelId: Chat.channel['id'],
@@ -19,6 +24,12 @@ export const loadFilePart = async (
   limit = API_LOADING_PART_SIZE
 ) => {
   const fileUuid = generateFileUuid(location)
+  const filePartUuid = generateFilePartUuid(location, offset, limit)
+
+  if (resCache[filePartUuid]) {
+    return resCache[filePartUuid]
+  }
+
   const refreshedFileReference = getRefreshedFileReference(fileUuid)
   const [promise, resolve, reject] = createPromise<UploadFile | void>()
 
@@ -35,6 +46,9 @@ export const loadFilePart = async (
     thread,
     dc
   }).then(res => {
+    if (res._ === 'upload.file') {
+      resCache[filePartUuid] = res
+    }
     resolve(res)
   }).catch(async (err: APIError) => {
     if (err.message !== 'FILE_REFERENCE_EXPIRED') {

@@ -2,7 +2,7 @@ import { set, getMany } from 'idb-keyval'
 
 export const dbFileStorage = {
   setBytes: (key: string, bytes: ArrayBuffer) => {
-    return set(generateFileKey(key), bytes).catch()
+    return set(generateFileKey(key), bytes).catch(() => {})
   },
 
   getBytes: (keys: string[]) => {

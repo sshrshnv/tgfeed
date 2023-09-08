@@ -1,12 +1,11 @@
 import type { Component } from 'solid-js'
-import { createMemo } from 'solid-js'
 import { clsx } from 'clsx'
 
 import { Input } from '~/shared/ui/elements/input'
 import { Text } from '~/shared/ui/elements/text'
 
 import type { ChannelId } from '../feed.types'
-import { feedState } from '../feed-state'
+import { feedCache } from '../feed-cache'
 import { FeedChannelCover } from './feed-channel-cover'
 
 import * as layoutCSS from '../../shared/ui/elements/layout.sss'
@@ -22,9 +21,9 @@ export type FeedManagingDialogFormChannelProps = {
 }
 
 export const FeedManagingDialogFormChannelsItem: Component<FeedManagingDialogFormChannelProps> = (props) => {
-  const getChannel = createMemo(() => {
-    return feedState.channels[props.channelId]
-  })
+  const getChannel = () => {
+    return feedCache.channels[props.channelId]
+  }
 
   return (
     <label

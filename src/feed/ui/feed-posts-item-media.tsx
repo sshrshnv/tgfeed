@@ -6,6 +6,7 @@ import { Slider } from '~/shared/ui/elements/slider'
 
 import type { PostUuid, PostGroupUuid } from '../feed.types'
 import { feedState } from '../feed-state'
+import { feedCache } from '../feed-cache'
 import { getMediaAspectRatio, isMediaImage, isMediaVideo, isMediaAudio } from '../utils/detect-post-media'
 import { FeedMediaImage } from './feed-media-image'
 import { FeedMediaVideo } from './feed-media-video'
@@ -33,13 +34,13 @@ export const FeedPostsItemMedia: Component<FeedPostsItemMediaProps> = (props) =>
   const getItems = createMemo(() => (props.groupUuid ?
     feedState.postGroups[props.groupUuid].map(uuid => ({
       uuid,
-      media: feedState.posts[uuid].media,
-      playable: !isMediaImage(feedState.posts[uuid].media!)
+      media: feedCache.posts[uuid].media,
+      playable: !isMediaImage(feedCache.posts[uuid].media!)
     })):
     [{
       uuid: props.uuid,
-      media: feedState.posts[props.uuid].media,
-      playable: !isMediaImage(feedState.posts[props.uuid].media!)
+      media: feedCache.posts[props.uuid].media,
+      playable: !isMediaImage(feedCache.posts[props.uuid].media!)
     }]
   ) as MediaItem[])
 
@@ -79,10 +80,14 @@ export const FeedPostsItemMedia: Component<FeedPostsItemMediaProps> = (props) =>
       onClick={handleClick}
     >
       <For each={getItems()}>{(item, getIndex) => {
-        const isVisible = createMemo(() => (
+        const isItemVisible = createMemo(() => (
           props.visible &&
           (getIndex() >= getActiveIndex() - 1) &&
           (getIndex() <= getActiveIndex() + 1)
+        ))
+
+        const isItemPlaying = createMemo(() => (
+          isPlaying() && getIndex() === getActiveIndex()
         ))
 
         return (
@@ -91,7 +96,7 @@ export const FeedPostsItemMedia: Component<FeedPostsItemMediaProps> = (props) =>
               <FeedMediaImage
                 uuid={item.uuid}
                 media={item.media}
-                visible={isVisible()}
+                visible={isItemVisible()}
               />
             </Match>
 
@@ -99,8 +104,8 @@ export const FeedPostsItemMedia: Component<FeedPostsItemMediaProps> = (props) =>
               <FeedMediaVideo
                 uuid={item.uuid}
                 media={item.media as MessageMedia.messageMediaDocument}
-                playing={isPlaying()}
-                visible={isVisible()}
+                playing={isItemPlaying()}
+                visible={isItemVisible()}
                 onEnded={handleEnded}
               />
             </Match>
@@ -109,8 +114,8 @@ export const FeedPostsItemMedia: Component<FeedPostsItemMediaProps> = (props) =>
               <FeedMediaAudio
                 uuid={item.uuid}
                 media={item.media as MessageMedia.messageMediaDocument}
-                playing={isPlaying()}
-                visible={isVisible()}
+                playing={isItemPlaying()}
+                visible={isItemVisible()}
                 onEnded={handleEnded}
               />
             </Match>

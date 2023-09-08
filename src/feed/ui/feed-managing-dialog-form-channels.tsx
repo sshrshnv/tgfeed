@@ -1,5 +1,5 @@
 import type { Component } from 'solid-js'
-import { For, createMemo } from 'solid-js'
+import { For } from 'solid-js'
 import { createVisibilityObserver } from '@solid-primitives/intersection-observer'
 
 import type { Folder } from '../feed.types'
@@ -13,16 +13,12 @@ export type FeedManagingDialogFormChannelsProps = {
 }
 
 export const FeedManagingDialogFormChannels: Component<FeedManagingDialogFormChannelsProps> = (props) => {
-  const getChannelIds = createMemo(() => {
-    return Object.keys(feedState.channels)
-  })
-
   const useVisibilityObserver = createVisibilityObserver({
     root: props.parentEl
   })
 
   return (
-    <For each={getChannelIds()}>{channelId => {
+    <For each={feedState.channelIds}>{channelId => {
       let el!: HTMLLabelElement
       const isVisible = useVisibilityObserver(() => el)
 

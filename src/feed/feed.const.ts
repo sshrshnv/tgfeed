@@ -10,13 +10,13 @@ export const DEFAULT_FOLDER_ID = 0
 
 export const DEFAULT_FEED_STATE: FeedState = {
   initialLoading: true,
+  streamsHandlerActivated: false,
   currentFolderId: DEFAULT_FOLDER_ID,
   defaultFolderVisibility: true,
   postUuids: [],
+  channelIds: [],
   folders: [],
   filters: [],
-  channels: {},
-  posts: {},
   postGroups: {},
   configId: 0,
   fontSize: 'medium'

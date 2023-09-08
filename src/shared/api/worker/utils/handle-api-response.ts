@@ -33,7 +33,7 @@ const handlers = {
       return res
     }
 
-    const filePartUuid = generateFilePartUuid(req.location, req.offset)
+    const filePartUuid = generateFilePartUuid(req.location, req.offset, req.limit)
     await dbFileStorage.setBytes(filePartUuid, res.bytes)
 
     res.bytes = new ArrayBuffer(0)
@@ -41,7 +41,7 @@ const handlers = {
   }
 } as const satisfies Handlers
 
-export const handleApiRes = <T extends keyof MethodDeclMap>(
+export const handleApiResponse = <T extends keyof MethodDeclMap>(
   method: T,
   res: MethodDeclMap[T]['res'],
   req?: MethodDeclMap[T]['req']

@@ -1,11 +1,13 @@
 import type { Component } from 'solid-js'
-import { createSignal, createResource, createMemo } from 'solid-js'
+import { createSignal, createResource, createMemo, onMount } from 'solid-js'
 
+import { service } from '~/shared/service'
 import { Progress } from '~/shared/ui/elements/progress'
 
 import { DEFAULT_FOLDER_ID } from '../feed.const'
-import { feedState } from '../feed-state'
+import { feedState, setFeedState } from '../feed-state'
 import { fetchPosts } from '../actions/fetch-posts'
+import { loadStreamFilePart } from '../utils/load-stream-file-part'
 import { FeedPosts } from './feed-posts'
 
 import * as feedContentCSS from './feed-content.sss'
@@ -28,6 +30,18 @@ export const FeedContent: Component = () => {
     )
   })
 
+  const handleLastVisible = () => {
+    if (feedState.initialLoading || postsRes.loading) return
+    setPageNumber(value => value + 1)
+  }
+
+  onMount(() => {
+    if (feedState.streamsHandlerActivated) return
+    service.handleStreams(loadStreamFilePart).then(() => {
+      setFeedState('streamsHandlerActivated', true)
+    })
+  })
+
   return (
     <>
       <Progress
@@ -37,6 +51,7 @@ export const FeedContent: Component = () => {
       <FeedPosts
         postUuids={getPostUuids()}
         loading={!feedState.initialLoading && postsRes.loading}
+        onLastVisible={handleLastVisible}
       />
     </>
   )

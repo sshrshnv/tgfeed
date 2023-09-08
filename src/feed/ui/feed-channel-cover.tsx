@@ -5,7 +5,7 @@ import { clsx } from 'clsx'
 import { Image, BluredImage } from '~/shared/ui/elements/image'
 
 import type { ChannelId } from '../feed.types'
-import { feedState } from '../feed-state'
+import { feedCache } from '../feed-cache'
 import { getChannelCoverUrls } from '../utils/get-channel-cover-urls'
 
 import * as feedChannelCoverCSS from './feed-channel-cover.sss'
@@ -26,7 +26,7 @@ const loadingCache: Record<string, boolean> = {}
 
 export const FeedChannelCover: Component<FeedChannelCoverProps> = (props) => {
   const hasCover = createMemo(() => {
-    return feedState.channels[props.channelId].photo._ === 'chatPhoto'
+    return feedCache.channels[props.channelId].photo._ === 'chatPhoto'
   })
 
   const getCoverUrls = () => {
@@ -35,7 +35,7 @@ export const FeedChannelCover: Component<FeedChannelCoverProps> = (props) => {
     }
 
     return getChannelCoverUrls(
-      feedState.channels[props.channelId]
+      feedCache.channels[props.channelId]
     )
   }
 

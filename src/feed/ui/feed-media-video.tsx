@@ -7,6 +7,7 @@ import type { MessageMedia } from '~/shared/api/mtproto'
 import { BluredImage } from '~/shared/ui/elements/image'
 
 import type { PostUuid } from '../feed.types'
+import { feedState } from '../feed-state'
 import { getMediaVideoSize } from '../utils/detect-post-media'
 import { getPostImageUrls } from '../utils/get-post-image-urls'
 import { getPostStreamUrl } from '../utils/get-post-stream-url'
@@ -32,69 +33,75 @@ const [loadingCache, setLoadingCache] = createStore<LoadingCache>({})
 
 export const FeedMediaVideo: Component<FeedMadiaVideoProps> = (props) => {
   let videoEl!: HTMLVideoElement
+
   const [isLoading, setLoading] = createSignal(false)
 
   const getImageUrls = () => {
     if (!isLoadStarted()) {
       setLoadingCache(props.uuid, { started: true })
-      setLoading(true)
     }
     return getPostImageUrls(props.uuid, props.media)
   }
 
-  const getVideoUrl = () => {
-    return getPostStreamUrl(props.uuid, props.media)
-  }
+  const getVideoUrl = () =>
+    getPostStreamUrl(props.uuid, props.media)
 
-  const getVideoSize = () => {
-    return getMediaVideoSize(props.media)
-  }
+  const getVideoSize = () =>
+    getMediaVideoSize(props.media)
 
-  const isLoadStarted = () => (
+  const isLoadStarted = () =>
     loadingCache[props.uuid]?.started
-  )
 
-  const handleCanPlay = () => {
+  const isImageReady = () =>
+    props.visible || isLoadStarted()
+
+  const isVideoReady = () =>
+    feedState.streamsHandlerActivated && isImageReady()
+
+  const handleCanPlay = () =>
     setLoading(false)
-  }
 
-  const handleWaiting = () => {
+  const handleWaiting = () =>
     setLoading(true)
-  }
 
-  const handleEnded = () => {
+  const handleEnded = () =>
     props.onEnded()
-  }
 
   createEffect((prev) => {
+    const loading = untrack(isLoading)
+
     if (!videoEl) return
+
     if (prev && !props.playing) {
       videoEl.pause()
+      if (loading) setLoading(false)
     }
-    if (!prev && props.playing && !untrack(isLoading)) {
-      videoEl.play()
+
+    if (!prev && props.playing && !loading) {
+      videoEl.play().catch(() => {})
     }
+
     return props.playing
   })
 
   return (
     <div class={feedMediaVideoCSS.base}>
       <BluredImage
-        src={props.visible || isLoadStarted() ? getImageUrls().thumbUrl : ''}
+        src={isImageReady() ? getImageUrls().thumbUrl : ''}
         width={100}
         height={100}
         radius={24}
       />
       <video
         ref={videoEl}
-        src={props.visible || isLoadStarted() ? getVideoUrl() : ''}
+        src={isVideoReady() ? getVideoUrl() : ''}
         width={getVideoSize()?.w}
         height={getVideoSize()?.h}
-        poster={props.visible || isLoadStarted() ? getImageUrls().imageUrl : ''}
+        poster={isImageReady() ? getImageUrls().imageUrl : ''}
         onCanPlayThrough={handleCanPlay}
         onWaiting={handleWaiting}
         onEnded={handleEnded}
-        preload='auto'
+        preload='none'
         controls={false}
         playsinline
       />

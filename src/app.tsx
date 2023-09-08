@@ -7,8 +7,12 @@ preventContextMenu()
 preventDragAndDrop()
 preventScale()
 
-import { initWorkers } from './app.workers'
-initWorkers()
+import { initApiWorker } from '~/shared/api/worker/init-api-worker'
+import { initUiWorker } from '~/shared/ui/worker/init-ui-worker'
+import { registerServiceWorker } from '~/shared/service/worker/register-service-worker'
+initApiWorker()
+initUiWorker()
+registerServiceWorker()
 
 import { View } from './app.view'
 render(

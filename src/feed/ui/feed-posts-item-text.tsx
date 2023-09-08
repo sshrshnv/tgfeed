@@ -9,6 +9,7 @@ import { Icon } from '~/shared/ui/elements/icon'
 import type { PostUuid } from '../feed.types'
 import { FONT_SIZE_LINE_HEIGHT_VALUES, VISIBLE_LINES_COUNT } from '../feed.const'
 import { feedState } from '../feed-state'
+import { feedCache } from '../feed-cache'
 import { formatPostText } from '../utils/format-post-text'
 
 import * as layoutCSS from '../../shared/ui/elements/layout.sss'
@@ -24,8 +25,8 @@ export const FeedPostsItemText: Component<FeedPostsItemTextProps> = (props) => {
   let paragraphEl!: HTMLParagraphElement
   const [isCollapsed, setCollapsed] = createSignal<boolean>()
 
-  const getPost = createMemo(() =>
-    feedState.posts[props.uuid]
+  const getPost = () => (
+    feedCache.posts[props.uuid]
   )
 
   const getText = createMemo(() =>

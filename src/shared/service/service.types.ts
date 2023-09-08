@@ -5,8 +5,18 @@ export type StreamParams = {
 }
 
 export type Service = {
-  getStreamUrl: (
-    params: StreamParams,
-    loadStreamFilePart: (offset: number, limit: number) => Promise<string>
-  ) => Promise<string>
+  handleStreams: (
+    loadStreamFilePart: (
+      uuid: string,
+      offset: number,
+      limit: number
+    ) => void
+  ) => Promise<void>
+
+  handleStreamFilePartLoad: (
+    filePartUuid: string,
+    uuid: string,
+    offset: number,
+    limit: number
+  ) => void
 }

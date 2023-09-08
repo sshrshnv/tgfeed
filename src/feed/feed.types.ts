@@ -2,14 +2,19 @@ import type { Chat, Message, Peer } from '~/shared/api/mtproto'
 
 export type FeedState = Config & {
   initialLoading: boolean
+  streamsHandlerActivated: boolean
   currentFolderId: Folder['id']
   postUuids: PostUuids
+  channelIds: ChannelId[]
   folders: Folder[]
   filters: Filter[]
-  channels: Channels
-  posts: Posts
   postGroups: PostGroups
   fontSize: FontSize
+}
+
+export type FeedCache = {
+  channels: Channels
+  posts: Posts
 }
 
 export type Config = {

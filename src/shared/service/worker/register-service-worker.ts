@@ -18,9 +18,7 @@ let waitingTimeoutId = 0
 let registration: ServiceWorkerRegistration | undefined
 let registrationStarted = false
 
-export const registerServiceWorker = async (
-  mainServiceMessageChannel: MessageChannel
-) => {
+export const registerServiceWorker = async () => {
   if (!('serviceWorker' in navigator)) return
   if (process.env.NODE_ENV !== 'production' && registrationStarted) return
 
@@ -58,22 +56,21 @@ export const registerServiceWorker = async (
   navigator.serviceWorker.addEventListener('controllerchange', handleControllerChange)
 
   const serviceWorkerInstance = await serviceWorkerPromise
+  const { port1, port2 } = new MessageChannel()
 
   postMessage(serviceWorkerInstance, {
-    mainPort: mainServiceMessageChannel.port1
-  }, [
-    mainServiceMessageChannel.port1
-  ])
+    port: port1
+  }, [port1])
 
   resolveServicePromise(
-    comlink.wrap(mainServiceMessageChannel.port2) as Service
+    comlink.wrap(port2) as Service
   )
 }
 
 export const unregisterServiceWorker = () =>
   registration?.unregister()
 
-export const checkIsServiceWorkerRegistered = () =>
+export const isServiceWorkerRegistered = () =>
   !!registration
 
 export const getService = () => servicePromise
@@ -88,6 +85,8 @@ const startUpdate = () => {
   if (process.env.NODE_ENV === 'production') {
     //waitAppUpdateAccepted(update)
     //setAppUpdateExists()
+
+    endUpdate()
   } else {
     endUpdate()
   }

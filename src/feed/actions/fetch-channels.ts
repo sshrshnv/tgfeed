@@ -3,6 +3,7 @@ import { api } from '~/shared/api'
 
 import type { Channels } from '../feed.types'
 import { setFeedState } from '../feed-state'
+import { feedCache } from '../feed-cache'
 
 const LIMIT = 100
 let channelsLoaded = false
@@ -11,7 +12,8 @@ export const fetchChannels = async () => {
   if (channelsLoaded) return
   channelsLoaded = true
   const channels = await loadChannels()
-  setFeedState('channels', channels)
+  feedCache.channels = channels
+  setFeedState('channelIds', Object.keys(channels))
 }
 
 const loadChannels = async (

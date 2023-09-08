@@ -32,11 +32,6 @@ export type APIError = ClientError & {
   method: string
 }
 
-export type APIWorkerMessage = {
-  mainPort: MessagePort
-  swPort: MessagePort
-}
-
 export type APIStorage = {
   meta: { apiMeta: ClientMetaData }
 }

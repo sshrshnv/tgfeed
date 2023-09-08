@@ -5,7 +5,7 @@ import { generateFileUuid } from '~/shared/api/utils/generate-file-uuid'
 import { getUiWorker } from '~/shared/ui/worker/init-ui-worker'
 
 import type { PostUuid, ChannelId, PostId } from '../feed.types'
-import { feedState } from '../feed-state'
+import { feedCache } from '../feed-cache'
 import { loadFile, pauseFileLoading, isFileLoadingPaused } from './load-file'
 import { getMediaImage, getMediaVideo, getMediaImageSize } from './detect-post-media'
 
@@ -26,7 +26,7 @@ export const getPostImageUrls = (
   const [channelId, postId] = uuid.split('-').map((value, index) =>
     index ? +value : value
   ) as [ChannelId, PostId]
-  const { access_hash: accessHash } = feedState.channels[channelId]
+  const { access_hash: accessHash } = feedCache.channels[channelId]
   const { id, dc_id } = image
   const { thumbs = [] } = image as Document.document
   const { sizes = thumbs } = image as Photo.photo

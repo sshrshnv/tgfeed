@@ -1,3 +1,5 @@
+import type { InputFileLocation } from '~/shared/api/mtproto'
+
 export type UI = {
   getThumbUrlFromBytes: (
     bytes: ArrayBuffer,
@@ -17,8 +19,9 @@ export type UI = {
 
   getMediaUrlFromFile: (
     file: {
-      fileUuid: string
+      location: InputFileLocation
       type: string
+      limit: number
       partsCount: number
     }
   ) => string | undefined | Promise<string | undefined>

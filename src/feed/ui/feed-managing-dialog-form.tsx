@@ -42,7 +42,7 @@ export const FeedManagingDialogForm: Component<FeedManagingDialogFormProps> = (p
   })
 
   const isEmptyChannelsList = createMemo(() => {
-    return !Object.keys(feedState.channels).length
+    return !Object.keys(feedState.channelIds).length
   })
 
   const isEmptyChannelsListError = createMemo(() => {

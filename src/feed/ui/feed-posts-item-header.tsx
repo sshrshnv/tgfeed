@@ -7,7 +7,7 @@ import { Icon } from '~/shared/ui/elements/icon'
 import { Text } from '~/shared/ui/elements/text'
 
 import type { PostUuid } from '../feed.types'
-import { feedState } from '../feed-state'
+import { feedCache } from '../feed-cache'
 import { formatPostDate } from '../utils/format-post-date'
 import { FeedChannelCover } from './feed-channel-cover'
 
@@ -21,9 +21,9 @@ export type FeedPostsItemHeaderProps = {
 }
 
 export const FeedPostsItemHeader: Component<FeedPostsItemHeaderProps> = (props) => {
-  const getPost = createMemo(() =>
-    feedState.posts[props.uuid]
-  )
+  const getPost = () => {
+    return feedCache.posts[props.uuid]
+  }
 
   const getDate = createMemo(() =>
     formatPostDate(getPost().date, { time: true })
@@ -34,7 +34,7 @@ export const FeedPostsItemHeader: Component<FeedPostsItemHeaderProps> = (props) 
   )
 
   const getChannelTitle = createMemo(() =>
-    feedState.channels[getChannelId()].title
+    feedCache.channels[getChannelId()].title
   )
 
   return (

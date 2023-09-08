@@ -49,7 +49,7 @@ module.exports = {
   output: {
     path: path.resolve('./build'),
     filename: isDev() ? '[name].js' : '[name].[contenthash].js',
-    chunkFilename: ({ chunk }) => isDev() || chunk.name?.startsWith('sw') ? '[name].js' : '[name].[contenthash].js',
+    chunkFilename: ({ chunk }) => isDev() || chunk.name?.startsWith('service-worker') ? '[name].js' : '[name].[contenthash].js',
     assetModuleFilename: '[name].[hash][ext]',
     publicPath: process.env.ASSETS_HOST || '/',
     hashDigestLength: 8

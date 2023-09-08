@@ -39,7 +39,7 @@
     "@solid-primitives/static-store": "0.0.5",
     "clsx": "2.0.0",
     "comlink": "4.4.1",
-    "core-js": "3.32.1",
+    "core-js": "3.32.2",
     "fflate": "0.8.0",
     "idb-keyval": "6.2.1",
     "pointer-tracker": "2.5.3",

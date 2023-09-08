@@ -3,11 +3,11 @@ import { createPromise } from '~/shared/utils/create-promise'
 import { setDelay } from '~/shared/utils/set-delay'
 import { dbStorage } from '~/shared/storage/db-storage'
 
-import type { API, APIWorkerMessage } from '../api.types'
+import type { API } from '../api.types'
 import type { ClientMetaData, Updates } from '../mtproto'
 import { Client } from '../mtproto'
 import { DEFAULT_API_META, API_META_STORAGE_KEY } from '../api.const'
-import { handleApiRes } from './utils/handle-api-res'
+import { handleApiResponse } from './utils/handle-api-response'
 
 const getMeta = async () =>
   (await dbStorage.get(API_META_STORAGE_KEY)) || DEFAULT_API_META
@@ -108,7 +108,7 @@ const apiWorker: API = {
   req: async (method, ...args) => {
     const api = await apiPromise
     const res = await api.req(method, ...args)
-    return handleApiRes(method, res, args[0])
+    return handleApiResponse(method, res, args[0])
   },
 
   exec: async (...args) => {
@@ -117,8 +117,4 @@ const apiWorker: API = {
   }
 }
 
-self.onmessage = (ev: MessageEvent<APIWorkerMessage>) => {
-  if (ev.data?.mainPort) {
-    comlink.expose(apiWorker, ev.data.mainPort)
-  }
-}
+comlink.expose(apiWorker)

@@ -19,6 +19,7 @@ import * as feedPostsCSS from './feed-posts.sss'
 export type FeedPostsProps = {
   postUuids: (PostUuid | PostGroupUuid)[]
   loading?: boolean
+  onLastVisible: () => void
 }
 
 type HeightState = {
@@ -147,6 +148,14 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
           const prevHeight = prevUuid && heightState[prevUuid] || 0
           if (getIndex() && !prevHeight) return
           setOffsetState(uuid, prevOffset + prevHeight + 24)
+        })
+
+        createEffect((prev) => {
+          if (getIndex() !== props.postUuids.length - 1) return
+          if (!prev && isVisible()) {
+            props.onLastVisible()
+          }
+          return isVisible()
         })
 
         return (

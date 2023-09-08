@@ -1,18 +1,15 @@
 import { comlink } from '~/shared/utils/comlink'
 import { createPromise } from '~/shared/utils/create-promise'
-import { postMessage } from '~/shared/utils/post-message'
 
 import type { UI } from './ui.types'
 
 let uiWorkerInstance: Worker
 let [uiWorkerPromise, resolveUiWorkerPromise] = createPromise<UI>()
 
-export const initUiWorker = (
-  mainUiMessageChannel: MessageChannel
-) => {
+export const initUiWorker = () => {
   if (uiWorkerInstance) {
     try {
-      uiWorkerInstance.terminate()
+      uiWorkerInstance.terminate?.()
     } finally {
       [uiWorkerPromise, resolveUiWorkerPromise] = createPromise<UI>()
     }
@@ -23,14 +20,8 @@ export const initUiWorker = (
     import.meta.url
   ))
 
-  postMessage(uiWorkerInstance, {
-    mainPort: mainUiMessageChannel.port1
-  }, [
-    mainUiMessageChannel.port1
-  ])
-
   resolveUiWorkerPromise(
-    comlink.wrap(mainUiMessageChannel.port2) as UI
+    comlink.wrap(uiWorkerInstance) as UI
   )
 }
 
