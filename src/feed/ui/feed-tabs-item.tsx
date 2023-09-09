@@ -1,5 +1,4 @@
 import type { ParentComponent } from 'solid-js'
-import { createMemo } from 'solid-js'
 import { clsx } from 'clsx'
 
 import { ButtonProps } from '~/shared/ui/elements/button'
@@ -18,9 +17,8 @@ export type FeedTabsItemProps = ButtonProps & {
 }
 
 export const FeedTabsItem: ParentComponent<FeedTabsItemProps> = (props) => {
-  const isActive = createMemo(() => {
-    return feedState.currentFolderId === props.folderId
-  })
+  const isActive = () =>
+    feedState.currentFolderId === props.folderId
 
   const handleClick = () => {
     selectFolder(props.folderId)

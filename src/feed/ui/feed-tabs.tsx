@@ -1,5 +1,5 @@
 import type { Component } from 'solid-js'
-import { Show, For, createMemo } from 'solid-js'
+import { Show, For } from 'solid-js'
 import { clsx } from 'clsx'
 
 import { localeState } from '~/core/locale/locale-state'
@@ -12,7 +12,8 @@ import * as layoutCSS from '../../shared/ui/elements/layout.sss'
 import * as feedTabsCSS from './feed-tabs.sss'
 
 export const FeedTabs: Component = () => {
-  const hasFolders = createMemo(() => !!feedState.folders.length)
+  const hasFolders = () =>
+    !!feedState.folders.length
 
   return (
     <div class={clsx(

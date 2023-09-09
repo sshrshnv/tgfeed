@@ -1,5 +1,5 @@
 import type { Component } from 'solid-js'
-import { Show, createMemo, createSignal, createEffect, untrack } from 'solid-js'
+import { Show, createSignal, createEffect, untrack } from 'solid-js'
 import { clsx } from 'clsx'
 
 import { Paragraph } from '~/shared/ui/elements/paragraph'
@@ -25,13 +25,11 @@ export const FeedPostsItemText: Component<FeedPostsItemTextProps> = (props) => {
   let paragraphEl!: HTMLParagraphElement
   const [isCollapsed, setCollapsed] = createSignal<boolean>()
 
-  const getPost = () => (
+  const getPost = () =>
     feedCache.posts[props.uuid]
-  )
 
-  const getText = createMemo(() =>
+  const getText = () =>
     formatPostText(getPost().message, getPost().entities)
-  )
 
   const expand = () => {
     setCollapsed(false)

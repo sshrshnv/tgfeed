@@ -1,8 +1,8 @@
 import type { Component } from 'solid-js'
-import { Show, createMemo, createSignal, createEffect, onMount, onCleanup } from 'solid-js'
+import { Show, createSignal, createEffect, onMount, onCleanup } from 'solid-js'
 import { clsx } from 'clsx'
 
-import type { PostUuid, PostGroupUuid } from '../feed.types'
+import type { UncertainPostUuid, PostUuid, PostGroupUuid } from '../feed.types'
 import { feedCache } from '../feed-cache'
 import { isSupportedMedia } from '../utils/detect-post-media'
 import { FeedPostsItemHeader } from './feed-posts-item-header'
@@ -13,6 +13,7 @@ import * as feedPostsItemCSS from './feed-posts-item.sss'
 
 export type FeedPostsItemProps = {
   index: number
+  refId: UncertainPostUuid
   uuid: PostUuid
   groupUuid?: PostGroupUuid
   offset: number
@@ -26,17 +27,14 @@ export const FeedPostsItem: Component<FeedPostsItemProps> = (props) => {
   let el!: HTMLDivElement
   const [isReady, setReady] = createSignal(false)
 
-  const getPost = createMemo(() =>
+  const getPost = () =>
     feedCache.posts[props.uuid]
-  )
 
-  const hasText = createMemo(() =>
+  const hasText = () =>
     !!getPost().message.length
-  )
 
-  const hasMedia = createMemo(() =>
+  const hasMedia = () =>
     !!props.groupUuid || isSupportedMedia(getPost().media)
-  )
 
   createEffect((prevOffset) => {
     if (typeof prevOffset !== 'undefined') return
@@ -64,7 +62,7 @@ export const FeedPostsItem: Component<FeedPostsItemProps> = (props) => {
         translate: `0 ${props.offset}px`,
         display: props.visible ? 'block' : 'none'
       }}
-      id={props.uuid}
+      id={props.refId}
       ref={el}
     >
       <article class={feedPostsItemCSS.base}>

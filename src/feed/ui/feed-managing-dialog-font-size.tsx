@@ -1,5 +1,4 @@
 import type { Component } from 'solid-js'
-import { createMemo } from 'solid-js'
 
 import { localeState } from '~/core/locale/locale-state'
 import { MenuTitle, MenuRadioGroup } from '~/shared/ui/elements/menu'
@@ -13,11 +12,11 @@ type FontSizeItem = {
 }
 
 export const FeedManagingDialogFontSize: Component = () => {
-  const getItems = createMemo<FontSizeItem[]>(() => [
+  const getItems = (): FontSizeItem[] => [
     { value: 'large', text: localeState.texts?.feed.fontSize.large },
     { value: 'medium', text: localeState.texts?.feed.fontSize.medium },
     { value: 'small', text: localeState.texts?.feed.fontSize.small }
-  ])
+  ]
 
   const handleChange = (value: FontSize) => {
     setFeedState('fontSize', value)

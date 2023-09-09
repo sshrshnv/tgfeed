@@ -1,5 +1,5 @@
 import type { Component,  } from 'solid-js'
-import { Show, splitProps, createSignal, createMemo, createEffect } from 'solid-js'
+import { Show, splitProps, createSignal, createEffect } from 'solid-js'
 import type { TransitionProps } from 'solid-transition-group'
 import { Transition } from 'solid-transition-group'
 import { clsx } from 'clsx'
@@ -33,9 +33,8 @@ export const FeedManagingDialogFoldersItem: Component<FeedManagingDialogFoldersI
 
   const [isExpanded, setExpanded] = createSignal(false)
 
-  const isFolderMenuRoute = createMemo(() => {
-    return routingState.currentRoute.id === feedRoutes.managingDialogFolderMenu.id
-  })
+  const isFolderMenuRoute = () =>
+    routingState.currentRoute.id === feedRoutes.managingDialogFolderMenu.id
 
   const openFolderMenu = () => {
     pushRoute(feedRoutes.managingDialogFolderMenu)

@@ -1,3 +1,5 @@
+import { batch } from 'solid-js'
+
 import type { MessagesMessages, Message } from '~/shared/api/mtproto'
 import { api } from '~/shared/api'
 
@@ -41,13 +43,15 @@ export const fetchPosts = async (pageNumber: number | true) => {
     }
 
     setFeedCache({ channels, posts })
-    setFeedState('configId', config.configId)
-    setFeedState('defaultFolderVisibility', config.defaultFolderVisibility)
-    setFeedState('folders', folders)
-    setFeedState('filters', filters)
-    setFeedState('postGroups', postGroups)
-    setFeedState('postUuids', postUuids)
-    setFeedState('initialLoading', false)
+    batch(() => {
+      setFeedState('configId', config.configId)
+      setFeedState('defaultFolderVisibility', config.defaultFolderVisibility)
+      setFeedState('folders', folders)
+      setFeedState('filters', filters)
+      setFeedState('postGroups', postGroups)
+      setFeedState('postUuids', postUuids)
+      setFeedState('initialLoading', false)
+    })
 
     initialLoading = false
     res.next = next
@@ -55,9 +59,11 @@ export const fetchPosts = async (pageNumber: number | true) => {
   else {
     const { postUuids, channels, posts, postGroups, next } = await loadPosts({ next: !!pageNumber })
 
-    setFeedCache({ channels, posts })
-    setFeedState('postGroups', getPostGroupsUpdate(feedState.postGroups, postGroups))
-    setFeedState('postUuids', getPostUuidsUpdate(feedState.postUuids, postUuids))
+    batch(() => {
+      setFeedCache({ channels, posts })
+      setFeedState('postGroups', getPostGroupsUpdate(feedState.postGroups, postGroups))
+      setFeedState('postUuids', getPostUuidsUpdate(feedState.postUuids, postUuids))
+    })
 
     res.next = next
   }

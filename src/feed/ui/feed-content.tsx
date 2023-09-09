@@ -1,5 +1,5 @@
 import type { Component } from 'solid-js'
-import { createSignal, createResource, createMemo, onMount } from 'solid-js'
+import { createSignal, createResource, onMount } from 'solid-js'
 
 import { service } from '~/shared/service'
 import { Progress } from '~/shared/ui/elements/progress'
@@ -16,7 +16,7 @@ export const FeedContent: Component = () => {
   const [getPageNumber, setPageNumber] = createSignal(0)
   const [postsRes] = createResource(getPageNumber, fetchPosts)
 
-  const getPostUuids = createMemo(() => {
+  const getPostUuids = () => {
     if (feedState.currentFolderId === DEFAULT_FOLDER_ID) {
       return feedState.postUuids
     }
@@ -28,7 +28,7 @@ export const FeedContent: Component = () => {
     return feedState.postUuids.filter(postUuid =>
       channelIds.some(channelId => postUuid.indexOf(channelId) === 0)
     )
-  })
+  }
 
   const handleLastVisible = () => {
     if (feedState.initialLoading || postsRes.loading) return

@@ -49,7 +49,9 @@ export type PostUuid = `${Peer.peerChannel['channel_id']}-${Message.message['id'
 
 export type PostGroupUuid = `${Peer.peerChannel['channel_id']}-${string}`
 
-export type PostUuids = (PostUuid | PostGroupUuid)[]
+export type UncertainPostUuid = PostUuid | PostGroupUuid
+
+export type PostUuids = UncertainPostUuid[]
 
 export type PostGroups = {
   [postGroupUuid in PostGroupUuid]: PostUuid[]

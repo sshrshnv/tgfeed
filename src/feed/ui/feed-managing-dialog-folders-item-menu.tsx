@@ -1,5 +1,5 @@
 import type { Component } from 'solid-js'
-import { For, createSignal, createMemo, onCleanup } from 'solid-js'
+import { For, createSignal, onCleanup } from 'solid-js'
 import { clsx } from 'clsx'
 
 import { localeState } from '~/core/locale/locale-state'
@@ -50,13 +50,13 @@ export const FeedManagingDialogFoldersItemMenu: Component<FeedManagingDialogFold
 
   const startDeleting = () => setDeleting(true)
 
-  const getMenuItems = createMemo<FolderMenuItem[]>(() => [
+  const getMenuItems = () => [
     { icon: 'edit', text: localeState.texts?.feed.buttons.edit, onClick: props.onEdit },
     props.onMoveUp && { icon: 'arrowUpward', text: localeState.texts?.feed.buttons.moveUp, onClick: props.onMoveUp },
     props.onMoveDown && { icon: 'arrowDownward', text: localeState.texts?.feed.buttons.moveDown, onClick: props.onMoveDown },
     !isDeleting() && { icon: 'delete', text: localeState.texts?.feed.buttons.delete, onClick: startDeleting },
     isDeleting() && { icon: 'delete', text: localeState.texts?.feed.buttons.confirm, onClick: props.onDelete, warning: true },
-  ].filter(item => !!item) as FolderMenuItem[])
+  ].filter(item => !!item) as FolderMenuItem[]
 
   onCleanup(() => {
     const folderMenuRoute = routingState.history.findLast(route =>

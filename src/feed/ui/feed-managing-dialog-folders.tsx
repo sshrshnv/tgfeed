@@ -1,5 +1,5 @@
 import type { Component } from 'solid-js'
-import { For, createMemo } from 'solid-js'
+import { For } from 'solid-js'
 
 import { localeState } from '~/core/locale/locale-state'
 import { Checkbox } from '~/shared/ui/elements/checkbox'
@@ -18,7 +18,8 @@ export type FeedManagingDialogFoldersProps = {
 }
 
 export const FeedManagingDialogFolders: Component<FeedManagingDialogFoldersProps> = (props) => {
-  const hasFolders = createMemo(() => !!feedState.folders.length)
+  const hasFolders =
+    () => !!feedState.folders.length
 
   const moveFolder = ({ index, k }, ev) => {
     ev.stopPropagation()

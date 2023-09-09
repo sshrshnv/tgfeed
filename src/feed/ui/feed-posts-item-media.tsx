@@ -44,9 +44,8 @@ export const FeedPostsItemMedia: Component<FeedPostsItemMediaProps> = (props) =>
     }]
   ) as MediaItem[])
 
-  const getAspectRatio = createMemo(() =>
+  const getAspectRatio = () =>
     Math.min(...getItems().map(item => getMediaAspectRatio(item.media)))
-  )
 
   const handleActiveIndexChange = (k: number) => {
     batch(() => {
@@ -80,15 +79,15 @@ export const FeedPostsItemMedia: Component<FeedPostsItemMediaProps> = (props) =>
       onClick={handleClick}
     >
       <For each={getItems()}>{(item, getIndex) => {
-        const isItemVisible = createMemo(() => (
+        const isItemVisible = () => (
           props.visible &&
           (getIndex() >= getActiveIndex() - 1) &&
           (getIndex() <= getActiveIndex() + 1)
-        ))
+        )
 
-        const isItemPlaying = createMemo(() => (
+        const isItemPlaying = () => (
           isPlaying() && getIndex() === getActiveIndex()
-        ))
+        )
 
         return (
           <Switch>

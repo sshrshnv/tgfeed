@@ -1,5 +1,5 @@
 import type { Component } from 'solid-js'
-import { Show, createMemo } from 'solid-js'
+import { Show } from 'solid-js'
 import { clsx } from 'clsx'
 
 import { Image, BluredImage } from '~/shared/ui/elements/image'
@@ -25,9 +25,9 @@ const SIZES = {
 const loadingCache: Record<string, boolean> = {}
 
 export const FeedChannelCover: Component<FeedChannelCoverProps> = (props) => {
-  const hasCover = createMemo(() => {
+  const hasCover = () => {
     return feedCache.channels[props.channelId].photo._ === 'chatPhoto'
-  })
+  }
 
   const getCoverUrls = () => {
     if (!isLoadStarted()) {

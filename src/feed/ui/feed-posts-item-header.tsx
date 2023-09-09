@@ -1,5 +1,4 @@
 import type { Component } from 'solid-js'
-import { createMemo } from 'solid-js'
 import { clsx } from 'clsx'
 
 import { Button } from '~/shared/ui/elements/button'
@@ -21,21 +20,17 @@ export type FeedPostsItemHeaderProps = {
 }
 
 export const FeedPostsItemHeader: Component<FeedPostsItemHeaderProps> = (props) => {
-  const getPost = () => {
-    return feedCache.posts[props.uuid]
-  }
+  const getPost = () =>
+    feedCache.posts[props.uuid]
 
-  const getDate = createMemo(() =>
+  const getDate = () =>
     formatPostDate(getPost().date, { time: true })
-  )
 
-  const getChannelId = createMemo(() =>
+  const getChannelId = () =>
     getPost().peer_id.channel_id
-  )
 
-  const getChannelTitle = createMemo(() =>
+  const getChannelTitle = () =>
     feedCache.channels[getChannelId()].title
-  )
 
   return (
     <header class={clsx(

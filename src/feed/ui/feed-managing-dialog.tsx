@@ -1,5 +1,5 @@
 import type { Component } from 'solid-js'
-import { createMemo, createSignal } from 'solid-js'
+import { createSignal } from 'solid-js'
 import { clsx } from 'clsx'
 
 import { localeState } from '~/core/locale/locale-state'
@@ -26,8 +26,8 @@ export type FeedManagingDialogProps = {
 export const FeedManagingDialog: Component<FeedManagingDialogProps> = (props) => {
   const [getEditingFolder, setEditingFolder] = createSignal<Folder>()
   const [isFormTranstioning, setFormTransitioning] = createSignal(false)
-  const isOpen = createMemo(() => routingState.currentDialogRoute?.id === feedRoutes.managingDialog.id)
-  const isFormOpen = createMemo(() => routingState.currentRoute?.id === feedRoutes.managingDialogForm.id)
+  const isOpen = () => routingState.currentDialogRoute?.id === feedRoutes.managingDialog.id
+  const isFormOpen = () => routingState.currentRoute?.id === feedRoutes.managingDialogForm.id
 
   const startFormTransitioning = () => setFormTransitioning(true)
   const endFormTransitioning = () => setFormTransitioning(false)

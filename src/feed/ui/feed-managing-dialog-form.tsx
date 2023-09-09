@@ -1,5 +1,5 @@
 import type { Component } from 'solid-js'
-import { Show, createResource, createMemo, createSignal } from 'solid-js'
+import { Show, createResource, createSignal } from 'solid-js'
 import { clsx } from 'clsx'
 
 import { localeState } from '~/core/locale/locale-state'
@@ -37,17 +37,14 @@ export const FeedManagingDialogForm: Component<FeedManagingDialogFormProps> = (p
   const [getError, setError] = createSignal('')
   const [isSending, setSending] = createSignal(false)
 
-  const isReady = createMemo(() => {
-    return channelsRes.state === 'ready'
-  })
+  const isReady = () =>
+    channelsRes.state === 'ready'
 
-  const isEmptyChannelsList = createMemo(() => {
-    return !Object.keys(feedState.channelIds).length
-  })
+  const isEmptyChannelsList = () =>
+    !Object.keys(feedState.channelIds).length
 
-  const isEmptyChannelsListError = createMemo(() => {
-    return isReady() && isEmptyChannelsList() && !props.transitioning
-  })
+  const isEmptyChannelsListError = () =>
+    isReady() && isEmptyChannelsList() && !props.transitioning
 
   const handleChange = () => {
     if (getError()) setError('')

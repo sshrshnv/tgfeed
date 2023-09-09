@@ -1,4 +1,4 @@
-import { Switch, Match, Show, createMemo, createEffect, lazy } from 'solid-js'
+import { Switch, Match, Show, createEffect, lazy } from 'solid-js'
 import { clsx } from 'clsx'
 
 import { CoreMenuButton } from '~/core/ui/core-menu-button'
@@ -24,9 +24,9 @@ const FeedManagingDialog = lazy(async () => ({ default: (await import('~/feed/ui
 const FeedContent = lazy(async () => ({ default: (await import('~/feed/ui')).FeedContent }))
 
 export const View = () => {
-  const isFeed = createMemo(() => {
+  const isFeed = () => {
     return routingState.currentPageRoute?.id.startsWith('feed')
-  })
+  }
 
   createEffect(() => {
     const contains = self.document.body.classList.contains(appViewCSS._uniform)

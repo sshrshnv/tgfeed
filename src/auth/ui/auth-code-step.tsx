@@ -18,9 +18,8 @@ export const AuthCodeStep: Component = () => {
     return getCodeMask(authState.meta?.type)
   })
 
-  const getInputPlaceholderCodeMask = createMemo(() => {
-    return getCodeMask(authState.meta?.type, '0')
-  })
+  const getInputPlaceholderCodeMask = () =>
+    getCodeMask(authState.meta?.type, '0')
 
   const handleInput = (ev) => {
     if (getCode()) setCode()

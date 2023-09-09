@@ -1,5 +1,5 @@
 import type { ParentComponent } from 'solid-js'
-import { Show, For, onMount, onCleanup, createSignal, children, untrack, createMemo } from 'solid-js'
+import { Show, For, onMount, onCleanup, createSignal, children, untrack } from 'solid-js'
 import PointerTracker from 'pointer-tracker'
 import { clsx } from 'clsx'
 
@@ -23,9 +23,8 @@ export const Slider: ParentComponent<SliderProps> = (props) => {
   const items = children(() => props.children).toArray()
   const [getTranslateX, setTranslateX] = createSignal(0)
 
-  const isSingle = createMemo(() =>
+  const isSingle = () =>
     items.length <= 1
-  )
 
   const handleKey = (ev: KeyboardEvent) => {
     ev.stopPropagation()
