@@ -3,7 +3,10 @@ import { batch } from 'solid-js'
 import type { MessagesMessages, Message } from '~/shared/api/mtproto'
 import { api } from '~/shared/api'
 
-import type { FeedState, ChannelData, ChannelId, PostData, PostUuid, PostUuids, PostGroups, FeedCache } from '../feed.types'
+import type {
+  FeedCache, FeedState, ChannelData, ChannelId,
+  PostData, PostUuid, PostUuids, PostGroups
+} from '../feed.types'
 import { DEFAULT_FOLDER_ID } from '../feed.const'
 import { feedState, setFeedState } from '../feed-state'
 import { setFeedCache } from '../feed-cache'
@@ -58,11 +61,13 @@ export const fetchPosts = async (pageNumber: number | true) => {
   }
   else {
     const { postUuids, channels, posts, postGroups, next } = await loadPosts({ next: !!pageNumber })
+    const postGroupsUpdate = getPostGroupsUpdate(feedState.postGroups, postGroups)
+    const postUuidsUpdate = getPostUuidsUpdate(feedState.postUuids, postUuids)
 
+    setFeedCache({ channels, posts })
     batch(() => {
-      setFeedCache({ channels, posts })
-      setFeedState('postGroups', getPostGroupsUpdate(feedState.postGroups, postGroups))
-      setFeedState('postUuids', getPostUuidsUpdate(feedState.postUuids, postUuids))
+      setFeedState('postGroups', postGroupsUpdate)
+      setFeedState('postUuids', postUuidsUpdate)
     })
 
     res.next = next
@@ -158,16 +163,16 @@ const parsePostsRes = (
 const getPostUuidsUpdate = (
   state: PostUuids,
   postUuids: PostUuids
-) => [
+) => [...new Set([
   ...(state || []),
   ...postUuids
-]
+])]
 
 const getPostGroupsUpdate = (
   state: PostGroups,
   postGroups: PostGroups
-) => Object.entries(postGroups).reduce((obj, [key, value]) => {
-  obj[key] = [...value, ...(state?.[key] || [])]
+) => Object.entries(postGroups).reduce((obj, [key, values]) => {
+  obj[key] = [...values, ...(state?.[key] || [])]
   return obj
 }, {} as PostGroups)
 

@@ -1,25 +1,24 @@
 import type { Component } from 'solid-js'
-import { Show, For, createEffect, onMount, onCleanup, createSignal, createMemo , batch} from 'solid-js'
+import { For, createEffect, createSignal, createMemo, onMount, onCleanup, batch} from 'solid-js'
 import { createStore } from 'solid-js/store'
 import { createResizeObserver } from '@solid-primitives/resize-observer'
 import { clsx } from 'clsx'
 
-import { Icon } from '~/shared/ui/elements/icon'
-
-import type { PostUuids, UncertainPostUuid, PostUuid, PostGroupUuid } from '../feed.types'
-import { FONT_SIZE_LINE_HEIGHT_VALUES, VISIBLE_LINES_COUNT } from '../feed.const'
+import type { Folder, UncertainPostUuid, PostUuid, PostGroupUuid } from '../feed.types'
+import { DEFAULT_FOLDER_ID, FONT_SIZE_LINE_HEIGHT_VALUES, VISIBLE_LINES_COUNT } from '../feed.const'
 import { feedState } from '../feed-state'
 import { isPostGroupUuid } from '../utils/generate-post-uuid'
 import { FeedPostsItem } from './feed-posts-item'
+import { FeedPostsLoader } from './feed-posts-loader'
 
 import * as layoutCSS from '../../shared/ui/elements/layout.sss'
-import * as animationsCSS from '../../shared/ui/animations/animations.sss'
 import * as feedPostsCSS from './feed-posts.sss'
 
 export type FeedPostsProps = {
-  postUuids: PostUuids
+  folderId: Folder['id']
+  active?: boolean
   loading?: boolean
-  onLastVisible: () => void
+  onScrollEnd: () => void
 }
 
 type HeightState = {
@@ -33,19 +32,53 @@ type OffsetState = {
 const FEED_POSTS_GAP = 24
 
 export const FeedPosts: Component<FeedPostsProps> = (props) => {
-  let scrollEl!: HTMLDivElement
   const SCROLL_EL_ID = 'scrollEl'
-  const heightCache: HeightState = {}
+  let scrollEl!: HTMLDivElement
   const offsetCache: OffsetState = {}
+  const heightCache: HeightState = {}
   const [resizeObserverEls, setResizeObserverEls] = createStore<(Element | undefined)[]>([])
-  const [heightState, setHeightState] = createStore<HeightState>({})
   const [offsetState, setOffsetState] = createStore<OffsetState>({})
+  const [heightState, setHeightState] = createStore<HeightState>({})
   const [getScroll, setScroll] = createSignal(0)
 
-  const getStyles = () => ({
+  const getPostUuids = createMemo(() => {
+    if (!props.active) {
+      return []
+    }
+
+    if (props.folderId === DEFAULT_FOLDER_ID) {
+      return feedState.postUuids
+    }
+
+    const channelIds = feedState.folders.find(folder =>
+      folder.id === props.folderId
+    )?.channelIds || []
+
+    return feedState.postUuids.filter(postUuid =>
+      channelIds.some(channelId => postUuid.indexOf(channelId) === 0)
+    )
+  })
+
+  const getStyles = () => (props.active ? {
     '--js-line-height': `${FONT_SIZE_LINE_HEIGHT_VALUES[feedState.fontSize]}px`,
     '--js-lines-count': VISIBLE_LINES_COUNT
+  } : {
+    display: 'none'
   })
+
+  const getLoaderOffset = createMemo(() => {
+    const lastPostUuid = getPostUuids()[getPostUuids().length - 1]
+    const lastPostOffset = offsetState[lastPostUuid]
+    const lastPostHeight = heightState[lastPostUuid]
+    if (lastPostUuid && (!lastPostOffset || !lastPostHeight)) return
+    return (lastPostOffset || 0) + (lastPostHeight || 0)
+  })
+
+  const isScrollEnd = () => (
+    props.active &&
+    typeof getLoaderOffset() !== 'undefined' &&
+    getLoaderOffset()! <= getScroll() + (heightState[SCROLL_EL_ID] || 0) * 2
+  )
 
   const updatePosition = (uuid: UncertainPostUuid, height: number) => {
     if (uuid as string === SCROLL_EL_ID) {
@@ -53,17 +86,18 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
       return
     }
 
-    const index = props.postUuids.indexOf(uuid)
+    const uuids = getPostUuids()
+    const index = uuids.indexOf(uuid)
     if (index < 0 || height === heightCache[uuid]) return
 
     const offsetUpdate: OffsetState = {}
     heightCache[uuid] = height
 
-    for (let i = index; i < props.postUuids.length; i++) {
-      const uuid = props.postUuids[i]
+    for (let i = index; i < uuids.length; i++) {
+      const uuid = uuids[i]
       if (!heightCache[uuid]) break
 
-      const prevUuid = props.postUuids[i - 1]
+      const prevUuid = uuids[i - 1]
       const prevOffset = offsetCache[prevUuid] || 0
       const prevHeight = heightCache[prevUuid] || 0
       const offset = prevOffset + prevHeight + FEED_POSTS_GAP
@@ -108,14 +142,13 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
     )
   })
 
-  createEffect((prevFolderId) => {
-    if (prevFolderId !== feedState.currentFolderId) {
-      scrollEl.scrollTo({
-        top: 0,
-        behavior: 'instant'
-      })
-    }
-    return feedState.currentFolderId
+  createEffect((prev) => {
+    if (!!prev === props.active) return
+    scrollEl.scrollTo({
+      top: 0,
+      behavior: 'instant'
+    })
+    return props.active
   })
 
   onMount(() => {
@@ -140,7 +173,7 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
       id={SCROLL_EL_ID}
       ref={scrollEl}
     >
-      <For each={props.postUuids}>{(uncertainUuid, getIndex) => {
+      <For each={getPostUuids()}>{(uncertainUuid, getIndex) => {
         const getPostUuid = createMemo<PostUuid>(() => (
           isPostGroupUuid(uncertainUuid) ? feedState.postGroups[uncertainUuid][0] : uncertainUuid as PostUuid
         ))
@@ -165,14 +198,6 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
           )
         ))
 
-        createEffect((prev) => {
-          if (getIndex() !== props.postUuids.length - 1) return
-          if (!prev && isVisible()) {
-            props.onLastVisible()
-          }
-          return isVisible()
-        })
-
         return (
           <FeedPostsItem
             index={getIndex()}
@@ -188,16 +213,12 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
         )
       }}</For>
 
-      <Show when={props.loading}>
-        <Icon
-          class={clsx(
-            feedPostsCSS.loader,
-            animationsCSS.rotate
-          )}
-          name='loader'
-          size='large'
-        />
-      </Show>
+      <FeedPostsLoader
+        offset={getLoaderOffset()}
+        active={isScrollEnd()}
+        loading={props.loading}
+        onScrollEnd={props.onScrollEnd}
+      />
     </div>
   )
 }

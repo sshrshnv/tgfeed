@@ -1,9 +1,10 @@
 import type { Component } from 'solid-js'
-import { createSignal, createResource, onMount } from 'solid-js'
+import { Index, createSignal, createResource, createMemo, onMount } from 'solid-js'
 
 import { service } from '~/shared/service'
 import { Progress } from '~/shared/ui/elements/progress'
 
+import type { Folder } from '../feed.types'
 import { DEFAULT_FOLDER_ID } from '../feed.const'
 import { feedState, setFeedState } from '../feed-state'
 import { fetchPosts } from '../actions/fetch-posts'
@@ -16,21 +17,12 @@ export const FeedContent: Component = () => {
   const [getPageNumber, setPageNumber] = createSignal(0)
   const [postsRes] = createResource(getPageNumber, fetchPosts)
 
-  const getPostUuids = () => {
-    if (feedState.currentFolderId === DEFAULT_FOLDER_ID) {
-      return feedState.postUuids
-    }
+  const getFolderIds = createMemo<Folder['id'][]>((prev) => [...new Set([
+    ...prev,
+    ...feedState.folders.map(folder => folder.id)
+  ])], [DEFAULT_FOLDER_ID])
 
-    const channelIds = feedState.folders.find(folder =>
-      folder.id === feedState.currentFolderId
-    )?.channelIds || []
-
-    return feedState.postUuids.filter(postUuid =>
-      channelIds.some(channelId => postUuid.indexOf(channelId) === 0)
-    )
-  }
-
-  const handleLastVisible = () => {
+  const handleScrollEnd = () => {
     if (feedState.initialLoading || postsRes.loading) return
     setPageNumber(value => value + 1)
   }
@@ -48,11 +40,14 @@ export const FeedContent: Component = () => {
         class={feedContentCSS.progress}
         active={feedState.initialLoading}
       />
-      <FeedPosts
-        postUuids={getPostUuids()}
-        loading={!feedState.initialLoading && postsRes.loading}
-        onLastVisible={handleLastVisible}
-      />
+      <Index each={getFolderIds()}>{folderId => (
+        <FeedPosts
+          folderId={folderId()}
+          active={!feedState.initialLoading && folderId() === feedState.currentFolderId}
+          loading={!feedState.initialLoading && postsRes.loading}
+          onScrollEnd={handleScrollEnd}
+        />
+      )}</Index>
     </>
   )
 }

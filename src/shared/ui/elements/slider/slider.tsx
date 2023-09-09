@@ -1,5 +1,5 @@
 import type { ParentComponent } from 'solid-js'
-import { Show, For, onMount, onCleanup, createSignal, children, untrack } from 'solid-js'
+import { Show, For, createSignal, createMemo, onMount, onCleanup, children, untrack } from 'solid-js'
 import PointerTracker from 'pointer-tracker'
 import { clsx } from 'clsx'
 
@@ -20,11 +20,14 @@ export type SliderProps = {
 
 export const Slider: ParentComponent<SliderProps> = (props) => {
   let sliderEl!: HTMLDivElement
-  const items = children(() => props.children).toArray()
   const [getTranslateX, setTranslateX] = createSignal(0)
 
+  const getItems = createMemo(() => (
+    children(() => props.children).toArray()
+  ))
+
   const isSingle = () =>
-    items.length <= 1
+    getItems().length <= 1
 
   const handleKey = (ev: KeyboardEvent) => {
     ev.stopPropagation()
@@ -95,7 +98,7 @@ export const Slider: ParentComponent<SliderProps> = (props) => {
           'aspect-ratio': props.aspectRatio || 'unset'
         }}
       >
-        <For each={items}>{(child, getIndex) => (
+        <For each={getItems()}>{(child, getIndex) => (
           <SliderItem
             single={isSingle()}
             previous={!isSingle() && getIndex() === props.activeIndex - 1}
@@ -120,13 +123,13 @@ export const Slider: ParentComponent<SliderProps> = (props) => {
         />
       </div>
 
-      <Show when={items.length > 1}>
+      <Show when={getItems().length > 1}>
         <div class={clsx(
           sliderCSS.dots,
           layoutCSS.flex,
           layoutCSS.flexCenter
         )}>
-          <For each={[...Array(items.length).keys()]}>{index => (
+          <For each={[...Array(getItems().length).keys()]}>{index => (
             <div class={clsx(
               sliderCSS.dotsItem,
               index === props.activeIndex && sliderCSS._active
