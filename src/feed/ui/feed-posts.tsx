@@ -1,5 +1,5 @@
 import type { Component } from 'solid-js'
-import { For, createEffect, createSignal, createMemo, onMount, onCleanup, batch} from 'solid-js'
+import { Index, createEffect, createSignal, createMemo, onMount, onCleanup, batch, untrack } from 'solid-js'
 import { createStore } from 'solid-js/store'
 import { createResizeObserver } from '@solid-primitives/resize-observer'
 import { clsx } from 'clsx'
@@ -30,6 +30,7 @@ type OffsetState = {
 }
 
 const FEED_POSTS_GAP = 24
+const FEED_POSTS_COUNT = 20
 
 export const FeedPosts: Component<FeedPostsProps> = (props) => {
   const SCROLL_EL_ID = 'scrollEl'
@@ -40,6 +41,7 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
   const [offsetState, setOffsetState] = createStore<OffsetState>({})
   const [heightState, setHeightState] = createStore<HeightState>({})
   const [getScroll, setScroll] = createSignal(0)
+  const [getPage, setPage] = createSignal(0)
 
   const getPostUuids = createMemo(() => {
     if (!props.active) {
@@ -59,6 +61,10 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
     )
   })
 
+  const getPostsCount = createMemo(() =>
+    (getPage() + 1) * FEED_POSTS_COUNT
+  )
+
   const getStyles = () => (props.active ? {
     '--js-line-height': `${FONT_SIZE_LINE_HEIGHT_VALUES[feedState.fontSize]}px`,
     '--js-lines-count': VISIBLE_LINES_COUNT
@@ -67,7 +73,7 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
   })
 
   const getLoaderOffset = createMemo(() => {
-    const lastPostUuid = getPostUuids()[getPostUuids().length - 1]
+    const lastPostUuid = getPostUuids()[Math.min(getPostsCount() - 1, getPostUuids().length - 1)]
     const lastPostOffset = offsetState[lastPostUuid]
     const lastPostHeight = heightState[lastPostUuid]
     if (lastPostUuid && (!lastPostOffset || !lastPostHeight)) return
@@ -123,6 +129,12 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
     self.requestAnimationFrame(updateScroll)
   }
 
+  const handleScrollEnd = () => {
+    setPage(value => value + 1)
+    if (getPostUuids().length > getPostsCount()) return
+    props.onScrollEnd()
+  }
+
   const addResizeObserverEl = (el: Element) => {
     setResizeObserverEls(resizeObserverEls.length, el)
   }
@@ -135,19 +147,24 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
   }
 
   createResizeObserver(resizeObserverEls, ({ height }, el: Element) => {
+    height = Math.round(height)
     if (!height) return
     updatePosition(
       el.id as UncertainPostUuid,
-      Math.round(height)
+      height
     )
   })
 
   createEffect((prev) => {
-    if (!!prev === props.active) return
-    scrollEl.scrollTo({
-      top: 0,
-      behavior: 'instant'
-    })
+    if (prev && !props.active) {
+      setPage(0)
+    }
+    if (!prev && props.active && untrack(getScroll)) {
+      scrollEl.scrollTo({
+        top: 0,
+        behavior: 'instant'
+      })
+    }
     return props.active
   })
 
@@ -173,52 +190,52 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
       id={SCROLL_EL_ID}
       ref={scrollEl}
     >
-      <For each={getPostUuids()}>{(uncertainUuid, getIndex) => {
+      <FeedPostsLoader
+        offset={getLoaderOffset()}
+        active={isScrollEnd()}
+        loading={props.loading}
+        onScrollEnd={handleScrollEnd}
+      />
+
+      <Index each={getPostUuids().slice(0, getPostsCount())}>{(getUuid, index) => {
         const getPostUuid = createMemo<PostUuid>(() => (
-          isPostGroupUuid(uncertainUuid) ? feedState.postGroups[uncertainUuid][0] : uncertainUuid as PostUuid
+          isPostGroupUuid(getUuid()) ? feedState.postGroups[getUuid()][0] : getUuid() as PostUuid
         ))
 
         const getPostGroupUuid = createMemo<PostGroupUuid | undefined>(() => (
-          getPostUuid() === uncertainUuid ? undefined : uncertainUuid as PostGroupUuid
+          getPostUuid() === getUuid() ? undefined : getUuid() as PostGroupUuid
         ))
 
         const isVisible = createMemo(() => (
-          !offsetState[uncertainUuid] ||
-          !heightState[uncertainUuid] || (
-            (offsetState[uncertainUuid] + heightState[uncertainUuid] >= getScroll() - heightState[SCROLL_EL_ID]) &&
-            (offsetState[uncertainUuid] <= getScroll() + heightState[SCROLL_EL_ID] * 2)
+          !offsetState[getUuid()] ||
+          !heightState[getUuid()] || (
+            (offsetState[getUuid()] + heightState[getUuid()] >= getScroll() - heightState[SCROLL_EL_ID]) &&
+            (offsetState[getUuid()] <= getScroll() + heightState[SCROLL_EL_ID] * 2)
           )
         ))
 
         const isOnScreen = createMemo(() => (
-          !!offsetState[uncertainUuid] &&
-          !!heightState[uncertainUuid] && (
-            (offsetState[uncertainUuid] >= getScroll() - heightState[SCROLL_EL_ID] / 4) &&
-            (offsetState[uncertainUuid] <= getScroll() + heightState[SCROLL_EL_ID])
+          !!offsetState[getUuid()] &&
+          !!heightState[getUuid()] && (
+            (offsetState[getUuid()] >= getScroll() - heightState[SCROLL_EL_ID] / 4) &&
+            (offsetState[getUuid()] <= getScroll() + heightState[SCROLL_EL_ID])
           )
         ))
 
         return (
           <FeedPostsItem
-            index={getIndex()}
-            refId={uncertainUuid}
+            index={index}
+            refId={getUuid()}
             uuid={getPostUuid()}
             groupUuid={getPostGroupUuid()}
-            offset={offsetState[uncertainUuid]}
+            offset={offsetState[getUuid()]}
             visible={isVisible()}
             onScreen={isOnScreen()}
             onMount={addResizeObserverEl}
             onCleanup={removeResizeObserverEl}
           />
         )
-      }}</For>
-
-      <FeedPostsLoader
-        offset={getLoaderOffset()}
-        active={isScrollEnd()}
-        loading={props.loading}
-        onScrollEnd={props.onScrollEnd}
-      />
+      }}</Index>
     </div>
   )
 }
