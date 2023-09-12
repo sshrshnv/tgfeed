@@ -1,4 +1,5 @@
 import type { ParentComponent } from 'solid-js'
+import { createMemo } from 'solid-js'
 import { clsx } from 'clsx'
 
 import * as sliderItemCSS from './slider-item.sss'
@@ -12,6 +13,10 @@ export type SliderItemProps = {
 }
 
 export const SliderItem: ParentComponent<SliderItemProps> = (props) => {
+  const getStyles = createMemo(() => props.active ? {
+    translate: `${props.translateX}px 0`
+  } : {})
+
   return (
     <div
       class={clsx(
@@ -22,9 +27,7 @@ export const SliderItem: ParentComponent<SliderItemProps> = (props) => {
         props.next && sliderItemCSS._next,
         !props.translateX && sliderItemCSS._transitionable,
       )}
-      style={ props.active ? {
-        translate: `${props.translateX}px 0px`
-      } : {}}
+      style={getStyles()}
     >
       {props.children}
     </div>

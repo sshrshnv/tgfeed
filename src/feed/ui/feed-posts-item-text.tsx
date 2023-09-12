@@ -56,6 +56,9 @@ export const FeedPostsItemText: Component<FeedPostsItemTextProps> = (props) => {
       <Paragraph
         class={clsx(
           feedPostsItemTextCSS.text,
+          feedPostsItemTextCSS.linesCountState,
+          feedPostsItemTextCSS.fontSizeState,
+          feedPostsItemTextCSS[`_${feedState.fontSize}`],
           isCollapsed() !== false && feedPostsItemTextCSS._collapsed
         )}
         size={feedState.fontSize}
@@ -68,6 +71,8 @@ export const FeedPostsItemText: Component<FeedPostsItemTextProps> = (props) => {
         <Button
           class={clsx(
             feedPostsItemTextCSS.button,
+            feedPostsItemTextCSS.fontSizeState,
+            feedPostsItemTextCSS[`_${feedState.fontSize}`],
             layoutCSS.after
           )}
           onClick={expand}

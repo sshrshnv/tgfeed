@@ -26,6 +26,10 @@ export const Slider: ParentComponent<SliderProps> = (props) => {
     children(() => props.children).toArray()
   ))
 
+  const getStyles = createMemo(() => ({
+    'aspect-ratio': props.aspectRatio || 'unset'
+  }))
+
   const isSingle = () =>
     getItems().length <= 1
 
@@ -94,9 +98,7 @@ export const Slider: ParentComponent<SliderProps> = (props) => {
           props.class,
           sliderCSS.base
         )}
-        style={{
-          'aspect-ratio': props.aspectRatio || 'unset'
-        }}
+        style={getStyles()}
       >
         <For each={getItems()}>{(child, getIndex) => (
           <SliderItem

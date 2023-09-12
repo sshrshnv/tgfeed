@@ -3,7 +3,7 @@
   width: 100%
   height: 100%
 
-  > canvas, > video
+  > canvas, > video, .sound
     position: absolute
 
   > canvas
@@ -12,10 +12,18 @@
     width: 100%
     height: 100%
 
-  > video
+  > video, > .sound
     top: 50%
     left: 50%
     translate: -50% -50%
+
+  > video
     width: 100%
     height: 100%
     object-fit: contain
+
+  > .sound
+    height: 50%
+    width: auto
+    max-width: 50%
+    opacity: 0.75

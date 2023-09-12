@@ -1,5 +1,5 @@
 import type { Component } from 'solid-js'
-import { Show, createSignal, createEffect, onMount, onCleanup } from 'solid-js'
+import { Show, createSignal, createEffect, createMemo, onMount, onCleanup } from 'solid-js'
 import { clsx } from 'clsx'
 
 import type { UncertainPostUuid, PostUuid, PostGroupUuid } from '../feed.types'
@@ -17,6 +17,7 @@ export type FeedPostsItemProps = {
   uuid: PostUuid
   groupUuid?: PostGroupUuid
   offset: number
+  datePadding?: boolean
   visible?: boolean
   onScreen?: boolean
   onMount?: (el: Element) => void
@@ -29,6 +30,10 @@ export const FeedPostsItem: Component<FeedPostsItemProps> = (props) => {
 
   const getPost = () =>
     feedCache.posts[props.uuid]
+
+  const getStyles = createMemo(() => ({
+    translate: `0 ${props.offset}px`
+  }))
 
   const hasText = () =>
     !!getPost().message.length
@@ -56,15 +61,20 @@ export const FeedPostsItem: Component<FeedPostsItemProps> = (props) => {
     <div
       class={clsx(
         feedPostsItemCSS.wrapper,
+        !props.visible && feedPostsItemCSS._hidden,
         !isReady() && feedPostsItemCSS._transparent
       )}
-      style={{
-        translate: `0 ${props.offset}px`,
-        display: props.visible ? 'block' : 'none'
-      }}
+      style={getStyles()}
       id={props.refId}
       ref={el}
     >
+      <Show when={props.datePadding}>
+        <div class={clsx(
+          feedPostsItemCSS.padding,
+          props.datePadding && feedPostsItemCSS._date
+        )}/>
+      </Show>
+
       <article class={feedPostsItemCSS.base}>
         <FeedPostsItemHeader
           uuid={props.uuid}

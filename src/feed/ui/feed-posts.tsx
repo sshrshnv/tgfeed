@@ -1,15 +1,17 @@
 import type { Component } from 'solid-js'
-import { Index, createEffect, createSignal, createMemo, onMount, onCleanup, batch, untrack } from 'solid-js'
+import { Index, Show, createEffect, createSignal, createMemo, onMount, onCleanup, batch, untrack } from 'solid-js'
 import { createStore } from 'solid-js/store'
 import { createResizeObserver } from '@solid-primitives/resize-observer'
 import { clsx } from 'clsx'
 
 import type { Folder, UncertainPostUuid, PostUuid, PostGroupUuid } from '../feed.types'
-import { DEFAULT_FOLDER_ID, FONT_SIZE_LINE_HEIGHT_VALUES, VISIBLE_LINES_COUNT } from '../feed.const'
+import { DEFAULT_FOLDER_ID } from '../feed.const'
+import { feedCache } from '../feed-cache'
 import { feedState } from '../feed-state'
 import { isPostGroupUuid } from '../utils/generate-post-uuid'
 import { FeedPostsItem } from './feed-posts-item'
 import { FeedPostsLoader } from './feed-posts-loader'
+import { FeedPostsDate } from './feed-posts-date'
 
 import * as layoutCSS from '../../shared/ui/elements/layout.sss'
 import * as feedPostsCSS from './feed-posts.sss'
@@ -35,12 +37,15 @@ const FEED_POSTS_COUNT = 20
 export const FeedPosts: Component<FeedPostsProps> = (props) => {
   const SCROLL_EL_ID = 'scrollEl'
   let scrollEl!: HTMLDivElement
+  let scroll = 0
+  let roughScroll = 0
   const offsetCache: OffsetState = {}
   const heightCache: HeightState = {}
   const [resizeObserverEls, setResizeObserverEls] = createStore<(Element | undefined)[]>([])
   const [offsetState, setOffsetState] = createStore<OffsetState>({})
   const [heightState, setHeightState] = createStore<HeightState>({})
   const [getScroll, setScroll] = createSignal(0)
+  const [getRoughScroll, setRoughScroll] = createSignal(0)
   const [getPage, setPage] = createSignal(0)
 
   const getPostUuids = createMemo(() => {
@@ -65,13 +70,6 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
     (getPage() + 1) * FEED_POSTS_COUNT
   )
 
-  const getStyles = () => (props.active ? {
-    '--js-line-height': `${FONT_SIZE_LINE_HEIGHT_VALUES[feedState.fontSize]}px`,
-    '--js-lines-count': VISIBLE_LINES_COUNT
-  } : {
-    display: 'none'
-  })
-
   const getLoaderOffset = createMemo(() => {
     const lastPostUuid = getPostUuids()[Math.min(getPostsCount() - 1, getPostUuids().length - 1)]
     const lastPostOffset = offsetState[lastPostUuid]
@@ -83,7 +81,7 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
   const isScrollEnd = () => (
     props.active &&
     typeof getLoaderOffset() !== 'undefined' &&
-    getLoaderOffset()! <= getScroll() + (heightState[SCROLL_EL_ID] || 0) * 2
+    getLoaderOffset()! <= getRoughScroll() + (heightState[SCROLL_EL_ID] || 0) * 2
   )
 
   const updatePosition = (uuid: UncertainPostUuid, height: number) => {
@@ -121,7 +119,18 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
   }
 
   const updateScroll = () => {
-    setScroll(Math.floor(scrollEl.scrollTop / 100) * 100)
+    const newScroll = Math.round(scrollEl.scrollTop)
+    const newRoughScroll = Math.round(scrollEl.scrollTop / 100) * 100
+    batch(() => {
+      if (scroll !== newScroll) {
+        scroll = newScroll
+        setScroll(newScroll)
+      }
+      if (roughScroll !== newRoughScroll) {
+        roughScroll = newRoughScroll
+        setRoughScroll(newRoughScroll)
+      }
+    })
   }
 
   const handleScroll = (ev) => {
@@ -159,7 +168,7 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
     if (prev && !props.active) {
       setPage(0)
     }
-    if (!prev && props.active && untrack(getScroll)) {
+    if (!prev && props.active && untrack(getRoughScroll)) {
       scrollEl.scrollTo({
         top: 0,
         behavior: 'instant'
@@ -182,11 +191,11 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
     <div
       class={clsx(
         feedPostsCSS.base,
+        !props.active && feedPostsCSS._hidden,
         layoutCSS.flex,
         layoutCSS.scroll,
         layoutCSS.scrollCustom
       )}
-      style={getStyles()}
       id={SCROLL_EL_ID}
       ref={scrollEl}
     >
@@ -202,38 +211,65 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
           isPostGroupUuid(getUuid()) ? feedState.postGroups[getUuid()][0] : getUuid() as PostUuid
         ))
 
+        const getPrevPostUuid = createMemo<PostUuid | undefined>(() => {
+          const prevUuid = getPostUuids()[index - 1]
+          if (!prevUuid) return
+          return isPostGroupUuid(prevUuid) ? feedState.postGroups[prevUuid][0] : prevUuid as PostUuid
+        })
+
         const getPostGroupUuid = createMemo<PostGroupUuid | undefined>(() => (
           getPostUuid() === getUuid() ? undefined : getUuid() as PostGroupUuid
+        ))
+
+        const hasDate = createMemo(() => {
+          const prevDate = getPrevPostUuid() && feedCache.posts[getPrevPostUuid()!]?.date
+          const date = feedCache.posts[getPostUuid()].date
+          return !!prevDate && new Date(prevDate * 1000).toDateString() !== new Date(date * 1000).toDateString()
+        })
+
+        const isStickyDate = createMemo(() => (
+          hasDate() && !!offsetState[getUuid()] && getScroll() >= offsetState[getUuid()] - FEED_POSTS_GAP / 2
         ))
 
         const isVisible = createMemo(() => (
           !offsetState[getUuid()] ||
           !heightState[getUuid()] || (
-            (offsetState[getUuid()] + heightState[getUuid()] >= getScroll() - heightState[SCROLL_EL_ID]) &&
-            (offsetState[getUuid()] <= getScroll() + heightState[SCROLL_EL_ID] * 2)
+            (offsetState[getUuid()] + heightState[getUuid()] >= getRoughScroll() - heightState[SCROLL_EL_ID]) &&
+            (offsetState[getUuid()] <= getRoughScroll() + heightState[SCROLL_EL_ID] * 2)
           )
         ))
 
         const isOnScreen = createMemo(() => (
           !!offsetState[getUuid()] &&
           !!heightState[getUuid()] && (
-            (offsetState[getUuid()] >= getScroll() - heightState[SCROLL_EL_ID] / 4) &&
-            (offsetState[getUuid()] <= getScroll() + heightState[SCROLL_EL_ID])
+            (offsetState[getUuid()] >= getRoughScroll() - heightState[SCROLL_EL_ID] / 4) &&
+            (offsetState[getUuid()] <= getRoughScroll() + heightState[SCROLL_EL_ID])
           )
         ))
 
         return (
-          <FeedPostsItem
-            index={index}
-            refId={getUuid()}
-            uuid={getPostUuid()}
-            groupUuid={getPostGroupUuid()}
-            offset={offsetState[getUuid()]}
-            visible={isVisible()}
-            onScreen={isOnScreen()}
-            onMount={addResizeObserverEl}
-            onCleanup={removeResizeObserverEl}
-          />
+          <>
+            <Show when={hasDate()}>
+              <FeedPostsDate
+                uuid={getPostUuid()}
+                offset={offsetState[getUuid()]}
+                sticky={isStickyDate()}
+              />
+            </Show>
+
+            <FeedPostsItem
+              index={index}
+              refId={getUuid()}
+              uuid={getPostUuid()}
+              groupUuid={getPostGroupUuid()}
+              offset={offsetState[getUuid()]}
+              datePadding={hasDate()}
+              visible={isVisible()}
+              onScreen={isOnScreen()}
+              onMount={addResizeObserverEl}
+              onCleanup={removeResizeObserverEl}
+            />
+          </>
         )
       }}</Index>
     </div>

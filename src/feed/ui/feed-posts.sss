@@ -1,8 +1,13 @@
 .base
   --local-scrollbar-color: var(--theme-color-surface-0)
   --local-scrollbar-background-color: var(--theme-color-background)
+  --local-date-height: 56px
   position: relative
   flex: 1 1 auto
   flex-direction: column
   align-items: center
   height: 100%
+  will-change: scroll-position
+
+  &._hidden
+    display: none

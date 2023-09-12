@@ -41,6 +41,8 @@ export const getMediaAudio = (media: MessageMedia) => (
 
 export const isMediaAudio = (media: MessageMedia) => !!getMediaAudio(media)
 
+export const hasThumbs = (media: MessageMedia) => !!getMediaDocument(media)?.thumbs?.length
+
 export const getMediaImageSize = (media: MessageMedia) => {
   const document = getMediaDocument(media)
   const photo = getMediaPhoto(media)

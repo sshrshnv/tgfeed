@@ -5,11 +5,20 @@
   padding: 0 16px
   will-change: translate
 
+  &._hidden
+    display: none
+
   &._transparent
-    opacity: 0
+    visibility: hidden
 
 .base
   padding: 0
   border-radius: 16px
   background-color: var(--theme-color-surface-0)
   overflow: hidden
+
+.padding
+  width: 100%
+
+  &._date
+    height: var(--local-date-height)

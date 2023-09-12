@@ -1,5 +1,5 @@
 import type { Component } from 'solid-js'
-import { Show, createEffect } from 'solid-js'
+import { createEffect, createMemo } from 'solid-js'
 import { clsx } from 'clsx'
 
 import { Icon } from '~/shared/ui/elements/icon'
@@ -16,6 +16,10 @@ export type FeedPostsLoaderProps = {
 }
 
 export const FeedPostsLoader: Component<FeedPostsLoaderProps> = (props) => {
+  const getStyles = createMemo(() => ({
+    translate: `0 ${props.offset}px`
+  }))
+
   createEffect(() => {
     if (props.active && !props.loading) {
       props.onScrollEnd()
@@ -25,22 +29,21 @@ export const FeedPostsLoader: Component<FeedPostsLoaderProps> = (props) => {
   return (
     <div
       class={clsx(
-        props.active && feedPostsLoaderCSS._active,
         feedPostsLoaderCSS.base,
+        !props.active && feedPostsLoaderCSS._transparent,
         layoutCSS.flex,
         layoutCSS.flexCenter
       )}
-      style={{
-        translate: `0 ${props.offset}px`
-      }}
+      style={getStyles()}
     >
-      <Show when={props.loading}>
-        <Icon
-          class={animationsCSS.rotate}
-          name='loader'
-          size='large'
-        />
-      </Show>
+      <Icon
+        class={clsx(
+          !props.loading && feedPostsLoaderCSS._transparent,
+          props.loading && animationsCSS.rotate
+        )}
+        name='loader'
+        size='large'
+      />
     </div>
   )
 }

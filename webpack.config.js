@@ -189,8 +189,8 @@ module.exports = {
     nodeEnv: isDev() ? 'development' : 'production',
     splitChunks: {
       cacheGroups: {
-        'vendors.core-js': {
-          name: 'vendors.core-js',
+        'vendors.corejs': {
+          name: 'vendors.corejs',
           test: /[\\/]node_modules[\\/]core-js[\\/]/,
           chunks: 'all',
           reuseExistingChunk: true
@@ -207,8 +207,8 @@ module.exports = {
           chunks: 'all',
           reuseExistingChunk: true
         },
-        'vendors.solid-js': {
-          name: 'vendors.solid-js',
+        'vendors.solidjs': {
+          name: 'vendors.solidjs',
           test: /[\\/]node_modules[\\/]@?solid/,
           chunks: 'all',
           reuseExistingChunk: true

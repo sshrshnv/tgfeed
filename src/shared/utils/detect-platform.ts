@@ -44,7 +44,7 @@ let Chromium
 export const isChromium = () =>
   Chromium ??= brands ?
     brands.some(({ brand }) => brand.toLocaleLowerCase() === 'chromium') :
-    !!(window as any).chrome && /chrome/i.test(userAgent)
+    !!(self as any).chrome && /chrome/i.test(userAgent)
 
 let Chrome
 export const isChrome = () =>

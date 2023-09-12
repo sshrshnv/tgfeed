@@ -1,3 +1,16 @@
+.linesCountState
+  --local-lines-count: 10
+
+.fontSizeState
+  &._large
+    --local-line-height: 24px
+
+  &._medium
+    --local-line-height: 20px
+
+  &._small
+    --local-line-height: 16px
+
 .base
   position: relative
   padding: 16px
@@ -11,7 +24,7 @@
   user-select: text
 
   &._collapsed
-    max-height: calc(var(--js-line-height) * var(--js-lines-count))
+    max-height: calc(var(--local-line-height) * var(--local-lines-count))
 
   a
     color: var(--theme-color-primary)
@@ -30,15 +43,15 @@
   right: 0
   bottom: 0
   width: 40px
-  height: calc(var(--js-line-height) * 2 + 16px)
-  padding: calc(var(--js-line-height) + 2px) 0 16px
+  height: calc(var(--local-line-height) * 2 + 16px)
+  padding: calc(var(--local-line-height) + 2px) 0 16px
   overflow: visible
 
   &::after
     right: 0
     bottom: 0
     width: 80px
-    height: calc(var(--js-line-height) + 16px)
+    height: calc(var(--local-line-height) + 16px)
     background-image: linear-gradient(to right, transparent, var(--theme-color-surface-0) 48px)
 
   > svg

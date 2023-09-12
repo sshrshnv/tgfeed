@@ -1,5 +1,6 @@
 import type { Component } from 'solid-js'
 import { Switch, Match, For, createMemo, createSignal, createEffect, batch, untrack } from 'solid-js'
+import { clsx } from 'clsx'
 
 import type { MessageMedia } from '~/shared/api/mtproto'
 import { Slider } from '~/shared/ui/elements/slider'
@@ -9,8 +10,7 @@ import { feedState } from '../feed-state'
 import { feedCache } from '../feed-cache'
 import { getMediaAspectRatio, isMediaImage, isMediaVideo, isMediaAudio } from '../utils/detect-post-media'
 import { FeedMediaImage } from './feed-media-image'
-import { FeedMediaVideo } from './feed-media-video'
-import { FeedMediaAudio } from './feed-media-audio'
+import { FeedMadiaPlayer } from './feed-media-player'
 
 import * as feedPostsItemMedia from './feed-posts-item-media.sss'
 
@@ -47,6 +47,9 @@ export const FeedPostsItemMedia: Component<FeedPostsItemMediaProps> = (props) =>
   const getAspectRatio = () =>
     Math.min(...getItems().map(item => getMediaAspectRatio(item.media)))
 
+  const isFixedHeight = () =>
+    !getAspectRatio()
+
   const handleActiveIndexChange = (k: number) => {
     batch(() => {
       isPlaying() && setPlaying(false)
@@ -72,7 +75,10 @@ export const FeedPostsItemMedia: Component<FeedPostsItemMediaProps> = (props) =>
 
   return (
     <Slider
-      class={feedPostsItemMedia.base}
+      class={clsx(
+        feedPostsItemMedia.base,
+        isFixedHeight() && feedPostsItemMedia._fixedHeight
+      )}
       activeIndex={getActiveIndex()}
       aspectRatio={getAspectRatio()}
       onChange={handleActiveIndexChange}
@@ -99,18 +105,8 @@ export const FeedPostsItemMedia: Component<FeedPostsItemMediaProps> = (props) =>
               />
             </Match>
 
-            <Match when={isMediaVideo(item.media)}>
-              <FeedMediaVideo
-                uuid={item.uuid}
-                media={item.media as MessageMedia.messageMediaDocument}
-                playing={isItemPlaying()}
-                visible={isItemVisible()}
-                onEnded={handleEnded}
-              />
-            </Match>
-
-            <Match when={isMediaAudio(item.media)}>
-              <FeedMediaAudio
+            <Match when={isMediaVideo(item.media) || isMediaAudio(item.media)}>
+              <FeedMadiaPlayer
                 uuid={item.uuid}
                 media={item.media as MessageMedia.messageMediaDocument}
                 playing={isItemPlaying()}

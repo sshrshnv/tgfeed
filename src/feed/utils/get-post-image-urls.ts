@@ -7,7 +7,7 @@ import { getUiWorker } from '~/shared/ui/worker/init-ui-worker'
 import type { PostUuid, ChannelId, PostId } from '../feed.types'
 import { feedCache } from '../feed-cache'
 import { loadFile, pauseFileLoading, isFileLoadingPaused } from './load-file'
-import { getMediaImage, getMediaVideo, getMediaImageSize } from './detect-post-media'
+import { getMediaImage, getMediaVideo, getMediaAudio, getMediaImageSize } from './detect-post-media'
 
 type ImageUrls = {
   thumbUrl: string
@@ -18,11 +18,18 @@ type ImageUrlsCache = Record<string, ImageUrls>
 
 const [imageUrlsCache, setImageUrlsCache] = createStore<ImageUrlsCache>({})
 
+const defaultPostImageUrls = {
+  thumbUrl: '',
+  imageUrl: ''
+}
+
 export const getPostImageUrls = (
   uuid: PostUuid,
   media: MessageMedia
 ): ImageUrls => {
-  const image = getMediaImage(media) || getMediaVideo(media)!
+  const image = getMediaImage(media) || getMediaVideo(media) || getMediaAudio(media)
+  if (!image) return defaultPostImageUrls
+
   const [channelId, postId] = uuid.split('-').map((value, index) =>
     index ? +value : value
   ) as [ChannelId, PostId]
@@ -87,7 +94,7 @@ export const pausePostImageLoading = (
 const getPostImageLocation = (
   media: MessageMedia
 ) => {
-  const image = getMediaImage(media) || getMediaVideo(media)!
+  const image = getMediaImage(media) || getMediaVideo(media) || getMediaAudio(media)!
 
   const { id, access_hash, file_reference } = image
   const type = image._ === 'photo' ? 'inputPhotoFileLocation' : 'inputDocumentFileLocation'

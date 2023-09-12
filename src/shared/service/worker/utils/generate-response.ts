@@ -7,7 +7,7 @@ export type ResponseParams = {
   to: number
   offset: number
   limit: number
-  bytes?: Uint8Array
+  bytes?: ArrayBuffer
 }
 
 export const generateResponse = ({
