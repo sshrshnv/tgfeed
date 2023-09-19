@@ -12,6 +12,11 @@ export const feedRoutes = {
     type: 'page'
   },
 
+  postMenu: {
+    id: 'feedPostMenu',
+    type: 'state'
+  },
+
   managingDialog: {
     id: 'feedManagingDialog',
     type: 'dialog'

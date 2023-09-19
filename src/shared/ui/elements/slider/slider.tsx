@@ -34,18 +34,21 @@ export const Slider: ParentComponent<SliderProps> = (props) => {
     getItems().length <= 1
 
   const handleKey = (ev: KeyboardEvent) => {
-    ev.stopPropagation()
-    ev.preventDefault()
-
     switch (ev.key.toLowerCase()) {
     case ' ':
     case 'enter':
+      ev.stopPropagation()
+      ev.preventDefault()
       props.onClick?.()
       break
     case 'arrowleft':
+      ev.stopPropagation()
+      ev.preventDefault()
       props.onChange?.(-1)
       break
     case 'arrowright':
+      ev.stopPropagation()
+      ev.preventDefault()
       props.onChange?.(1)
       break
     }

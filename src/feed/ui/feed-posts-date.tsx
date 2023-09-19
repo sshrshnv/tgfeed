@@ -5,7 +5,7 @@ import { localeState } from '~/core/locale/locale-state'
 import { Text } from '~/shared/ui/elements/text'
 
 import type { PostUuid } from '../feed.types'
-import { feedCache } from '../feed-cache'
+import { getPost } from '../utils/get-feed-cache-data'
 import { formatPostsDate } from '../utils/format-posts-date'
 
 import * as layoutCSS from '../../shared/ui/elements/layout.sss'
@@ -20,11 +20,8 @@ export type FeedPostsItemDateProps = {
 const FEED_POSTS_DATE_OFFSET = 68
 
 export const FeedPostsDate: Component<FeedPostsItemDateProps> = (props) => {
-  const getPost = () =>
-    feedCache.posts[props.uuid]
-
   const getDate = () =>
-    formatPostsDate(getPost().date, { lang: localeState.lang })
+    formatPostsDate(getPost(props.uuid).date, { lang: localeState.lang })
 
   const getStyles = () => ((props.sticky || typeof props.offset !== 'number') ? {} : {
     translate: `0 ${props.offset - FEED_POSTS_DATE_OFFSET}px`

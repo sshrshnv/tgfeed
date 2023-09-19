@@ -30,30 +30,21 @@ const ANIMATION_PARAMS = {
 
 export const FeedManagingDialogFoldersItem: Component<FeedManagingDialogFoldersItemProps> = (_props) => {
   const [props, menuProps] = splitProps(_props, ['folder'])
-
-  const [isExpanded, setExpanded] = createSignal(false)
+  const [isMenuExpanded, setMenuExpanded] = createSignal(false)
 
   const isFolderMenuRoute = () =>
     routingState.currentRoute.id === feedRoutes.managingDialogFolderMenu.id
 
-  const openFolderMenu = () => {
+  const openMenu = () => {
     pushRoute(feedRoutes.managingDialogFolderMenu)
-    setExpanded(true)
+    setMenuExpanded(true)
   }
 
-  const closeFolderMenu = () => {
-    setExpanded(false)
-  }
+  const closeMenu = () =>
+    setMenuExpanded(false)
 
-  const toggleExpanding = () => {
-    isExpanded() ? closeFolderMenu() : openFolderMenu()
-  }
-
-  createEffect(() => {
-    if (!isFolderMenuRoute() && isExpanded()) {
-      closeFolderMenu()
-    }
-  })
+  const toggleMenuExpanding = () =>
+    isMenuExpanded() ? closeMenu() : openMenu()
 
   const handleMenuEnter: TransitionProps['onEnter'] = async (el, done) => {
     const animationParams = ANIMATION_PARAMS.enter
@@ -69,15 +60,21 @@ export const FeedManagingDialogFoldersItem: Component<FeedManagingDialogFoldersI
     done()
   }
 
+  createEffect(() => {
+    if (!isFolderMenuRoute() && isMenuExpanded()) {
+      closeMenu()
+    }
+  })
+
   return (
     <div>
       <Button
         class={clsx(
           feedManagingDialogFoldersItemCSS.button,
-          isExpanded() && feedManagingDialogFoldersItemCSS._expanded,
+          isMenuExpanded() && feedManagingDialogFoldersItemCSS._expanded,
           layoutCSS.after
         )}
-        onClick={toggleExpanding}
+        onClick={toggleMenuExpanding}
         stopPropagation
       >
         <Icon name='folder' size='medium'/>
@@ -91,7 +88,7 @@ export const FeedManagingDialogFoldersItem: Component<FeedManagingDialogFoldersI
         onEnter={handleMenuEnter}
         onExit={handleMenuExit}
       >
-        <Show when={isExpanded()}>
+        <Show when={isMenuExpanded()}>
           <FeedManagingDialogFoldersItemMenu
             {...menuProps}
           />

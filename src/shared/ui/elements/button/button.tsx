@@ -11,15 +11,17 @@ import * as buttonCSS from './button.sss'
 export type ButtonProps = ComponentProps<'button'> & {
   route?: Route
   stopPropagation?: boolean
+  stopImmediatePropagation?: boolean
 }
 
 export const Button: ParentComponent<ButtonProps> = (_props) => {
   const [props, buttonProps] = splitProps(_props, [
-    'route', 'stopPropagation', 'class', 'type', 'onClick'
+    'route', 'stopPropagation', 'stopImmediatePropagation', 'class', 'type', 'onClick'
   ])
 
   const handleClick = (ev) => {
     if (props.stopPropagation) ev.stopPropagation()
+    if (props.stopImmediatePropagation) ev.stopImmediatePropagation()
     if (typeof props.onClick === 'function') {
       props.onClick(ev)
       return

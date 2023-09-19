@@ -66,11 +66,14 @@
     "buttons": {
       "newFolder": "Create new folder",
       "save": "Save",
+      "saving": "Saving..",
+      "savePost": "Save post",
       "edit": "Edit",
       "moveUp": "Move up",
       "moveDown": "Move down",
       "delete": "Delete",
-      "confirm": "Confirm"
+      "confirm": "Confirm",
+      "openTelegram": "Open in Telegram"
     },
     "errors": {
       "FOLDER_NAME_EMPTY": "You should enter the folder name",

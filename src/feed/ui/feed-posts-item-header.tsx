@@ -1,17 +1,15 @@
-import type { Component } from 'solid-js'
+import type { ParentComponent } from 'solid-js'
 import { clsx } from 'clsx'
 
-import { Button } from '~/shared/ui/elements/button'
-import { Icon } from '~/shared/ui/elements/icon'
 import { Text } from '~/shared/ui/elements/text'
 
 import type { PostUuid } from '../feed.types'
-import { feedCache } from '../feed-cache'
+import { getPost, getPostChannel } from '../utils/get-feed-cache-data'
 import { formatPostDate } from '../utils/format-post-date'
 import { FeedChannelCover } from './feed-channel-cover'
 
 import * as layoutCSS from '../../shared/ui/elements/layout.sss'
-import * as feedPostsItemCSS from './feed-posts-item-header.sss'
+import * as feedPostsItemHeaderCSS from './feed-posts-item-header.sss'
 
 export type FeedPostsItemHeaderProps = {
   class?: string
@@ -19,23 +17,20 @@ export type FeedPostsItemHeaderProps = {
   visible?: boolean
 }
 
-export const FeedPostsItemHeader: Component<FeedPostsItemHeaderProps> = (props) => {
-  const getPost = () =>
-    feedCache.posts[props.uuid]
-
+export const FeedPostsItemHeader: ParentComponent<FeedPostsItemHeaderProps> = (props) => {
   const getDate = () =>
-    formatPostDate(getPost().date, { time: true })
+    formatPostDate(getPost(props.uuid).date, { time: true })
 
   const getChannelId = () =>
-    getPost().peer_id.channel_id
+    getPost(props.uuid).peer_id.channel_id
 
   const getChannelTitle = () =>
-    feedCache.channels[getChannelId()].title
+    getPostChannel(props.uuid).title
 
   return (
     <header class={clsx(
       props.class,
-      feedPostsItemCSS.base,
+      feedPostsItemHeaderCSS.base,
       layoutCSS.flex
     )}>
       <FeedChannelCover
@@ -45,7 +40,7 @@ export const FeedPostsItemHeader: Component<FeedPostsItemHeaderProps> = (props) 
       />
 
       <div class={clsx(
-        feedPostsItemCSS.description,
+        feedPostsItemHeaderCSS.description,
         layoutCSS.flex
       )}>
         <Text variant='label' size='medium' ellipsis>
@@ -56,11 +51,7 @@ export const FeedPostsItemHeader: Component<FeedPostsItemHeaderProps> = (props) 
         </Text>
       </div>
 
-      <Button
-        class={feedPostsItemCSS.button}
-      >
-        <Icon name='more' size='medium'/>
-      </Button>
+      {props.children}
     </header>
   )
 }
