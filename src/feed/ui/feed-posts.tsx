@@ -198,10 +198,12 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
 
   createEffect((prev) => {
     if (prev && !props.active) {
-      setUpdating(true)
-      setPage(0)
-      setScroll(0)
-      setRoughScroll(0)
+      batch(() => {
+        setUpdating(true)
+        setPage(0)
+        setScroll(0)
+        setRoughScroll(0)
+      })
     }
     if (!prev && props.active) {
       if (firtsActiveFolderRendered) {

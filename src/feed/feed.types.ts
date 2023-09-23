@@ -19,7 +19,7 @@ export type FeedCache = {
 
 export type Config = {
   configId?: Message.message['id']
-  currentFolderId: Folder['id']
+  currentFolderId?: Folder['id']
   defaultFolderVisibility: boolean
 }
 

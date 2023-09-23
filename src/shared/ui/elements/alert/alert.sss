@@ -1,0 +1,18 @@
+.base
+  position: absolute
+  z-index: 10
+  margin: 0 auto
+  left: 0
+  right: 0
+  bottom: var(--layout-header-size)
+  width: calc(min(100%, 720px) - 16px)
+  min-height: var(--layout-header-size)
+  padding: 16px
+  border-radius: 8px
+  background-color: var(--theme-color-tertiary)
+  color: var(--theme-color-on-tertiary)
+  translate: 0 calc(100% + var(--layout-header-size))
+  transition: translate 300ms ease-in-out
+
+  &._active
+    translate: 0 0

@@ -16,6 +16,16 @@
     "title": "Language"
   },
 
+  "update": {
+    "description": "New version of the application is available.",
+    "button": "Update"
+  },
+
+  "install": {
+    "description": "Install this application for easier use.",
+    "button": "Install"
+  },
+
   "auth": {
     "title": "Sign In",
     "phone": {
