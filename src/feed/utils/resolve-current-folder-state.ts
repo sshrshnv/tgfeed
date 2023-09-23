@@ -1,16 +1,20 @@
-import type { FeedState } from '../feed.types'
+import type { FeedState, Folder } from '../feed.types'
 import { DEFAULT_FOLDER_ID } from '../feed.const'
 
 export const resolveCurrentFolderState = (
   state: FeedState,
-  stateUpdates: Partial<FeedState>
+  update: Partial<FeedState>,
+  folders: Folder[]
 ) => {
-  stateUpdates.currentFolderId = state.defaultFolderVisibility ?
-    DEFAULT_FOLDER_ID : (stateUpdates.folders?.[0]?.id || DEFAULT_FOLDER_ID)
+  update.currentFolderId = update.defaultFolderVisibility ?
+    DEFAULT_FOLDER_ID : (folders?.[0]?.id || DEFAULT_FOLDER_ID)
 
-  if (stateUpdates.currentFolderId === DEFAULT_FOLDER_ID && !state.defaultFolderVisibility) {
-    stateUpdates.defaultFolderVisibility = true
+  if (update.currentFolderId === DEFAULT_FOLDER_ID && (
+    !state.defaultFolderVisibility ||
+    !update.defaultFolderVisibility
+  )) {
+    update.defaultFolderVisibility = true
   }
 
-  return stateUpdates
+  return update
 }

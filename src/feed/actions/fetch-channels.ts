@@ -12,7 +12,10 @@ export const fetchChannels = async () => {
   if (channelsLoaded) return
   channelsLoaded = true
   const channels = await loadChannels()
-  feedCache.channels = channels
+  feedCache.channels = {
+    ...feedCache.channels,
+    ...channels
+  }
   setFeedState('channelIds', Object.keys(channels))
 }
 

@@ -1,4 +1,5 @@
 import { logOut } from '~/core/account/actions/log-out'
+import { comlink } from '~/shared/utils/comlink'
 
 import type { API } from './api.types'
 import { getApiWorker } from './worker/init-api-worker'
@@ -25,5 +26,12 @@ export const api: API = {
   exec: async (...args) => {
     const apiWorker = await getApiWorker()
     return apiWorker.exec(...args)
+  },
+
+  listenUpdates: async (...args) => {
+    const apiWorker = await getApiWorker()
+    return apiWorker.listenUpdates(
+      comlink.proxy(...args)
+    )
   }
 }

@@ -1,18 +1,22 @@
 .header
+  position: relative
+  z-index: 2
   height: calc(var(--layout-header-top-offset) + var(--layout-header-size))
   padding: var(--layout-header-top-offset) safe(right) 0 safe(left)
   justify-content: space-between
+  background-color: var(--theme-color-surface-1)
 
 .headerButton
   position: relative
   z-index: 1
   width: var(--layout-header-size)
+  background-image: linear-gradient(var(--local-direction), var(--theme-color-surface-1) calc(var(--layout-header-size) - 8px), transparent)
 
   &._left
-    background-image: linear-gradient(to right, var(--theme-color-surface-1) calc(var(--layout-header-size) - 8px), transparent)
+    --local-direction: to right
 
   &._right
-    background-image: linear-gradient(to left, var(--theme-color-surface-1) calc(var(--layout-header-size) - 8px), transparent)
+    --local-direction: to left
 
 .hr
   position: absolute

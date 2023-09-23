@@ -1,8 +1,10 @@
-export const preventContextMenu = () => {
-  const availableTags = ['a', 'input']
+const AVAILABLE_TAGS = [
+  'a', 'p', 'b', 'i', 'u', 's', 'pre', 'code', 'input'
+]
 
+export const preventContextMenu = () => {
   const handleContextMenu = ev => {
-    if (availableTags.includes(ev.target.tagName.toLowerCase())) return
+    if (AVAILABLE_TAGS.includes(ev.target.tagName.toLowerCase())) return
     ev.preventDefault()
   }
 

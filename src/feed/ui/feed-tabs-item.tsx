@@ -1,4 +1,5 @@
 import type { ParentComponent } from 'solid-js'
+import { createEffect } from 'solid-js'
 import { clsx } from 'clsx'
 
 import { ButtonProps } from '~/shared/ui/elements/button'
@@ -17,12 +18,22 @@ export type FeedTabsItemProps = ButtonProps & {
 }
 
 export const FeedTabsItem: ParentComponent<FeedTabsItemProps> = (props) => {
+  let tabEl!: HTMLButtonElement
+
   const isActive = () =>
     feedState.currentFolderId === props.folderId
 
   const handleClick = () => {
     selectFolder(props.folderId)
   }
+
+  createEffect((prev) => {
+    const active = isActive()
+    if (!prev && active) {
+      tabEl?.scrollIntoView({ inline: 'center' })
+    }
+    return active
+  })
 
   return (
     <Button
@@ -31,6 +42,7 @@ export const FeedTabsItem: ParentComponent<FeedTabsItemProps> = (props) => {
         isActive() && feedTabsItemCSS._active,
         layoutCSS.after
       )}
+      ref={tabEl}
       role="tab"
       onClick={handleClick}
     >

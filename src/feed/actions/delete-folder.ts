@@ -8,14 +8,15 @@ export const deleteFolder = (
   folder: Folder
 ) => {
   setFeedState(state => {
-    const stateUpdates: Partial<FeedState> = {}
-    stateUpdates.folders = state.folders.filter(({ id }) => id !== folder.id)
+    const update: Partial<FeedState> = {}
+    const folders = state.folders.filter(({ id }) => id !== folder.id)
 
     if (state.currentFolderId === folder.id) {
-      resolveCurrentFolderState(state, stateUpdates)
+      resolveCurrentFolderState(state, update, folders)
     }
 
-    return stateUpdates
+    update.folders = folders
+    return update
   })
 
   return api.req('messages.deleteMessages', {

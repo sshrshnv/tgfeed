@@ -100,16 +100,24 @@ export const FeedManagingDialogForm: Component<FeedManagingDialogFormProps> = (p
       >
         <MenuTitle
           class={feedManagingDialogFormCSS.title}
-          text={isReady() ?
-            localeState.texts?.feed.folderChannelsTitle :
-            localeState.texts?.feed.folderChannelsLoading
-          }
+          text={localeState.texts?.feed.folderChannelsTitle}
         />
         <Show when={
           isReady() &&
           !isEmptyChannelsList() &&
           !props.transitioning &&
           !!channelsEl
+        } fallback={
+          <div class={feedManagingDialogFormCSS.loader}>
+            <Icon
+              class={clsx(
+                animationsCSS.rotate,
+                animationsCSS.forcedPerformance
+              )}
+              name='loader'
+              size='large'
+            />
+          </div>
         }>
           <FeedManagingDialogFormChannels
             folder={props.folder}

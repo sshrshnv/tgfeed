@@ -1,0 +1,23 @@
+.base
+  position: absolute
+  z-index: 1
+  top: calc(var(--layout-header-size) + 14px)
+  min-width: var(--local-chip-min-width)
+  height: 32px
+  padding: 0 16px
+  border-radius: 16px
+  text-transform: capitalize
+  background-color: var(--theme-color-surface-1)
+  will-change: top, translate
+
+  &:nth-child(4):not(._sticky)
+    background-color: var(--theme-color-surface-0)
+
+  &._sticky
+    position: fixed
+
+  &._hidden
+    display: none
+
+  &._transparent
+    visibility: hidden

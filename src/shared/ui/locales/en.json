@@ -52,7 +52,6 @@
     "editFolderTitle": "Edit folder",
     "foldersTitle": "Folders",
     "folderNamePlaceholder": "Enter folder name",
-    "folderChannelsLoading": "Channels loading..",
     "folderChannelsTitle": "Select channels",
     "defaultFolderName": "All channels",
     "emptyFoldersList": "No folders created",
@@ -73,7 +72,8 @@
       "moveDown": "Move down",
       "delete": "Delete",
       "confirm": "Confirm",
-      "openTelegram": "Open in Telegram"
+      "openTelegram": "Open in Telegram",
+      "loadUpdates": "Load new posts"
     },
     "errors": {
       "FOLDER_NAME_EMPTY": "You should enter the folder name",

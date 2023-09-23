@@ -4,10 +4,13 @@ import { setDelay } from '~/shared/utils/set-delay'
 import { dbStorage } from '~/shared/storage/db-storage'
 
 import type { API } from '../api.types'
-import type { ClientMetaData, Updates } from '../mtproto'
+import type { ClientMetaData } from '../mtproto'
 import { Client } from '../mtproto'
 import { DEFAULT_API_META, API_META_STORAGE_KEY } from '../api.const'
 import { handleApiResponse } from './utils/handle-api-response'
+import { handleApiUpdates } from './utils/handle-api-updates'
+
+let updateCallback: Parameters<API['listenUpdates']>[0]
 
 const getMeta = async () =>
   (await dbStorage.get(API_META_STORAGE_KEY)) || DEFAULT_API_META
@@ -98,6 +101,14 @@ const apiPromise = new Promise<API>(async resolve => {
 
     exec: async (method, data) => {
       return client[method]?.(data)
+    },
+
+    listenUpdates: async () => {
+      client.updates.on(updates => {
+        const res = handleApiUpdates(updates)
+        if (!res) return
+        updateCallback?.(res)
+      })
     }
   }
 
@@ -114,6 +125,12 @@ const apiWorker: API = {
   exec: async (...args) => {
     const api = await apiPromise
     return api.exec(...args)
+  },
+
+  listenUpdates: async (cb) => {
+    updateCallback = cb
+    const api = await apiPromise
+    api.listenUpdates()
   }
 }
 

@@ -3,8 +3,8 @@ import type { Chat, Message, Peer } from '~/shared/api/mtproto'
 export type FeedState = Config & {
   initialLoading: boolean
   streamsHandlerActivated: boolean
-  currentFolderId: Folder['id']
   postUuids: PostUuids
+  newPostUuids: PostUuids
   channelIds: ChannelId[]
   folders: Folder[]
   filters: Filter[]
@@ -19,6 +19,7 @@ export type FeedCache = {
 
 export type Config = {
   configId?: Message.message['id']
+  currentFolderId: Folder['id']
   defaultFolderVisibility: boolean
 }
 

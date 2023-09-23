@@ -14,6 +14,9 @@
 .base
   position: relative
   padding: 16px
+  border: var(--local-border)
+  border-top: none
+  border-radius: 0 0 var(--local-border-radius) var(--local-border-radius)
 
   &:nth-child(2)
     padding-top: 0
@@ -45,7 +48,7 @@
   width: 40px
   height: calc(var(--local-line-height) * 2 + 16px)
   padding: calc(var(--local-line-height) + 2px) 0 16px
-  border-radius: 16px
+  border-radius: var(--local-border-radius)
   overflow: visible
 
   &::after

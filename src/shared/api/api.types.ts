@@ -1,4 +1,7 @@
-import type { ClientError, ClientMetaData, MethodDeclMap, InputCheckPasswordSRP, AccountPassword } from './mtproto'
+import type {
+  ClientError, ClientMetaData, MethodDeclMap, InputCheckPasswordSRP,
+  AccountPassword, MessagesMessages
+} from './mtproto'
 
 export type API = {
   req: <T extends keyof MethodDeclMap>(
@@ -16,6 +19,12 @@ export type API = {
     method: T,
     data: ExecMethodDeclMap[T]['req']
   ) => Promise<ExecMethodDeclMap[T]['res']>
+
+  listenUpdates: (
+    cb?: (
+      messages: Partial<MessagesMessages>
+    ) => void
+  ) => Promise<void>
 }
 
 export type ExecMethodDeclMap = {

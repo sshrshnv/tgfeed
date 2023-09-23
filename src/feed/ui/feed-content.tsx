@@ -1,5 +1,5 @@
 import type { Component } from 'solid-js'
-import { Index, createSignal, createResource, createMemo, onMount } from 'solid-js'
+import { Index, createSignal, createResource, createEffect, createMemo, onMount } from 'solid-js'
 
 import { service } from '~/shared/service'
 import { Progress } from '~/shared/ui/elements/progress'
@@ -8,6 +8,8 @@ import type { Folder } from '../feed.types'
 import { DEFAULT_FOLDER_ID } from '../feed.const'
 import { feedState, setFeedState } from '../feed-state'
 import { fetchPosts } from '../actions/fetch-posts'
+import { listenUpdates } from '../actions/listen-updates'
+import { applyUpdates } from '../actions/apply-updates'
 import { loadStreamFilePart } from '../utils/load-stream-file-part'
 import { FeedPosts } from './feed-posts'
 
@@ -26,6 +28,13 @@ export const FeedContent: Component = () => {
     if (feedState.initialLoading || postsRes.loading) return
     setPageNumber(value => value + 1)
   }
+
+  createEffect((prev) => {
+    if (prev && !feedState.initialLoading) {
+      listenUpdates()
+    }
+    return feedState.initialLoading
+  }, true)
 
   onMount(() => {
     if (feedState.streamsHandlerActivated) return
@@ -46,6 +55,7 @@ export const FeedContent: Component = () => {
           active={!feedState.initialLoading && folderId() === feedState.currentFolderId}
           loading={!feedState.initialLoading && postsRes.loading}
           onScrollEnd={handleScrollEnd}
+          onApplyUpdates={applyUpdates}
         />
       )}</Index>
     </>

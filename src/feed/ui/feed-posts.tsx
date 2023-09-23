@@ -1,8 +1,11 @@
 import type { Component } from 'solid-js'
-import { Index, Show, createEffect, createSignal, createMemo, onMount, onCleanup, batch, untrack } from 'solid-js'
+import { Index, Show, createEffect, createSignal, createMemo, onMount, onCleanup, batch } from 'solid-js'
 import { createStore } from 'solid-js/store'
 import { createResizeObserver } from '@solid-primitives/resize-observer'
 import { clsx } from 'clsx'
+
+import { Button } from '~/shared/ui/elements/button'
+import { Icon } from '~/shared/ui/elements/icon'
 
 import type { Folder, UncertainPostUuid, PostUuid, PostGroupUuid } from '../feed.types'
 import { DEFAULT_FOLDER_ID } from '../feed.const'
@@ -10,17 +13,20 @@ import { feedCache } from '../feed-cache'
 import { feedState } from '../feed-state'
 import { isPostGroupUuid } from '../utils/generate-post-uuid'
 import { FeedPostsItem } from './feed-posts-item'
+import { FeedPostsUpdateButton } from './feed-posts-update-button'
 import { FeedPostsLoader } from './feed-posts-loader'
-import { FeedPostsDate } from './feed-posts-date'
+import { FeedPostsDateChip } from './feed-posts-date-chip'
 
 import * as layoutCSS from '../../shared/ui/elements/layout.sss'
 import * as feedPostsCSS from './feed-posts.sss'
 
 export type FeedPostsProps = {
   folderId: Folder['id']
+  defaultActive?: boolean
   active?: boolean
   loading?: boolean
   onScrollEnd: () => void
+  onApplyUpdates: () => void
 }
 
 type HeightState = {
@@ -31,8 +37,9 @@ type OffsetState = {
   [uuid in UncertainPostUuid]: number
 }
 
-const FEED_POSTS_GAP = 24
+const FEED_POSTS_GAP = 12
 const FEED_POSTS_COUNT = 20
+let firtsActiveFolderRendered = false
 
 export const FeedPosts: Component<FeedPostsProps> = (props) => {
   const SCROLL_EL_ID = 'scrollEl'
@@ -47,27 +54,36 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
   const [getScroll, setScroll] = createSignal(0)
   const [getRoughScroll, setRoughScroll] = createSignal(0)
   const [getPage, setPage] = createSignal(0)
+  const [isUpdating, setUpdating] = createSignal(true)
 
-  const getPostUuids = createMemo(() => {
-    if (!props.active) {
-      return []
-    }
-
-    if (props.folderId === DEFAULT_FOLDER_ID) {
-      return feedState.postUuids
-    }
-
+  const filterPostUuids = (postUuids) => {
     const channelIds = feedState.folders.find(folder =>
       folder.id === props.folderId
     )?.channelIds || []
 
-    return feedState.postUuids.filter(postUuid =>
+    return postUuids.filter(postUuid =>
       channelIds.some(channelId => postUuid.indexOf(channelId) === 0)
     )
+  }
+
+  const getPostUuids = createMemo(() => {
+    if (!props.active || isUpdating()) {
+      return []
+    }
+    if (props.folderId === DEFAULT_FOLDER_ID) {
+      return feedState.postUuids
+    }
+    return filterPostUuids(feedState.postUuids)
   })
 
   const getPostsCount = createMemo(() =>
     (getPage() + 1) * FEED_POSTS_COUNT
+  )
+
+  const getUpdatesCount = createMemo(() =>
+    props.folderId === DEFAULT_FOLDER_ID ?
+      feedState.newPostUuids.length :
+      filterPostUuids(feedState.newPostUuids).length
   )
 
   const getLoaderOffset = createMemo(() => {
@@ -77,6 +93,14 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
     if (lastPostUuid && (!lastPostOffset || !lastPostHeight)) return
     return (lastPostOffset || 0) + (lastPostHeight || 0)
   })
+
+  const isUpdateButtonVisible = createMemo(() =>
+    !!getUpdatesCount() && getRoughScroll() < (heightState[SCROLL_EL_ID] || 0)
+  )
+
+  const isScrollButtonVisible = createMemo(() =>
+    heightState[SCROLL_EL_ID] && getRoughScroll() >= heightState[SCROLL_EL_ID]
+  )
 
   const isScrollEnd = () => (
     props.active &&
@@ -144,6 +168,17 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
     props.onScrollEnd()
   }
 
+  const scrollToTop = () => {
+    scrollEl.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const applyUpdates = () => {
+    setUpdating(true)
+    self.setTimeout(() => setUpdating(false), 300)
+    props.onApplyUpdates()
+    setPage(0)
+  }
+
   const addResizeObserverEl = (el: Element) => {
     setResizeObserverEls(resizeObserverEls.length, el)
   }
@@ -158,21 +193,24 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
   createResizeObserver(resizeObserverEls, ({ height }, el: Element) => {
     height = Math.round(height)
     if (!height) return
-    updatePosition(
-      el.id as UncertainPostUuid,
-      height
-    )
+    updatePosition(el.id as UncertainPostUuid, height)
   })
 
   createEffect((prev) => {
     if (prev && !props.active) {
+      setUpdating(true)
       setPage(0)
+      setScroll(0)
+      setRoughScroll(0)
     }
-    if (!prev && props.active && untrack(getRoughScroll)) {
-      scrollEl.scrollTo({
-        top: 0,
-        behavior: 'instant'
-      })
+    if (!prev && props.active) {
+      if (firtsActiveFolderRendered) {
+        self.setTimeout(() => setUpdating(false), 300)
+      }
+      else {
+        firtsActiveFolderRendered = true
+        setUpdating(false)
+      }
     }
     return props.active
   })
@@ -199,10 +237,26 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
       id={SCROLL_EL_ID}
       ref={scrollEl}
     >
+      <Button
+        class={clsx(
+          feedPostsCSS.scrollButton,
+          !isScrollButtonVisible() && feedPostsCSS._hidden
+        )}
+        disabled={!isScrollButtonVisible()}
+        onClick={scrollToTop}
+      >
+        <Icon name='arrowUp' size='large'/>
+      </Button>
+
+      <FeedPostsUpdateButton
+        visible={isUpdateButtonVisible()}
+        onClick={applyUpdates}
+      />
+
       <FeedPostsLoader
         offset={getLoaderOffset()}
-        active={isScrollEnd()}
-        loading={props.loading}
+        active={isScrollEnd() || isUpdating()}
+        loading={props.loading || isUpdating()}
         onScrollEnd={handleScrollEnd}
       />
 
@@ -221,15 +275,21 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
           getPostUuid() === getUuid() ? undefined : getUuid() as PostGroupUuid
         ))
 
-        const hasDate = createMemo(() => {
-          const prevDate = getPrevPostUuid() && feedCache.posts[getPrevPostUuid()!]?.date
-          const date = feedCache.posts[getPostUuid()].date
-          return !!prevDate && new Date(prevDate * 1000).toDateString() !== new Date(date * 1000).toDateString()
+        const hasDateChip = createMemo(() => {
+          const date = new Date(feedCache.posts[getPostUuid()].date * 1000).toDateString()
+          const prevDate = getPrevPostUuid() && new Date(feedCache.posts[getPrevPostUuid()!]?.date * 1000).toDateString()
+          return !prevDate || date !== prevDate
         })
 
-        const isStickyDate = createMemo(() => (
-          hasDate() && !!offsetState[getUuid()] && getScroll() >= offsetState[getUuid()] - FEED_POSTS_GAP / 2
-        ))
+        const isStickyDateChip = createMemo(() => {
+          const date = new Date(feedCache.posts[getPostUuid()].date * 1000).toDateString()
+          const todayDate = new Date().toDateString()
+          return (
+            hasDateChip() &&
+            date !== todayDate &&
+            !!offsetState[getUuid()] && getScroll() >= offsetState[getUuid()] - FEED_POSTS_GAP
+          )
+        })
 
         const isVisible = createMemo(() => (
           !offsetState[getUuid()] ||
@@ -249,11 +309,11 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
 
         return (
           <>
-            <Show when={hasDate()}>
-              <FeedPostsDate
+            <Show when={hasDateChip()}>
+              <FeedPostsDateChip
                 uuid={getPostUuid()}
                 offset={offsetState[getUuid()]}
-                sticky={isStickyDate()}
+                sticky={isStickyDateChip()}
               />
             </Show>
 
@@ -263,7 +323,7 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
               uuid={getPostUuid()}
               groupUuid={getPostGroupUuid()}
               offset={offsetState[getUuid()]}
-              datePadding={hasDate()}
+              chipPadding={hasDateChip()}
               visible={isVisible()}
               onScreen={isOnScreen()}
               onMount={addResizeObserverEl}

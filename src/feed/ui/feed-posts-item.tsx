@@ -2,7 +2,6 @@ import type { Component } from 'solid-js'
 import { Show, createSignal, createEffect, createMemo, onMount, onCleanup } from 'solid-js'
 import type { TransitionProps } from 'solid-transition-group'
 import { Transition } from 'solid-transition-group'
-import { DocumentEventListener } from '@solid-primitives/event-listener'
 import { clsx } from 'clsx'
 
 import { routingState } from '~/shared/routing/routing-state'
@@ -28,7 +27,7 @@ export type FeedPostsItemProps = {
   uuid: PostUuid
   groupUuid?: PostGroupUuid
   offset: number
-  datePadding?: boolean
+  chipPadding?: boolean
   visible?: boolean
   onScreen?: boolean
   onMount?: (el: Element) => void
@@ -86,11 +85,18 @@ export const FeedPostsItem: Component<FeedPostsItemProps> = (props) => {
     }
   })
 
+  createEffect(() => {
+    if (isMenuExpanded()) {
+      self.document.addEventListener('click', closeMenu)
+    }
+    onCleanup(() => {
+      self.document.removeEventListener('click', closeMenu)
+    })
+  })
+
   createEffect((prevOffset) => {
     if (typeof prevOffset !== 'undefined') return
-    self.setTimeout(() => {
-      setReady(true)
-    }, 50)
+    self.setTimeout(() => setReady(true), 50)
     return props.offset
   })
 
@@ -113,12 +119,10 @@ export const FeedPostsItem: Component<FeedPostsItemProps> = (props) => {
       id={props.refId}
       ref={el}
     >
-      <Show when={props.datePadding}>
-        <div class={clsx(
-          feedPostsItemCSS.padding,
-          props.datePadding && feedPostsItemCSS._date
-        )}/>
-      </Show>
+      <div class={clsx(
+        feedPostsItemCSS.padding,
+        props.chipPadding && feedPostsItemCSS._chipPadding
+      )}/>
 
       <article
         class={feedPostsItemCSS.base}
@@ -129,7 +133,7 @@ export const FeedPostsItem: Component<FeedPostsItemProps> = (props) => {
           visible={props.visible && isReady()}
         >
           <Button
-            class={feedPostsItemCSS.button}
+            class={feedPostsItemCSS.menuButton}
             onClick={openMenu}
           >
             <Icon name='more' size='medium'/>
@@ -158,15 +162,11 @@ export const FeedPostsItem: Component<FeedPostsItemProps> = (props) => {
         onExit={handleMenuExit}
       >
         <Show when={isMenuExpanded()}>
-          <>
-            <FeedPostsItemMenu
-              uuid={props.uuid}
-              onClose={closeMenu}
-            />
-            <DocumentEventListener
-              onClick={closeMenu}
-            />
-          </>
+          <FeedPostsItemMenu
+            uuid={props.uuid}
+            chipPadding={props.chipPadding}
+            onClose={closeMenu}
+          />
         </Show>
       </Transition>
     </div>

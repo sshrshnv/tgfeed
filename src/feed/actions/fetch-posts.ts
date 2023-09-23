@@ -1,19 +1,14 @@
 import { batch } from 'solid-js'
 
-import type { MessagesMessages, Message } from '~/shared/api/mtproto'
 import { api } from '~/shared/api'
 
-import type {
-  FeedCache, FeedState, ChannelData, ChannelId,
-  PostData, PostUuid, PostUuids, PostGroups
-} from '../feed.types'
+import type { FeedCache, FeedState, PostUuids, PostGroups } from '../feed.types'
 import { DEFAULT_FOLDER_ID } from '../feed.const'
 import { feedState, setFeedState } from '../feed-state'
 import { setFeedCache } from '../feed-cache'
-import { resolveCurrentFolderState } from '../utils/resolve-current-folder-state'
-import { generatePostUuid, generatePostGroupUuid } from '../utils/generate-post-uuid'
 import { loadConfig } from '../utils/load-config'
-import { isSupportedMedia } from '../utils/detect-post-media'
+import { resolveCurrentFolderState } from '../utils/resolve-current-folder-state'
+import { parsePostMessages } from '../utils/parse-post-messages'
 
 type Data = {
   postUuids: FeedState['postUuids']
@@ -42,13 +37,12 @@ export const fetchPosts = async (pageNumber: number | true) => {
       feedState.currentFolderId !== DEFAULT_FOLDER_ID &&
       !folders.some(folder => folder.id === feedState.currentFolderId)
     ) {
-      resolveCurrentFolderState(feedState, config)
+      resolveCurrentFolderState(feedState, config, folders)
     }
 
     setFeedCache({ channels, posts })
     batch(() => {
-      setFeedState('configId', config.configId)
-      setFeedState('defaultFolderVisibility', config.defaultFolderVisibility)
+      setFeedState(config)
       setFeedState('folders', folders)
       setFeedState('filters', filters)
       setFeedState('postGroups', postGroups)
@@ -81,7 +75,7 @@ const loadPosts = async ({ next = false } = {}): Promise<Data> => {
     offset_rate = 0
   }
   if (typeof offset_rate === 'undefined') {
-    return parsePostsRes()
+    return parsePostMessages()
   }
 
   const res = await api.req('messages.searchGlobal', {
@@ -99,7 +93,7 @@ const loadPosts = async ({ next = false } = {}): Promise<Data> => {
     offset_rate
   })
 
-  const data = parsePostsRes(res)
+  const data = parsePostMessages(res)
 
   if ('next_rate' in res) {
     data.next = true
@@ -110,51 +104,6 @@ const loadPosts = async ({ next = false } = {}): Promise<Data> => {
 
   if (!data.postUuids.length && offset_rate) {
     return loadPosts({ next: true })
-  }
-
-  return data
-}
-
-const parsePostsRes = (
-  res?: MessagesMessages
-) => {
-  const data = {
-    postUuids: [] as FeedState['postUuids'],
-    channels: {} as FeedCache['channels'],
-    posts: {} as FeedCache['posts'],
-    postGroups: {} as FeedState['postGroups'],
-    next: false
-  }
-
-  if (!res || !('messages' in res)) {
-    return data
-  }
-
-  for (let i = 0; i < res.messages.length; i++) {
-    const post = res.messages[i] as PostData
-    const postUuid: PostUuid = generatePostUuid(post)
-    const channelId: ChannelId = post.peer_id.channel_id
-
-    if (!isValidPost(post)) continue
-
-    if (post.grouped_id) {
-      const postGroupUuid = generatePostGroupUuid(post)
-
-      if (!data.postGroups[postGroupUuid]) {
-        data.postGroups[postGroupUuid] = []
-        data.postUuids.push(postGroupUuid)
-      }
-
-      data.postGroups[postGroupUuid].unshift(postUuid)
-    } else {
-      data.postUuids.push(postUuid)
-    }
-    data.posts[postUuid] = post
-
-    if (!data.channels.channelId) {
-      const channel = res.chats.find(chat => chat.id === channelId) as ChannelData
-      data.channels[channelId] = channel
-    }
   }
 
   return data
@@ -175,13 +124,3 @@ const getPostGroupsUpdate = (
   obj[key] = [...values, ...(state?.[key] || [])]
   return obj
 }, {} as PostGroups)
-
-const isValidPost = (message: Message) => !!(
-  message._ === 'message' &&
-  message.peer_id._ === 'peerChannel' &&
-  message.post &&
-  !message.out && (
-    message.message ||
-    isSupportedMedia(message.media)
-  )
-)

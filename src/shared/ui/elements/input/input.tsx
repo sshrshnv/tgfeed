@@ -1,5 +1,6 @@
 import type { Component, ComponentProps } from 'solid-js'
-import { splitProps } from 'solid-js'
+import { splitProps, createSignal, createEffect } from 'solid-js'
+import { mergeRefs } from '@solid-primitives/refs'
 import { clsx } from 'clsx'
 
 import * as layoutCSS from '../layout.sss'
@@ -11,8 +12,16 @@ export type InputProps = ComponentProps<'input'> & {
 
 export const Input: Component<InputProps> = (_props) => {
   const [props, inputProps] = splitProps(_props, [
-    'class', 'type', 'transparent'
+    'class', 'ref', 'type', 'transparent'
   ])
+
+  const [getEl, setEl] = createSignal<HTMLInputElement>()
+
+  createEffect(() => {
+    if (!inputProps.autofocus) return
+    const el = getEl()
+    el && self.setTimeout(() => el.focus(), 0)
+  })
 
   return (
     <input {...inputProps}
@@ -22,6 +31,7 @@ export const Input: Component<InputProps> = (_props) => {
         inputCSS.input,
         layoutCSS.outline
       )}
+      ref={mergeRefs(props.ref, setEl)}
       type={props.type || 'text'}
       autocomplete='off'
     />

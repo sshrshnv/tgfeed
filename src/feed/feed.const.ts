@@ -14,6 +14,7 @@ export const DEFAULT_FEED_STATE: FeedState = {
   currentFolderId: DEFAULT_FOLDER_ID,
   defaultFolderVisibility: true,
   postUuids: [],
+  newPostUuids: [],
   channelIds: [],
   folders: [],
   filters: [],

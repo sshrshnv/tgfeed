@@ -20,6 +20,7 @@ import * as feedPostsItemMenuCSS from './feed-posts-item-menu.sss'
 
 export type FeedPostsItemMenuProps = {
   uuid: PostUuid
+  chipPadding?: boolean
   onClose?: () => void
 }
 
@@ -47,6 +48,7 @@ export const FeedPostsItemMenu: Component<FeedPostsItemMenuProps> = (props) => {
     <div
       class={clsx(
         feedPostsItemMenuCSS.base,
+        props.chipPadding && feedPostsItemMenuCSS._chipPadding,
         layoutCSS.before
       )}
     >

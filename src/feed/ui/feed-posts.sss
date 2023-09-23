@@ -1,7 +1,9 @@
 .base
   --local-scrollbar-color: var(--theme-color-surface-0)
   --local-scrollbar-background-color: var(--theme-color-background)
-  --local-date-height: 56px
+  --local-posts-gap: 12px
+  --local-chip-min-width: 96px
+  --local-chip-wrapper-height: 44px
   position: relative
   flex: 1 1 auto
   flex-direction: column
@@ -11,3 +13,18 @@
 
   &._hidden
     display: none
+
+.scrollButton
+  position: fixed
+  z-index: 1
+  top: calc(14px + var(--layout-header-size))
+  right: 12px
+  width: 32px
+  height: 32px
+  translate: 0 0
+  border-radius: 16px
+  background-color: var(--theme-color-surface-1)
+  transition: translate 300ms ease-in-out
+
+  &._hidden
+    translate: 0 -46px

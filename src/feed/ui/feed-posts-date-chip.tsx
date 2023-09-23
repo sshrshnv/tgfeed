@@ -1,4 +1,5 @@
 import type { Component } from 'solid-js'
+import { createSignal, createEffect } from 'solid-js'
 import { clsx } from 'clsx'
 
 import { localeState } from '~/core/locale/locale-state'
@@ -9,17 +10,19 @@ import { getPost } from '../utils/get-feed-cache-data'
 import { formatPostsDate } from '../utils/format-posts-date'
 
 import * as layoutCSS from '../../shared/ui/elements/layout.sss'
-import * as feedPostsDateCSS from './feed-posts-date.sss'
+import * as feedPostsDateChipCSS from './feed-posts-date-chip.sss'
 
-export type FeedPostsItemDateProps = {
+export type FeedPostsItemDateChipProps = {
   uuid: PostUuid
   offset?: number
   sticky?: boolean
 }
 
-const FEED_POSTS_DATE_OFFSET = 68
+const FEED_POSTS_DATE_OFFSET = 70
 
-export const FeedPostsDate: Component<FeedPostsItemDateProps> = (props) => {
+export const FeedPostsDateChip: Component<FeedPostsItemDateChipProps> = (props) => {
+  const [isReady, setReady] = createSignal(false)
+
   const getDate = () =>
     formatPostsDate(getPost(props.uuid).date, { lang: localeState.lang })
 
@@ -27,11 +30,18 @@ export const FeedPostsDate: Component<FeedPostsItemDateProps> = (props) => {
     translate: `0 ${props.offset - FEED_POSTS_DATE_OFFSET}px`
   })
 
+  createEffect((prevOffset) => {
+    if (typeof prevOffset !== 'undefined') return
+    self.setTimeout(() => setReady(true), 50)
+    return props.offset
+  })
+
   return (
     <div
       class={clsx(
-        props.sticky && feedPostsDateCSS._sticky,
-        feedPostsDateCSS.base,
+        props.sticky && feedPostsDateChipCSS._sticky,
+        !isReady() && feedPostsDateChipCSS._transparent,
+        feedPostsDateChipCSS.base,
         layoutCSS.flex,
         layoutCSS.flexCenter
       )}
