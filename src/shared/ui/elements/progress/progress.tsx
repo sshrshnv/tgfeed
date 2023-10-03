@@ -19,6 +19,7 @@ export const Progress: Component<ProgressProps> = (props) => {
     element.onanimationstart = () => setActive(true)
     element.onanimationiteration = () => {
       if (props.active) return
+      element.classList.remove(progressCSS._animated)
       setActive(false)
     }
   })

@@ -23,9 +23,8 @@ export const FeedTabsItem: ParentComponent<FeedTabsItemProps> = (props) => {
   const isActive = () =>
     feedState.currentFolderId === props.folderId
 
-  const handleClick = () => {
+  const handleClick = () =>
     selectFolder(props.folderId)
-  }
 
   createEffect((prev) => {
     const active = isActive()
@@ -40,10 +39,12 @@ export const FeedTabsItem: ParentComponent<FeedTabsItemProps> = (props) => {
       class={clsx(
         feedTabsItemCSS.base,
         isActive() && feedTabsItemCSS._active,
+        layoutCSS.before,
         layoutCSS.after
       )}
       ref={tabEl}
       role="tab"
+      opacity={false}
       onClick={handleClick}
     >
       <Text variant='label' size='large'>

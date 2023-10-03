@@ -18,8 +18,18 @@
   transition-property: opacity, outline-color
   will-change: opacity, outline-color
 
+  &:not(._opacity)
+    > span, > svg
+      transition: opacity 200ms ease-in-out
+      will-change: opacity
+
   &:active:not(:disabled)
-    opacity: 0.5
+    &._opacity
+      opacity: 0.5
+
+    &:not(._opacity)
+      > span, > svg
+        opacity: 0.5
 
   &:disabled
     cursor: not-allowed

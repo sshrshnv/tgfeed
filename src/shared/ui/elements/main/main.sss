@@ -2,5 +2,8 @@
   flex-shrink: 0
   flex-grow: 1
   width: 100%
-  padding: 0 safe(right) 0 safe(left)
+  padding: safe(top) safe(right) 0 safe(left)
   background-color: var(--theme-color-background)
+
+  @media (--min-width-l)
+    padding-top: calc(safe(top) + var(--layout-float-top-bar-size))

@@ -1,4 +1,4 @@
-import { Switch, Match, Show, createEffect, lazy } from 'solid-js'
+import { Switch, Match, Show, createMemo, createEffect, lazy } from 'solid-js'
 import { clsx } from 'clsx'
 
 import { CoreMenuButton } from '~/core/ui/core-menu-button'
@@ -7,11 +7,11 @@ import { routingState } from '~/shared/routing/routing-state'
 import { Header } from '~/shared/ui/elements/header'
 import { Main } from '~/shared/ui/elements/main'
 import { Aside } from '~/shared/ui/elements/aside'
-import { HR } from '~/shared/ui/elements/hr'
 
 import { introRoutes } from '~/intro/intro-routes'
 import { authRoutes } from '~/auth/auth-routes'
 import { feedRoutes } from '~/feed/feed-routes'
+import { feedState } from '~/feed/feed-state'
 
 import * as layoutCSS from './shared/ui/elements/layout.sss'
 import * as appViewCSS from './app.view.sss'
@@ -19,14 +19,18 @@ import * as appViewCSS from './app.view.sss'
 const IntroMainContent = lazy(async () => ({ default: (await import('~/intro/ui/intro-main-content')).IntroMainContent }))
 const AuthContent = lazy(async () => ({ default: (await import('~/auth/ui/auth-content')).AuthContent }))
 const FeedTabs = lazy(async () => ({ default: (await import('~/feed/ui')).FeedTabs }))
-const FeedManagingButton = lazy(async () => ({ default: (await import('~/feed/ui')).FeedManagingButton }))
-const FeedManagingDialog = lazy(async () => ({ default: (await import('~/feed/ui')).FeedManagingDialog }))
+const FeedMenuButton = lazy(async () => ({ default: (await import('~/feed/ui')).FeedMenuButton }))
+const FeedMenuDialog = lazy(async () => ({ default: (await import('~/feed/ui')).FeedMenuDialog }))
 const FeedContent = lazy(async () => ({ default: (await import('~/feed/ui')).FeedContent }))
 
 export const View = () => {
   const isFeed = () => {
     return routingState.currentPageRoute?.id.startsWith('feed')
   }
+
+  const isHeaderHidden = createMemo(() =>
+    isFeed() && feedState.scrolling[feedState.currentFolderId || 0] > 0
+  )
 
   createEffect(() => {
     const contains = self.document.body.classList.contains(appViewCSS._uniform)
@@ -36,20 +40,11 @@ export const View = () => {
 
   return (
     <>
-      <Header class={appViewCSS.header}>
-        <HR class={appViewCSS.hr}/>
-
-        <CoreMenuButton class={clsx(
-          appViewCSS.headerButton,
-          isFeed() && appViewCSS._left
-        )}/>
-
+      <Header hidden={isHeaderHidden()}>
+        <CoreMenuButton/>
         <Show when={isFeed()}>
           <FeedTabs/>
-          <FeedManagingButton class={clsx(
-            appViewCSS.headerButton,
-            appViewCSS._right
-          )}/>
+          <FeedMenuButton/>
         </Show>
       </Header>
 
@@ -79,7 +74,7 @@ export const View = () => {
       </Aside>
       <Aside position='right'>
         <Show when={isFeed()}>
-          <FeedManagingDialog class={clsx(
+          <FeedMenuDialog class={clsx(
             appViewCSS.menu,
             appViewCSS._right
           )}/>

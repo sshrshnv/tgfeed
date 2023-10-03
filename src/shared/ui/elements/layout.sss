@@ -32,13 +32,6 @@
   &::-webkit-scrollbar-button
     display: none
 
-  @media (--min-width-l)
-    &::-webkit-scrollbar
-      width: 8px
-
-    &::-webkit-scrollbar-thumb
-      border-radius: 8px
-
 .scrollHidden
   overflow: auto
   scrollbar-width: none
@@ -74,9 +67,9 @@
 .outline
   outline: none
 
-  @media (hover: hover)
-    outline: 2px solid transparent
-    outline-offset: -2px
+  // @media (hover: hover)
+  //   outline: 1px solid transparent
+  //   outline-offset: -1px
 
-    &:focus-visible
-      outline-color: var(--theme-color-outline-variant)
+  //   &:focus-visible
+  //     outline-color: var(--theme-color-outline-variant)

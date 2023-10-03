@@ -23,16 +23,8 @@ export const MenuButton: Component<MenuButtonProps> = (props) => {
       route={props.route}
       onClick={props.onClick}
     >
-      <Icon
-        class={menuButtonCSS.icon}
-        name={props.icon}
-        size='medium'
-      />
-      <Text
-        class={menuButtonCSS.text}
-        variant='label'
-        size='large'
-      >
+      <Icon name={props.icon} size='medium'/>
+      <Text variant='label' size='large'>
         {props.text}
       </Text>
     </Button>

@@ -9,7 +9,7 @@ import { Icon } from '~/shared/ui/elements/icon'
 import type { PostUuid } from '../feed.types'
 import { FONT_SIZE_LINE_HEIGHT_VALUES, VISIBLE_LINES_COUNT } from '../feed.const'
 import { feedState } from '../feed-state'
-import { getPost } from '../utils/get-feed-cache-data'
+import { getPost } from '../utils/get-cache-data'
 import { formatPostText } from '../utils/format-post-text'
 
 import * as layoutCSS from '../../shared/ui/elements/layout.sss'

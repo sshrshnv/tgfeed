@@ -1,12 +1,12 @@
 type TranslateScaleArgs = {
-  translate: `${string} ${string}`
+  translate: `${string}, ${string}`
   x?: boolean
   y?: boolean
 }
 export const getTranslateScaleInParams = ({ translate, x = false, y = false }: TranslateScaleArgs) => ({
   keyframes: [
-    { translate, scale: x ? '0.9 1' : y ? '1 0.9' : '1 1', opacity: '0' },
-    { translate: '0 0', scale: '1 1', opacity: '1' }
+    { transform: `translate(${translate}) scale(${ x ? '0.9, 1' : y ? '1, 0.9' : '1, 1' })`, opacity: '0' },
+    { transform: 'translate(0, 0) scale(1, 1)', opacity: '1' }
   ],
   options: {
     easing: 'cubic-bezier(0, 0, 0, 1)',
@@ -16,8 +16,8 @@ export const getTranslateScaleInParams = ({ translate, x = false, y = false }: T
 })
 export const getTranslateScaleOutParams = ({ translate }: TranslateScaleArgs) => ({
   keyframes: [
-    { translate: '0 0', opacity: '1' },
-    { translate, opacity: '0' }
+    { transform: 'translate(0, 0)', opacity: '1' },
+    { transform: `translate(${translate})`, opacity: '0' }
   ],
   options: {
     easing: 'cubic-bezier(0.3, 0, 1, 1)',
@@ -27,12 +27,12 @@ export const getTranslateScaleOutParams = ({ translate }: TranslateScaleArgs) =>
 })
 
 type TranslateArgs = {
-  translate: `${string} ${string}`
+  translate: `${string}, ${string}`
 }
 export const getTranslateInParams = ({ translate }: TranslateArgs) => ({
   keyframes: [
-    { translate, opacity: '0' },
-    { translate: '0 0', opacity: '1' }
+    { transform: `translate(${translate})`, opacity: '0' },
+    { transform: 'translate(0, 0)', opacity: '1' }
   ],
   options: {
     easing: 'cubic-bezier(0, 0, 0, 1)',
@@ -42,8 +42,8 @@ export const getTranslateInParams = ({ translate }: TranslateArgs) => ({
 })
 export const getTranslateOutParams = ({ translate }: TranslateArgs) => ({
   keyframes: [
-    { translate: '0 0', opacity: '1' },
-    { translate, opacity: '0' }
+    { transform: 'translate(0, 0)', opacity: '1' },
+    { transform: `translate(${translate})`, opacity: '0' }
   ],
   options: {
     easing: 'cubic-bezier(0.3, 0, 1, 1)',
@@ -53,13 +53,13 @@ export const getTranslateOutParams = ({ translate }: TranslateArgs) => ({
 })
 
 type ScaleArgs = {
-  scale: `${number} ${number}`
+  scale: `${number}, ${number}`
 }
 export const getScaleInParams = ({ scale }: ScaleArgs) => ({
   keyframes: [
-    { scale, opacity: '0' },
-    { scale: '1 0.9', opacity: '0.25', offset: 0.75 },
-    { scale: '1 1', opacity: '1' },
+    { transform: `scale(${scale})`, opacity: '0' },
+    { transform: 'scale(1, 0.9)', opacity: '0.25', offset: 0.75 },
+    { transform: 'scale(1, 1)', opacity: '1' },
   ],
   options: {
     easing: 'cubic-bezier(0, 0, 0, 1)',
@@ -69,9 +69,9 @@ export const getScaleInParams = ({ scale }: ScaleArgs) => ({
 })
 export const getScaleOutParams = ({ scale }: ScaleArgs) => ({
   keyframes: [
-    { scale: '1 1', opacity: '1' },
+    { transform: 'scale(1, 1)', opacity: '1' },
     { opacity: '0.1', offset: 0.25 },
-    { scale, opacity: '0' }
+    { transform: `scale(${scale})`, opacity: '0' }
   ],
   options: {
     easing: 'cubic-bezier(0.3, 0, 1, 1)',

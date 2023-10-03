@@ -21,6 +21,7 @@ export const MenuRouteButton: Component<MenuRouteButtonProps> = (props) => {
     <Button
       class={menuButtonCSS.base}
       route={props.route}
+      autofocus={false}
     >
       <Icon
         class={clsx(
@@ -31,14 +32,13 @@ export const MenuRouteButton: Component<MenuRouteButtonProps> = (props) => {
         size='medium'
       />
       <Text
-        class={menuButtonCSS.text}
         variant='label'
         size='large'
       >
         {props.text}
       </Text>
       <Icon
-        class={menuButtonCSS.arrow}
+        class={menuButtonCSS.arrowIcon}
         name='arrowRight'
         size='small'
       />

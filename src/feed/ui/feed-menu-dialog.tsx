@@ -12,53 +12,53 @@ import { Button } from '~/shared/ui/elements/button'
 
 import type { Folder } from '../feed.types'
 import { feedRoutes } from '../feed-routes'
-import { FeedManagingDialogFolders } from './feed-managing-dialog-folders'
-import { FeedManagingDialogForm } from './feed-managing-dialog-form'
-import { FeedManagingDialogFontSize } from './feed-managing-dialog-font-size'
+import { FeedDialogFolders } from './feed-menu-folders'
+import { FeedFormDialog } from './feed-form-dialog'
+import { FeedMenuFontSize } from './feed-menu-font-size'
 
 import * as layoutCSS from '../../shared/ui/elements/layout.sss'
-import * as feedManagingDialogCSS from './feed-managing-dialog.sss'
+import * as feedMenuDialogCSS from './feed-menu-dialog.sss'
 
-export type FeedManagingDialogProps = {
+export type FeedMenuDialogProps = {
   class?: string
 }
 
-export const FeedManagingDialog: Component<FeedManagingDialogProps> = (props) => {
+export const FeedMenuDialog: Component<FeedMenuDialogProps> = (props) => {
   const [getEditingFolder, setEditingFolder] = createSignal<Folder>()
   const [isFormTranstioning, setFormTransitioning] = createSignal(false)
-  const isOpen = () => routingState.currentDialogRoute?.id === feedRoutes.managingDialog.id
-  const isFormOpen = () => routingState.currentRoute?.id === feedRoutes.managingDialogForm.id
+  const isOpen = () => routingState.currentDialogRoute?.id === feedRoutes.dialog.id
+  const isFormOpen = () => routingState.currentRoute?.id === feedRoutes.formDialog.id
 
   const startFormTransitioning = () => setFormTransitioning(true)
   const endFormTransitioning = () => setFormTransitioning(false)
 
   const openNewFolderForm = () => {
     setEditingFolder()
-    pushRoute(feedRoutes.managingDialogForm)
+    pushRoute(feedRoutes.formDialog)
   }
 
   const openEditingFolderForm = (folder, ev) => {
     ev.stopPropagation()
     setEditingFolder(folder)
-    pushRoute(feedRoutes.managingDialogForm)
+    pushRoute(feedRoutes.formDialog)
   }
 
   return (
     <TransitionDialog
       class={clsx(
         props.class,
-        feedManagingDialogCSS.base,
+        feedMenuDialogCSS.base,
         layoutCSS.flex
       )}
-      route={feedRoutes.managingDialog}
+      route={feedRoutes.dialog}
       open={isOpen()}
       animation='slideInLeftAnimation'
       onBeforeExit={startFormTransitioning}
     >
       <Menu
         class={clsx(
-          feedManagingDialogCSS.menu,
-          isFormOpen() && feedManagingDialogCSS._hidden
+          feedMenuDialogCSS.menu,
+          isFormOpen() && feedMenuDialogCSS._hidden
         )}
         {...(isFormOpen() ? { inert: true } : {})}
         scrollable
@@ -68,7 +68,7 @@ export const FeedManagingDialog: Component<FeedManagingDialogProps> = (props) =>
         />
 
         <Button
-          class={feedManagingDialogCSS.primaryButton}
+          class={feedMenuDialogCSS.primaryButton}
           onClick={openNewFolderForm}
           stopPropagation
         >
@@ -81,25 +81,25 @@ export const FeedManagingDialog: Component<FeedManagingDialogProps> = (props) =>
           text={localeState.texts?.feed.foldersTitle}
         />
 
-        <FeedManagingDialogFolders
+        <FeedDialogFolders
           openEditingFolderForm={openEditingFolderForm}
         />
 
-        <FeedManagingDialogFontSize/>
+        <FeedMenuFontSize/>
       </Menu>
 
       <TransitionMenu
-        class={feedManagingDialogCSS.formMenu}
-        route={feedRoutes.managingDialogForm}
+        class={feedMenuDialogCSS.formMenu}
+        route={feedRoutes.formDialog}
         open={isFormOpen()}
         onAfterEnter={endFormTransitioning}
         onBeforeExit={startFormTransitioning}
       >
         <MenuHeader
           title={localeState.texts?.feed[`${!!getEditingFolder() ? 'edit' : 'new'}FolderTitle`]}
-          backRoute={feedRoutes.managingDialogForm}
+          backRoute={feedRoutes.formDialog}
         />
-        <FeedManagingDialogForm
+        <FeedFormDialog
           folder={getEditingFolder()}
           transitioning={isFormTranstioning()}
         />

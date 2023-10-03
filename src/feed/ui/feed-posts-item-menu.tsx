@@ -13,7 +13,7 @@ import { Text } from '~/shared/ui/elements/text'
 import type { PostUuid } from '../feed.types'
 import { feedRoutes } from '../feed-routes'
 import { savePost } from '../actions/save-post'
-import { getPost, getPostChannel } from '../utils/get-feed-cache-data'
+import { getPost, getPostChannel } from '../utils/get-cache-data'
 
 import * as layoutCSS from '../../shared/ui/elements/layout.sss'
 import * as feedPostsItemMenuCSS from './feed-posts-item-menu.sss'
@@ -57,7 +57,7 @@ export const FeedPostsItemMenu: Component<FeedPostsItemMenuProps> = (props) => {
         onClick={save}
         stopImmediatePropagation
       >
-        <Icon name='bookmark' size='small'/>
+        <Icon name='bookmark' size='medium'/>
         <Text variant='label' size='large'>
           {isSaving() ? localeState.texts?.feed.buttons.saving : localeState.texts?.feed.buttons.savePost}
         </Text>
@@ -73,7 +73,7 @@ export const FeedPostsItemMenu: Component<FeedPostsItemMenuProps> = (props) => {
         target='_blank'
         rel='noopener noreferrer'
       >
-        <Icon name='arrowOutward' size='small'/>
+        <Icon name='arrowOutward' size='medium'/>
         <Text variant='label' size='large'>
           {localeState.texts?.feed.buttons.openTelegram}
         </Text>

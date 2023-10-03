@@ -9,15 +9,15 @@ import { feedState } from '../feed-state'
 import { toggleDefaultFolder } from '../actions/toggle-default-folder'
 import { resortFolders } from '../actions/resort-folders'
 import { deleteFolder } from '../actions/delete-folder'
-import { FeedManagingDialogFoldersItem } from './feed-managing-dialog-folders-item'
+import { FeedMenuFoldersItem } from './feed-menu-folders-item'
 
-import * as feedManagingDialogFoldersItemCSS from './feed-managing-dialog-folders-item.sss'
+import * as feedMenuFoldersItemCSS from './feed-menu-folders-item.sss'
 
-export type FeedManagingDialogFoldersProps = {
+export type FeedMenuFoldersProps = {
   openEditingFolderForm: (folder: Folder, ev) => void
 }
 
-export const FeedManagingDialogFolders: Component<FeedManagingDialogFoldersProps> = (props) => {
+export const FeedDialogFolders: Component<FeedMenuFoldersProps> = (props) => {
   const hasFolders =
     () => !!feedState.folders.length
 
@@ -29,7 +29,7 @@ export const FeedManagingDialogFolders: Component<FeedManagingDialogFoldersProps
   return (
     <>
       <Checkbox
-        class={feedManagingDialogFoldersItemCSS.checkbox}
+        class={feedMenuFoldersItemCSS.checkbox}
         text={localeState.texts?.feed.defaultFolderName}
         icon={`folder${hasFolders() ? (feedState.defaultFolderVisibility ? '' : 'Off') : 'Zip'}`}
         checked={feedState.defaultFolderVisibility || !hasFolders()}
@@ -38,7 +38,7 @@ export const FeedManagingDialogFolders: Component<FeedManagingDialogFoldersProps
       />
 
       <For each={feedState.folders}>{(folder, getIndex) => (
-        <FeedManagingDialogFoldersItem
+        <FeedMenuFoldersItem
           folder={folder}
           onEdit={[props.openEditingFolderForm, folder]}
           onMoveUp={getIndex() > 0 ?

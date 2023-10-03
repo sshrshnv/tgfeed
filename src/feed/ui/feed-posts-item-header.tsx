@@ -4,7 +4,7 @@ import { clsx } from 'clsx'
 import { Text } from '~/shared/ui/elements/text'
 
 import type { PostUuid } from '../feed.types'
-import { getPost, getPostChannel } from '../utils/get-feed-cache-data'
+import { getPost, getPostChannel } from '../utils/get-cache-data'
 import { formatPostDate } from '../utils/format-post-date'
 import { FeedChannelCover } from './feed-channel-cover'
 

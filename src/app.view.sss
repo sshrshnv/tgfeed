@@ -1,68 +1,30 @@
-.header
-  position: relative
-  z-index: 2
-  height: calc(var(--layout-header-top-offset) + var(--layout-header-size))
-  padding: var(--layout-header-top-offset) safe(right) 0 safe(left)
-  justify-content: space-between
-  background-color: var(--theme-color-surface-1)
-
-.headerButton
-  position: relative
-  z-index: 1
-  width: var(--layout-header-size)
-  background-image: linear-gradient(var(--local-direction), var(--theme-color-surface-1) calc(var(--layout-header-size) - 8px), transparent)
-
-  &._left
-    --local-direction: to right
-
-  &._right
-    --local-direction: to left
-
-.hr
-  position: absolute
-  top: calc(var(--layout-header-top-offset) - 2px)
-  left: 0
-  right: 0
-
 .main
   flex: 1 1 auto
   flex-direction: column
-  border-radius: 16px 16px 0 0
 
   &._overflowHidden
     overflow: hidden
 
 .menu
-  top: calc(var(--layout-header-top-offset) + var(--layout-header-size) + var(--layout-dialog-offset))
-  bottom: max(safe(bottom), var(--layout-dialog-offset))
+  top: safe(top)
+  bottom: 0
 
   &._left
-    left: max(safe(left), var(--layout-dialog-offset))
+    left: safe(left)
 
   &._right
-    right: max(safe(right), var(--layout-dialog-offset))
+    right: safe(right)
 
 ._uniform
-  .header
-    position: absolute
-    z-index: 1
-    top: safe(top)
-    left: 0
-    background-color: transparent
-
-  .hr
-    border-color: transparent
-
   .main
-    padding-top: calc(safe(top) + var(--layout-header-size) + 16px)
+    padding-top: safe(top)
 
     border-radius: 0
     background: none
 
     &::before
       inset: 0
-      background: linear-gradient(to bottom, var(--theme-color-surface-1), var(--theme-color-background))
+      background: linear-gradient(to bottom, var(--theme-color-surface-0), var(--theme-color-background))
 
   .menu
-    top: max(safe(top), var(--layout-dialog-offset))
     background: var(--theme-color-surface-2)

@@ -13,30 +13,30 @@ import { getScaleInParams, getScaleOutParams } from '~/shared/ui/animations'
 
 import type { Folder } from '../feed.types'
 import { feedRoutes } from '../feed-routes'
-import type { FeedManagingDialogFoldersItemMenuProps } from './feed-managing-dialog-folders-item-menu'
-import { FeedManagingDialogFoldersItemMenu } from './feed-managing-dialog-folders-item-menu'
+import type { FeedMenuFoldersItemMenuProps } from './feed-menu-folders-item-menu'
+import { FeedMenuFoldersItemMenu } from './feed-menu-folders-item-menu'
 
 import * as layoutCSS from '../../shared/ui/elements/layout.sss'
-import * as feedManagingDialogFoldersItemCSS from './feed-managing-dialog-folders-item.sss'
+import * as feedMenuFoldersItemCSS from './feed-menu-folders-item.sss'
 
-export type FeedManagingDialogFoldersItemProps = FeedManagingDialogFoldersItemMenuProps & {
+export type FeedMenuFoldersItemProps = FeedMenuFoldersItemMenuProps & {
   folder: Folder
 }
 
 const ANIMATION_PARAMS = {
-  enter: getScaleInParams({ scale: '1 0' }),
-  exit: getScaleOutParams({ scale: '1 0' })
+  enter: getScaleInParams({ scale: '1, 0' }),
+  exit: getScaleOutParams({ scale: '1, 0' })
 }
 
-export const FeedManagingDialogFoldersItem: Component<FeedManagingDialogFoldersItemProps> = (_props) => {
+export const FeedMenuFoldersItem: Component<FeedMenuFoldersItemProps> = (_props) => {
   const [props, menuProps] = splitProps(_props, ['folder'])
   const [isMenuExpanded, setMenuExpanded] = createSignal(false)
 
   const isFolderMenuRoute = () =>
-    routingState.currentRoute.id === feedRoutes.managingDialogFolderMenu.id
+    routingState.currentRoute.id === feedRoutes.dialogFolderMenu.id
 
   const openMenu = () => {
-    pushRoute(feedRoutes.managingDialogFolderMenu)
+    pushRoute(feedRoutes.dialogFolderMenu)
     setMenuExpanded(true)
   }
 
@@ -70,8 +70,8 @@ export const FeedManagingDialogFoldersItem: Component<FeedManagingDialogFoldersI
     <div>
       <Button
         class={clsx(
-          feedManagingDialogFoldersItemCSS.button,
-          isMenuExpanded() && feedManagingDialogFoldersItemCSS._expanded,
+          feedMenuFoldersItemCSS.button,
+          isMenuExpanded() && feedMenuFoldersItemCSS._expanded,
           layoutCSS.after
         )}
         onClick={toggleMenuExpanding}
@@ -89,7 +89,7 @@ export const FeedManagingDialogFoldersItem: Component<FeedManagingDialogFoldersI
         onExit={handleMenuExit}
       >
         <Show when={isMenuExpanded()}>
-          <FeedManagingDialogFoldersItemMenu
+          <FeedMenuFoldersItemMenu
             {...menuProps}
           />
         </Show>

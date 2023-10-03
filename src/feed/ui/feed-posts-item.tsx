@@ -12,7 +12,7 @@ import { Icon } from '~/shared/ui/elements/icon'
 
 import type { UncertainPostUuid, PostUuid, PostGroupUuid } from '../feed.types'
 import { feedRoutes } from '../feed-routes'
-import { getPost } from '../utils/get-feed-cache-data'
+import { getPost } from '../utils/get-cache-data'
 import { isSupportedMedia } from '../utils/detect-post-media'
 import { FeedPostsItemHeader } from './feed-posts-item-header'
 import { FeedPostsItemMedia } from './feed-posts-item-media'
@@ -35,8 +35,8 @@ export type FeedPostsItemProps = {
 }
 
 const ANIMATION_PARAMS = {
-  enter: getScaleInParams({ scale: '1 0' }),
-  exit: getScaleOutParams({ scale: '1 0' })
+  enter: getScaleInParams({ scale: '1, 0' }),
+  exit: getScaleOutParams({ scale: '1, 0' })
 }
 
 export const FeedPostsItem: Component<FeedPostsItemProps> = (props) => {
@@ -45,14 +45,14 @@ export const FeedPostsItem: Component<FeedPostsItemProps> = (props) => {
   const [isMenuExpanded, setMenuExpanded] = createSignal(false)
 
   const isPostMenuRoute = () =>
-    routingState.currentRoute.id === feedRoutes.managingDialogFolderMenu.id
+    routingState.currentRoute.id === feedRoutes.dialogFolderMenu.id
 
   const getStyles = createMemo(() => ({
     translate: `0 ${props.offset}px`
   }))
 
   const openMenu = () => {
-    pushRoute(feedRoutes.managingDialogFolderMenu)
+    pushRoute(feedRoutes.dialogFolderMenu)
     setMenuExpanded(true)
   }
 

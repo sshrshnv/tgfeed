@@ -12,11 +12,12 @@ export type ButtonProps = ComponentProps<'button'> & {
   route?: Route
   stopPropagation?: boolean
   stopImmediatePropagation?: boolean
+  opacity?: boolean
 }
 
 export const Button: ParentComponent<ButtonProps> = (_props) => {
   const [props, buttonProps] = splitProps(_props, [
-    'route', 'stopPropagation', 'stopImmediatePropagation', 'class', 'type', 'onClick'
+    'route', 'stopPropagation', 'stopImmediatePropagation', 'class', 'opacity', 'type', 'onClick'
   ])
 
   const handleClick = (ev) => {
@@ -34,6 +35,7 @@ export const Button: ParentComponent<ButtonProps> = (_props) => {
       class={clsx(
         props.class,
         buttonCSS.base,
+        props.opacity !== false && buttonCSS._opacity,
         layoutCSS.outline,
         layoutCSS.flex,
         layoutCSS.flexCenter

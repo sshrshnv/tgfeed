@@ -1,0 +1,40 @@
+.base
+  position: fixed
+  z-index: 3
+  right: var(--layout-float-button-y-offset)
+  background-color: var(--theme-color-surface-2)
+  border-radius: calc(var(--layout-float-button-size) / 2)
+  translate: 0 0
+  transition: translate 300ms ease-in-out
+  will-change: translate
+
+  @media (--max-width-m)
+    top: 100%
+
+    &._visible
+      translate: 0 calc(-100% - var(--layout-float-button-y-offset))
+
+      &._offset
+        translate: 0 calc(-100% - var(--layout-float-button-y-offset) * 2 - var(--layout-float-bottom-bar-size))
+
+  @media (--min-width-l)
+    top: calc(safe(top) + var(--layout-float-top-bar-size))
+    translate: 0 -100%
+
+    &._visible
+      translate: 0 var(--layout-float-button-y-offset)
+
+.button
+  width: var(--layout-float-button-size)
+  height: var(--layout-float-button-size)
+  padding: 0
+
+  &._hidden
+    display: none
+
+  &._primary
+    border-radius: 50%
+    background-color: var(--theme-color-primary)
+
+    > svg
+      fill: var(--theme-color-on-primary)

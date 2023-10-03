@@ -11,7 +11,7 @@ type FontSizeItem = {
   text?: string
 }
 
-export const FeedManagingDialogFontSize: Component = () => {
+export const FeedMenuFontSize: Component = () => {
   const getItems = (): FontSizeItem[] => [
     { value: 'large', text: localeState.texts?.feed.fontSize.large },
     { value: 'medium', text: localeState.texts?.feed.fontSize.medium },

@@ -20,7 +20,8 @@ export const DEFAULT_FEED_STATE: FeedState = {
   filters: [],
   postGroups: {},
   configId: 0,
-  fontSize: 'medium'
+  fontSize: 'medium',
+  scrolling: {}
 }
 
 export const SUPPORTED_MEDIA_TYPES: Partial<MessageMedia['_'][]> = [

@@ -1,6 +1,16 @@
 .animated
   position: absolute
-  border-radius: var(--layout-dialog-radius)
-  will-change: translate, scale, opacity
-  transform-origin: 0 0
+  will-change: transform, opacity
   opacity: 0
+
+  &._right
+    transform-origin: 0 0
+    border-radius: 0 var(--layout-dialog-radius) var(--layout-dialog-radius) 0
+
+  &._left
+    transform-origin: 100% 0
+    border-radius: var(--layout-dialog-radius) 0 0 var(--layout-dialog-radius)
+
+  &._bottom
+    transform-origin: 0 0
+    border-radius: var(--layout-dialog-radius)

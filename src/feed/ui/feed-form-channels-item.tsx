@@ -9,9 +9,9 @@ import { feedCache } from '../feed-cache'
 import { FeedChannelCover } from './feed-channel-cover'
 
 import * as layoutCSS from '../../shared/ui/elements/layout.sss'
-import * as feedManagingDialogFormChannelsItemCSS from './feed-managing-dialog-form-channels-item.sss'
+import * as feedFormChannelsItemCSS from './feed-form-channels-item.sss'
 
-export type FeedManagingDialogFormChannelProps = {
+export type FeedFormChannelProps = {
   channelId: ChannelId
   name: string
   ref: HTMLLabelElement
@@ -20,7 +20,7 @@ export type FeedManagingDialogFormChannelProps = {
   onChange: () => void
 }
 
-export const FeedManagingDialogFormChannelsItem: Component<FeedManagingDialogFormChannelProps> = (props) => {
+export const FeedFormChannelsItem: Component<FeedFormChannelProps> = (props) => {
   const getChannel = () => {
     return feedCache.channels[props.channelId]
   }
@@ -28,13 +28,13 @@ export const FeedManagingDialogFormChannelsItem: Component<FeedManagingDialogFor
   return (
     <label
       class={clsx(
-        feedManagingDialogFormChannelsItemCSS.base,
+        feedFormChannelsItemCSS.base,
         layoutCSS.flex
       )}
       ref={props.ref}
     >
       <Input
-        class={feedManagingDialogFormChannelsItemCSS.input}
+        class={feedFormChannelsItemCSS.input}
         type='checkbox'
         name={props.name}
         value={props.channelId}
@@ -42,14 +42,14 @@ export const FeedManagingDialogFormChannelsItem: Component<FeedManagingDialogFor
         onChange={props.onChange}
         transparent
       />
-      <div class={feedManagingDialogFormChannelsItemCSS.check}/>
+      <div class={feedFormChannelsItemCSS.check}/>
       <FeedChannelCover
         channelId={props.channelId}
         size='medium'
         visible={props.visible}
       />
       <Text
-        class={feedManagingDialogFormChannelsItemCSS.title}
+        class={feedFormChannelsItemCSS.title}
         variant='label'
         size='large'
         ellipsis

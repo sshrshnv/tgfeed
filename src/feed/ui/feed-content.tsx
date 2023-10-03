@@ -4,7 +4,7 @@ import { Index, createSignal, createResource, createEffect, createMemo, onMount 
 import { service } from '~/shared/service'
 import { Progress } from '~/shared/ui/elements/progress'
 
-import type { Folder } from '../feed.types'
+import type { Folder, ScrollingValue } from '../feed.types'
 import { DEFAULT_FOLDER_ID } from '../feed.const'
 import { feedState, setFeedState } from '../feed-state'
 import { fetchPosts } from '../actions/fetch-posts'
@@ -23,6 +23,11 @@ export const FeedContent: Component = () => {
     ...prev,
     ...feedState.folders.map(folder => folder.id)
   ])], [DEFAULT_FOLDER_ID])
+
+  const handleScrolling = (folderId: Folder['id'], value: ScrollingValue) => {
+    if (feedState.scrolling[folderId] === value) return
+    setFeedState('scrolling', folderId, value)
+  }
 
   const handleScrollEnd = () => {
     if (feedState.initialLoading || postsRes.loading) return
@@ -54,6 +59,7 @@ export const FeedContent: Component = () => {
           folderId={folderId()}
           active={!feedState.initialLoading && folderId() === feedState.currentFolderId}
           loading={!feedState.initialLoading && postsRes.loading}
+          onScrolling={handleScrolling}
           onScrollEnd={handleScrollEnd}
           onApplyUpdates={applyUpdates}
         />

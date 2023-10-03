@@ -10,9 +10,9 @@ import { Text } from '~/shared/ui/elements/text'
 
 import type { Folder } from '../feed.types'
 
-import * as feedManagingDialogFoldersItemMenuCSS from './feed-managing-dialog-folders-item-menu.sss'
+import * as feedMenuFoldersItemMenuCSS from './feed-menu-folders-item-menu.sss'
 
-export type FeedManagingDialogFoldersItemMenuProps = {
+export type FeedMenuFoldersItemMenuProps = {
   onEdit: FolderActionHandler
   onMoveUp?: FolderIndexActionHandler
   onMoveDown?: FolderIndexActionHandler
@@ -42,7 +42,7 @@ type FolderIndexActionHandler = [
   FolderIndex
 ]
 
-export const FeedManagingDialogFoldersItemMenu: Component<FeedManagingDialogFoldersItemMenuProps> = (props) => {
+export const FeedMenuFoldersItemMenu: Component<FeedMenuFoldersItemMenuProps> = (props) => {
   const [isDeleting, setDeleting] = createSignal(false)
 
   const startDeleting = () => setDeleting(true)
@@ -72,12 +72,12 @@ export const FeedManagingDialogFoldersItemMenu: Component<FeedManagingDialogFold
   ].filter(item => !!item) as FolderMenuItem[])
 
   return (
-    <div class={feedManagingDialogFoldersItemMenuCSS.base}>
+    <div class={feedMenuFoldersItemMenuCSS.base}>
       <For each={getMenuItems()}>{item => (
         <Button
           class={clsx(
-            feedManagingDialogFoldersItemMenuCSS.button,
-            item.warning && feedManagingDialogFoldersItemMenuCSS._warning
+            feedMenuFoldersItemMenuCSS.button,
+            item.warning && feedMenuFoldersItemMenuCSS._warning
           )}
           onClick={item.onClick}
           stopPropagation

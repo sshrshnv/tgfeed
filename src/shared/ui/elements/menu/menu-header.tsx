@@ -34,7 +34,7 @@ export const MenuHeader: ParentComponent<MenuHeaderProps> = (_props) => {
         layoutCSS.flexCenter
       )}
     >
-      <Text variant='label' size='small'>
+      <Text variant='label' size='large'>
         {props.title}
       </Text>
 

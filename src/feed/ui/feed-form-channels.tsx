@@ -4,15 +4,15 @@ import { createVisibilityObserver } from '@solid-primitives/intersection-observe
 
 import type { Folder } from '../feed.types'
 import { feedState } from '../feed-state'
-import { FeedManagingDialogFormChannelsItem } from './feed-managing-dialog-form-channels-item'
+import { FeedFormChannelsItem } from './feed-form-channels-item'
 
-export type FeedManagingDialogFormChannelsProps = {
+export type FeedFormChannelsProps = {
   folder?: Folder
   parentEl: Element
   onChange: () => void
 }
 
-export const FeedManagingDialogFormChannels: Component<FeedManagingDialogFormChannelsProps> = (props) => {
+export const FeedFormChannels: Component<FeedFormChannelsProps> = (props) => {
   const useVisibilityObserver = createVisibilityObserver({
     root: props.parentEl
   })
@@ -23,7 +23,7 @@ export const FeedManagingDialogFormChannels: Component<FeedManagingDialogFormCha
       const isVisible = useVisibilityObserver(() => el)
 
       return (
-        <FeedManagingDialogFormChannelsItem
+        <FeedFormChannelsItem
           channelId={channelId}
           name='channelIds[]'
           ref={el}

@@ -17,7 +17,7 @@ export type FeedPostsLoaderProps = {
 
 export const FeedPostsLoader: Component<FeedPostsLoaderProps> = (props) => {
   const getStyles = createMemo(() => ({
-    translate: `0 ${props.offset}px`
+    translate: `0 ${props.offset === 0 ? 'var(--local-min-top-offset)' : `${props.offset}px`}`
   }))
 
   createEffect(() => {

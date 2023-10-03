@@ -10,6 +10,7 @@ export type FeedState = Config & {
   filters: Filter[]
   postGroups: PostGroups
   fontSize: FontSize
+  scrolling: Scrolling
 }
 
 export type FeedCache = {
@@ -78,3 +79,9 @@ export type ConfigMessageParams = (
 )
 
 export type FontSize = 'large' | 'medium' | 'small'
+
+export type Scrolling = {
+  [folderId in Folder['id']]: ScrollingValue
+}
+
+export type ScrollingValue = -2 | -1 | 0 | 1 | 2

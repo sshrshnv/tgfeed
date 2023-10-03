@@ -3,7 +3,6 @@ import { batch } from 'solid-js'
 import { api } from '~/shared/api'
 
 import type { FeedCache, FeedState, PostUuids, PostGroups } from '../feed.types'
-import { DEFAULT_FOLDER_ID } from '../feed.const'
 import { feedState, setFeedState } from '../feed-state'
 import { setFeedCache } from '../feed-cache'
 import { loadConfig } from '../utils/load-config'
@@ -33,20 +32,13 @@ export const fetchPosts = async (pageNumber: number | true) => {
       loadPosts({ next: false })
     ])
 
-    if (
-      feedState.currentFolderId !== DEFAULT_FOLDER_ID &&
-      !folders.some(folder => folder.id === feedState.currentFolderId)
-    ) {
+    if (!folders.some(folder => folder.id === feedState.currentFolderId)) {
       resolveCurrentFolderState(feedState, config, folders)
     }
 
     setFeedCache({ channels, posts })
     batch(() => {
-      setFeedState(config)
-      setFeedState('folders', folders)
-      setFeedState('filters', filters)
-      setFeedState('postGroups', postGroups)
-      setFeedState('postUuids', postUuids)
+      setFeedState({ ...config, folders, filters, postGroups, postUuids })
       setFeedState('initialLoading', false)
     })
 

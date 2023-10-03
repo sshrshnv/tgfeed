@@ -1,21 +1,47 @@
 .wrapper
-  --local-height: 40px
-  position: relative
-  margin: 0 -8px
-  width: calc(100% - var(--layout-header-size) * 2 + 16px)
-  height: var(--local-height)
+  position: absolute
+  z-index: 3
+  padding: 0 8px
   overflow: hidden
+
+  @media (--max-width-m)
+    --local-translate-y: calc(max(safe(bottom), var(--layout-float-button-y-offset)) + var(--layout-float-bottom-bar-size))
+    top: calc(100% - var(--local-translate-y))
+    left: calc(safe(left) + var(--layout-float-button-x-offset))
+    width: calc(100% - safe(left) - safe(right) - var(--layout-float-button-x-offset) * 2)
+    height: var(--layout-float-bottom-bar-size)
+    border-radius: calc(var(--layout-float-bottom-bar-size) / 2)
+    background-color: var(--theme-color-surface-2)
+    translate: 0 0
+    transition: translate 300ms ease-in-out
+    will-change: translate
+
+    &._hidden
+      translate: 0 var(--local-translate-y)
+
+  @media (--min-width-l)
+    top: safe(top)
+    left: 50%
+    translate: -50% 0
+    height: var(--layout-float-top-bar-size)
+    width: var(--layout-article-max-width)
+    max-width: calc(100% - safe(left) - safe(right) - var(--layout-float-button-size) * 2 - var(--layout-float-button-x-offset) * 4)
+
+.base
+  width: 100%
+  align-items: center
+  scroll-snap-type: x proximity
   opacity: 1
   transition: opacity 300ms ease-in-out
+  will-change: scroll-position, opacity
 
   &._hidden
     opacity: 0
 
-.base
-  width: 100%
-  height: 100%
-  padding: 0 8px
-  align-items: center
-  gap: 12px
-  scroll-snap-type: x proximity
-  will-change: scroll-position
+  @media (--max-width-m)
+    height: 32px
+    border-radius: 16px
+
+  @media (--min-width-l)
+    height: 100%
+    border-radius: 0

@@ -6,7 +6,7 @@ import { localeState } from '~/core/locale/locale-state'
 import { Text } from '~/shared/ui/elements/text'
 
 import type { PostUuid } from '../feed.types'
-import { getPost } from '../utils/get-feed-cache-data'
+import { getPost } from '../utils/get-cache-data'
 import { formatPostsDate } from '../utils/format-posts-date'
 
 import * as layoutCSS from '../../shared/ui/elements/layout.sss'
@@ -18,8 +18,6 @@ export type FeedPostsItemDateChipProps = {
   sticky?: boolean
 }
 
-const FEED_POSTS_DATE_OFFSET = 70
-
 export const FeedPostsDateChip: Component<FeedPostsItemDateChipProps> = (props) => {
   const [isReady, setReady] = createSignal(false)
 
@@ -27,7 +25,7 @@ export const FeedPostsDateChip: Component<FeedPostsItemDateChipProps> = (props) 
     formatPostsDate(getPost(props.uuid).date, { lang: localeState.lang })
 
   const getStyles = () => ((props.sticky || typeof props.offset !== 'number') ? {} : {
-    translate: `0 ${props.offset - FEED_POSTS_DATE_OFFSET}px`
+    translate: `var(--local-forced-translate, 0 ${props.offset}px)`
   })
 
   createEffect((prevOffset) => {
@@ -43,11 +41,16 @@ export const FeedPostsDateChip: Component<FeedPostsItemDateChipProps> = (props) 
         !isReady() && feedPostsDateChipCSS._transparent,
         feedPostsDateChipCSS.base,
         layoutCSS.flex,
-        layoutCSS.flexCenter
+        layoutCSS.flexCenter,
+        layoutCSS.before
       )}
       style={getStyles()}
     >
-      <Text variant='label' size='medium'>
+      <Text
+        class={feedPostsDateChipCSS.label}
+        variant='label'
+        size='medium'
+      >
         {getDate()}
       </Text>
     </div>

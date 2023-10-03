@@ -1,17 +1,12 @@
 .base
+  --local-height: 32px
+  --local-min-width: 112px
   position: absolute
-  z-index: 1
-  top: calc(var(--layout-header-size) + 14px)
-  min-width: var(--local-chip-min-width)
-  height: 32px
-  padding: 0 16px
-  border-radius: 16px
+  top: 0
+  padding-left: var(--local-scroll-offset)
   text-transform: capitalize
-  background-color: var(--theme-color-surface-1)
+  translate: 0 0
   will-change: top, translate
-
-  &:nth-child(4):not(._sticky)
-    background-color: var(--theme-color-surface-0)
 
   &._sticky
     position: fixed
@@ -21,3 +16,34 @@
 
   &._transparent
     visibility: hidden
+
+  @media (--max-width-m)
+    &:nth-child(3)
+      position: fixed
+
+    &._sticky, &:nth-child(3)
+      --local-forced-translate: 0 10px
+      z-index: 2
+      translate: var(--local-forced-translate)
+
+      > .label
+        --local-font: var(--font-label-large)
+        --local-letter-spacing: var(--font-label-large-tracking)
+
+  @media (--min-width-l)
+    &:nth-child(3):not(._sticky) > .label
+      background-color: var(--theme-color-surface-0)
+
+    &._sticky
+      z-index: 2
+      translate: 0 calc(var(--layout-float-top-bar-size) + 12px)
+
+.label
+  display: flex
+  justify-content: center
+  align-items: center
+  min-width: var(--local-min-width)
+  height: var(--local-height)
+  background-color: var(--theme-color-system)
+  padding: 0 16px
+  border-radius: calc(var(--local-height) / 2)

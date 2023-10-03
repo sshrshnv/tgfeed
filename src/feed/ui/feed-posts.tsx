@@ -4,18 +4,19 @@ import { createStore } from 'solid-js/store'
 import { createResizeObserver } from '@solid-primitives/resize-observer'
 import { clsx } from 'clsx'
 
-import { Button } from '~/shared/ui/elements/button'
-import { Icon } from '~/shared/ui/elements/icon'
+import { isIOS } from '~/shared/utils/detect-platform'
 
-import type { Folder, UncertainPostUuid, PostUuid, PostGroupUuid } from '../feed.types'
+import type { Folder, UncertainPostUuid, PostUuid, PostGroupUuid, ScrollingValue } from '../feed.types'
 import { DEFAULT_FOLDER_ID } from '../feed.const'
 import { feedCache } from '../feed-cache'
 import { feedState } from '../feed-state'
+import { filterFolderPostUuids } from '../utils/filter-folder-post-uuids'
+import { getFolderUpdatesCount } from '../utils/get-folder-updates-count'
 import { isPostGroupUuid } from '../utils/generate-post-uuid'
 import { FeedPostsItem } from './feed-posts-item'
-import { FeedPostsUpdateButton } from './feed-posts-update-button'
 import { FeedPostsLoader } from './feed-posts-loader'
 import { FeedPostsDateChip } from './feed-posts-date-chip'
+import { FeedPostsControls } from './feed-posts-controls'
 
 import * as layoutCSS from '../../shared/ui/elements/layout.sss'
 import * as feedPostsCSS from './feed-posts.sss'
@@ -25,6 +26,7 @@ export type FeedPostsProps = {
   defaultActive?: boolean
   active?: boolean
   loading?: boolean
+  onScrolling: (folderId: Folder['id'], value: ScrollingValue) => void
   onScrollEnd: () => void
   onApplyUpdates: () => void
 }
@@ -56,16 +58,6 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
   const [getPage, setPage] = createSignal(0)
   const [isUpdating, setUpdating] = createSignal(true)
 
-  const filterPostUuids = (postUuids) => {
-    const channelIds = feedState.folders.find(folder =>
-      folder.id === props.folderId
-    )?.channelIds || []
-
-    return postUuids.filter(postUuid =>
-      channelIds.some(channelId => postUuid.indexOf(channelId) === 0)
-    )
-  }
-
   const getPostUuids = createMemo(() => {
     if (!props.active || isUpdating()) {
       return []
@@ -73,17 +65,15 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
     if (props.folderId === DEFAULT_FOLDER_ID) {
       return feedState.postUuids
     }
-    return filterPostUuids(feedState.postUuids)
+    return filterFolderPostUuids(
+      props.folderId,
+      feedState.folders,
+      feedState.postUuids
+    )
   })
 
   const getPostsCount = createMemo(() =>
     (getPage() + 1) * FEED_POSTS_COUNT
-  )
-
-  const getUpdatesCount = createMemo(() =>
-    props.folderId === DEFAULT_FOLDER_ID ?
-      feedState.newPostUuids.length :
-      filterPostUuids(feedState.newPostUuids).length
   )
 
   const getLoaderOffset = createMemo(() => {
@@ -94,13 +84,19 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
     return (lastPostOffset || 0) + (lastPostHeight || 0)
   })
 
-  const isUpdateButtonVisible = createMemo(() =>
-    !!getUpdatesCount() && getRoughScroll() < (heightState[SCROLL_EL_ID] || 0)
-  )
+  const isUpdateButtonVisible = createMemo(() => !!getFolderUpdatesCount(
+    props.folderId,
+    feedState.folders,
+    feedState.newPostUuids
+  ))
 
   const isScrollButtonVisible = createMemo(() =>
     heightState[SCROLL_EL_ID] && getRoughScroll() >= heightState[SCROLL_EL_ID]
   )
+
+  const isBeforeHeaderHidden = createMemo(() => (
+    props.active && feedState.scrolling[props.folderId] > 0
+  ))
 
   const isScrollEnd = () => (
     props.active &&
@@ -143,16 +139,24 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
   }
 
   const updateScroll = () => {
-    const newScroll = Math.round(scrollEl.scrollTop)
-    const newRoughScroll = Math.round(scrollEl.scrollTop / 100) * 100
+    const newScroll = Math.max(Math.round(scrollEl.scrollTop), 0)
+    const newRoughScroll = Math.round(newScroll / 100) * 100
     batch(() => {
       if (scroll !== newScroll) {
         scroll = newScroll
         setScroll(newScroll)
       }
       if (roughScroll !== newRoughScroll) {
+        let scrolling = newRoughScroll ? +(newRoughScroll > roughScroll) : 0
         roughScroll = newRoughScroll
         setRoughScroll(newRoughScroll)
+        if (isScrollButtonVisible()) {
+          scrolling = scrolling > 0 ? 2 : -2
+        }
+        props.onScrolling(
+          props.folderId,
+          scrolling as ScrollingValue
+        )
       }
     })
   }
@@ -232,27 +236,22 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
       class={clsx(
         feedPostsCSS.base,
         !props.active && feedPostsCSS._hidden,
+        isBeforeHeaderHidden() && feedPostsCSS._beforeHidden,
+        !isIOS() && feedPostsCSS._scrollOffset,
         layoutCSS.flex,
         layoutCSS.scroll,
-        layoutCSS.scrollCustom
+        layoutCSS.scrollCustom,
+        layoutCSS.before
       )}
       id={SCROLL_EL_ID}
       ref={scrollEl}
     >
-      <Button
-        class={clsx(
-          feedPostsCSS.scrollButton,
-          !isScrollButtonVisible() && feedPostsCSS._hidden
-        )}
-        disabled={!isScrollButtonVisible()}
-        onClick={scrollToTop}
-      >
-        <Icon name='arrowUp' size='large'/>
-      </Button>
-
-      <FeedPostsUpdateButton
-        visible={isUpdateButtonVisible()}
-        onClick={applyUpdates}
+      <FeedPostsControls
+        folderId={props.folderId}
+        scrollVisible={isScrollButtonVisible()}
+        updateVisible={isUpdateButtonVisible()}
+        scroll={scrollToTop}
+        update={applyUpdates}
       />
 
       <FeedPostsLoader

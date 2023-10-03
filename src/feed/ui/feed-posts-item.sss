@@ -3,8 +3,8 @@
   --local-border-radius: 12px
   position: absolute
   top: 0
-  width: min(100%, var(--layout-article-max-width))
-  padding: 0 4px 0 8px
+  width: min(100%, calc(var(--layout-article-max-width) + var(--layout-article-x-offset) * 2))
+  padding: 0 calc(var(--layout-article-x-offset) - var(--local-scroll-offset)) 0 var(--layout-article-x-offset)
   will-change: translate
 
   &._hidden
@@ -12,6 +12,10 @@
 
   &._transparent
     visibility: hidden
+
+  @media (--max-width-m)
+    &:nth-child(4)
+      --local-chip-wrapper-height: 64px
 
   @media (--min-width-l)
     --local-border-radius: 16px

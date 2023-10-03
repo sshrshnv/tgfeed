@@ -18,19 +18,19 @@ import { feedRoutes } from '../feed-routes'
 import { fetchChannels } from '../actions/fetch-channels'
 import { createFolder } from '../actions/create-folder'
 import { editFolder } from '../actions/edit-folder'
-import { FeedManagingDialogFormChannels } from './feed-managing-dialog-form-channels'
+import { FeedFormChannels } from './feed-form-channels'
 
 import * as layoutCSS from '../../shared/ui/elements/layout.sss'
 import * as animationsCSS from '../../shared/ui/animations/animations.sss'
-import * as feedManagingDialogFormCSS from './feed-managing-dialog-form.sss'
+import * as feedFormDialogCSS from './feed-form-dialog.sss'
 
-export type FeedManagingDialogFormProps = {
+export type FeedFormDialogProps = {
   folder?: Folder
   open?: boolean
   transitioning?: boolean
 }
 
-export const FeedManagingDialogForm: Component<FeedManagingDialogFormProps> = (props) => {
+export const FeedFormDialog: Component<FeedFormDialogProps> = (props) => {
   let channelsEl!: HTMLDivElement
 
   const [channelsRes] = createResource(fetchChannels)
@@ -67,14 +67,14 @@ export const FeedManagingDialogForm: Component<FeedManagingDialogFormProps> = (p
         editFolder({ ...data, id: props.folder.id }) :
         createFolder({ ...data, index: feedState.folders.length })
       )
-      popRoute(feedRoutes.managingDialogForm)
+      popRoute(feedRoutes.formDialog)
     }
   }
 
   return (
     <Form
       class={clsx(
-        feedManagingDialogFormCSS.base,
+        feedFormDialogCSS.base,
         layoutCSS.flex,
         layoutCSS.before,
         layoutCSS.after
@@ -82,7 +82,7 @@ export const FeedManagingDialogForm: Component<FeedManagingDialogFormProps> = (p
       onSubmit={handleSubmit}
     >
       <Input
-        class={feedManagingDialogFormCSS.input}
+        class={feedFormDialogCSS.input}
         name='name'
         placeholder={localeState.texts?.feed.folderNamePlaceholder}
         value={props.folder?.name || ''}
@@ -91,7 +91,7 @@ export const FeedManagingDialogForm: Component<FeedManagingDialogFormProps> = (p
 
       <div
         class={clsx(
-          feedManagingDialogFormCSS.channels,
+          feedFormDialogCSS.channels,
           layoutCSS.scroll,
           layoutCSS.scrollHidden,
           layoutCSS.flex
@@ -99,7 +99,7 @@ export const FeedManagingDialogForm: Component<FeedManagingDialogFormProps> = (p
         ref={channelsEl}
       >
         <MenuTitle
-          class={feedManagingDialogFormCSS.title}
+          class={feedFormDialogCSS.title}
           text={localeState.texts?.feed.folderChannelsTitle}
         />
         <Show when={
@@ -108,7 +108,7 @@ export const FeedManagingDialogForm: Component<FeedManagingDialogFormProps> = (p
           !props.transitioning &&
           !!channelsEl
         } fallback={
-          <div class={feedManagingDialogFormCSS.loader}>
+          <div class={feedFormDialogCSS.loader}>
             <Icon
               class={clsx(
                 animationsCSS.rotate,
@@ -119,7 +119,7 @@ export const FeedManagingDialogForm: Component<FeedManagingDialogFormProps> = (p
             />
           </div>
         }>
-          <FeedManagingDialogFormChannels
+          <FeedFormChannels
             folder={props.folder}
             parentEl={channelsEl}
             onChange={handleChange}
@@ -129,7 +129,7 @@ export const FeedManagingDialogForm: Component<FeedManagingDialogFormProps> = (p
 
       <Show when={isReady() && !isEmptyChannelsList()}>
         <Button
-          class={feedManagingDialogFormCSS.button}
+          class={feedFormDialogCSS.button}
           type='submit'
           name='submit'
           disabled={isSending()}
@@ -153,8 +153,8 @@ export const FeedManagingDialogForm: Component<FeedManagingDialogFormProps> = (p
 
       <MenuDescription
         class={clsx(
-          feedManagingDialogFormCSS.error,
-          (getError() || isEmptyChannelsListError()) && feedManagingDialogFormCSS._visible
+          feedFormDialogCSS.error,
+          (getError() || isEmptyChannelsListError()) && feedFormDialogCSS._visible
         )}
         text={getError() ?
           localeState.texts?.feed.errors[getError()] :

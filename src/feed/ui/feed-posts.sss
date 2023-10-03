@@ -1,10 +1,14 @@
 .base
-  --local-scrollbar-color: var(--theme-color-surface-0)
+  --local-scrollbar-color: var(--theme-color-surface-1)
   --local-scrollbar-background-color: var(--theme-color-background)
   --local-posts-gap: 12px
-  --local-chip-min-width: 96px
+  --local-chip-wrapper-width: 144px
   --local-chip-wrapper-height: 44px
+  --local-chip-after-height: 36px
+  --local-scroll-offset: 0px
+
   position: relative
+  z-index: 2
   flex: 1 1 auto
   flex-direction: column
   align-items: center
@@ -14,17 +18,26 @@
   &._hidden
     display: none
 
-.scrollButton
-  position: fixed
-  z-index: 1
-  top: calc(14px + var(--layout-header-size))
-  right: 12px
-  width: 32px
-  height: 32px
-  translate: 0 0
-  border-radius: 16px
-  background-color: var(--theme-color-surface-1)
-  transition: translate 300ms ease-in-out
+  &._scrollOffset
+    --local-scroll-offset: 4px
 
-  &._hidden
-    translate: 0 -46px
+  &::before, &::after
+    position: fixed
+    z-index: 1
+
+  @media (--max-width-m)
+    &::before
+      position: fixed
+      z-index: 1
+      top: calc(safe(top) - 2px)
+      right: safe(right)
+      left: safe(left)
+      height: calc(var(--layout-float-top-bar-size) + 2px)
+      background-color: var(--theme-color-system)
+      translate: 0 0
+      transition: translate 300ms ease-in-out
+      will-change: translate
+
+    &._beforeHidden
+      &::before
+        translate: 0 -100%

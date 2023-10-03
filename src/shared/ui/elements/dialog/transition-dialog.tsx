@@ -15,16 +15,19 @@ import * as transitionDialogCSS from './transition-dialog.sss'
 
 const ANIMATION_PARAMS = {
   slideInRightAnimation: {
-    enter: getTranslateScaleInParams({ translate: '-48px 0', x: true }),
-    exit: getTranslateScaleOutParams({ translate: '-24px 0' })
+    enter: getTranslateScaleInParams({ translate: '-48px, 0', x: true }),
+    exit: getTranslateScaleOutParams({ translate: '-24px, 0' }),
+    subClass: transitionDialogCSS._right
   },
   slideInLeftAnimation: {
-    enter: getTranslateScaleInParams({ translate: '48px 0', x: true }),
-    exit: getTranslateScaleOutParams({ translate: '24px 0' })
+    enter: getTranslateScaleInParams({ translate: '48px, 0', x: true }),
+    exit: getTranslateScaleOutParams({ translate: '24px, 0' }),
+    subClass: transitionDialogCSS._left
   },
   slideInBottomAnimation: {
-    enter: getTranslateScaleInParams({ translate: '0 -24px', y: true }),
-    exit: getTranslateScaleOutParams({ translate: '0 -12px' })
+    enter: getTranslateScaleInParams({ translate: '0, -24px', y: true }),
+    exit: getTranslateScaleOutParams({ translate: '0, -12px' }),
+    subClass: transitionDialogCSS._bottom
   }
 }
 
@@ -78,6 +81,7 @@ export const TransitionDialog: ParentComponent<TransitionDialogProps> = (props) 
           <div class={clsx(
             props.class,
             transitionDialogCSS.animated,
+            ANIMATION_PARAMS[props.animation].subClass,
             animationsCSS.forcedPerformance
           )}>
             {props.children}

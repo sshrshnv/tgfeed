@@ -1,6 +1,36 @@
 .base
-  flex-shrink: 0
-  align-items: center
   width: 100%
-  height: var(--layout-header-size)
-  background-color: var(--theme-color-surface-1)
+  height: 0
+
+  &::before
+    position: absolute
+    top: 0
+    right: 0
+    left: 0
+    height: calc(safe(top) + var(--layout-float-top-bar-size))
+    background-color: var(--theme-color-system)
+
+  @media (--max-width-m)
+    &::before
+      z-index: 1
+      translate: 0 0
+      transition: translate 300ms ease-in-out
+      will-change: translate
+
+    & > button
+      opacity: 1
+      transition: opacity 300ms ease-in
+      transition-delay: 150ms
+      will-change: opacity
+
+    &._hidden
+      &::before, & > button
+        translate: 0 -100%
+
+      & > button
+        opacity: 0
+        transition-delay: 0
+
+  @media (--min-width-l)
+    &::before
+      z-index: 3

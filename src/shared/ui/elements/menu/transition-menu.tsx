@@ -22,8 +22,8 @@ export type TransitionMenuProps = MenuProps & {
 }
 
 const ANIMATION_PARAMS = {
-  enter: getTranslateInParams({ translate: '48px 0' }),
-  exit: getTranslateOutParams({ translate: '24px 0' })
+  enter: getTranslateInParams({ translate: '48px, 0' }),
+  exit: getTranslateOutParams({ translate: '24px, 0' })
 }
 
 export const TransitionMenu: ParentComponent<TransitionMenuProps> = (_props) => {
