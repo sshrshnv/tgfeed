@@ -41,7 +41,6 @@
     "clsx": "2.0.0",
     "comlink": "4.4.1",
     "core-js": "3.33.0",
-    "fflate": "0.8.1",
     "idb-keyval": "6.2.1",
     "pointer-tracker": "2.5.3",
     "sanitize-markdown": "2.6.7",

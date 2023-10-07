@@ -24,10 +24,10 @@
     <script>
       (() => {
         const features = [
-          'Proxy', 'MessageChannel', 'BigInt', 'TransformStream', 'ResizeObserver', 'IntersectionObserver', 'HTMLDialogElement'
+          Proxy, MessageChannel, BigInt, TransformStream, ResizeObserver, IntersectionObserver, HTMLDialogElement, DecompressionStream
         ]
         const unsupported = typeof [].some !== 'function' || features.some(function(feature) {
-          return typeof self[feature] !== 'function'
+          return typeof feature !== 'function'
         })
         if (unsupported) {
           const warningEl = self.document.querySelector('.warning[data-browser]')
