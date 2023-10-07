@@ -19,4 +19,6 @@ export type Service = {
     offset: number,
     limit: number
   ) => void
+
+  handleUpdate: () => void
 }

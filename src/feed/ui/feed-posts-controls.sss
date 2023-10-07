@@ -9,13 +9,14 @@
   will-change: translate
 
   @media (--max-width-m)
+    --local-translate-y: calc(-100% - max(safe(bottom), var(--layout-float-button-y-offset)))
     top: 100%
 
     &._visible
-      translate: 0 calc(-100% - var(--layout-float-button-y-offset))
+      translate: 0 var(--local-translate-y)
 
       &._offset
-        translate: 0 calc(-100% - var(--layout-float-button-y-offset) * 2 - var(--layout-float-bottom-bar-size))
+        translate: 0 calc(var(--local-translate-y) - var(--layout-float-button-y-offset) - var(--layout-float-bottom-bar-size))
 
   @media (--min-width-l)
     top: calc(safe(top) + var(--layout-float-top-bar-size))

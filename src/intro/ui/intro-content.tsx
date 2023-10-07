@@ -1,6 +1,6 @@
 import type { Component } from 'solid-js'
 
-export const IntroMainContent: Component = () => {
+export const IntroContent: Component = () => {
   return (
     <>
     </>

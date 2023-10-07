@@ -14,6 +14,9 @@ initApiWorker()
 initUiWorker()
 registerServiceWorker()
 
+import { awaitInstallAvailability } from '~/core/install/actions/await-install-availability'
+awaitInstallAvailability()
+
 import { View } from './app.view'
 render(
   () => <View/>,

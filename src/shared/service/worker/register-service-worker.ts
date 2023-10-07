@@ -1,8 +1,8 @@
-//import { checkIsSafari } from '~/tools/detect-platform'
 import { comlink } from '~/shared/utils/comlink'
 import { createPromise } from '~/shared/utils/create-promise'
 import { setDelay } from '~/shared/utils/set-delay'
 import { postMessage } from '~/shared/utils/post-message'
+import { showUpdate } from '~/core/update/actions/show-update'
 
 import type { Service } from '../service.types'
 import { SERVICE_WORKER_SKIP_WAITING_MESSAGE } from '../service.const'
@@ -75,7 +75,7 @@ export const isServiceWorkerRegistered = () =>
 
 export const getService = () => servicePromise
 
-const endUpdate = () => {
+export const endUpdate = () => {
   postMessage(serviceWorker, {
     type: SERVICE_WORKER_SKIP_WAITING_MESSAGE
   })
@@ -83,10 +83,7 @@ const endUpdate = () => {
 
 const startUpdate = () => {
   if (process.env.NODE_ENV === 'production') {
-    //waitAppUpdateAccepted(update)
-    //setAppUpdateExists()
-
-    endUpdate()
+    showUpdate()
   } else {
     endUpdate()
   }

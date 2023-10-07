@@ -1,8 +1,8 @@
-import { createStore } from 'solid-js/store'
+import { createStateStore } from '~/shared/utils/create-state-store'
 
-import { isStandalone } from '~/shared/utils/detect-platform'
+import { DEFAULT_INSTALL_STATE } from './install.const'
 
-export const [installState, setInstallState] = createStore({
-  available: false,
-  completed: isStandalone()
+export const [installState, setInstallState] = createStateStore({
+  defaultState: DEFAULT_INSTALL_STATE,
+  staticState: true
 })

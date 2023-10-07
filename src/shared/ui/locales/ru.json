@@ -1,4 +1,8 @@
 {
+  "core": {
+    "help": "Help"
+  },
+
   "account": {
     "title": "Account",
     "signIn": "Sign In",
@@ -14,6 +18,21 @@
 
   "locale": {
     "title": "Language"
+  },
+
+  "update": {
+    "button": "Update application"
+  },
+
+  "install": {
+    "button": "Install application",
+    "ios": {
+      "title": "Установка",
+      "cancel": "Cancel",
+      "safariStep": "Откройте ссылку в основном браузере Safari, если вы открыли ее из другого приложения.",
+      "shareStep": "Нажмите кнопку \"Поделиться\" в строке меню.",
+      "homeScreenStep": "Нажмите \"На экран «Домой»\"."
+    }
   },
 
   "auth": {
@@ -51,10 +70,34 @@
     "newFolderTitle": "New folder",
     "editFolderTitle": "Edit folder",
     "foldersTitle": "Folders",
-    "defaultFolder": "All channels",
+    "folderNamePlaceholder": "Enter folder name",
+    "folderChannelsTitle": "Select channels",
+    "defaultFolderName": "All channels",
     "emptyFoldersList": "No folders created",
+    "emptyChannelsList": "No channels found",
+    "fontSize": {
+      "title": "Font size",
+      "large": "Large",
+      "medium": "Medium",
+      "small": "Small"
+    },
     "buttons": {
-      "newFolder": "Create new folder"
+      "newFolder": "Create new folder",
+      "save": "Save",
+      "saving": "Saving..",
+      "savePost": "Save post",
+      "edit": "Edit",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "delete": "Delete",
+      "confirm": "Confirm",
+      "openTelegram": "Open in Telegram",
+      "loadUpdates": "Load new posts"
+    },
+    "errors": {
+      "FOLDER_NAME_EMPTY": "You should enter the folder name",
+      "FOLDER_NAME_EXISTS": "This folder name already exists",
+      "FOLDER_CHANNELS_EMPTY": "You should select channels"
     }
   },
 

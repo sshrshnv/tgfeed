@@ -1,0 +1,127 @@
+.wrapper
+  --local-overlay-background-color: rgba(10, 10, 10, 0.5)
+  --local-background-color: rgba(255, 255, 255, 0.6)
+  --local-border-color: rgba(60, 60, 67, 0.29)
+  --local-font-color: rgba(60, 60, 67, 0.9)
+  --local-title-color: rgba(0, 0, 0, 1)
+  --local-primary-color: rgba(0, 85, 179, 1)
+  --local-filter: brightness(1.6)
+
+  @media (prefers-color-scheme: dark)
+    --local-background-color: rgba(65, 65, 65, 0.7)
+    --local-border-color: rgba(140, 140, 140, 0.7)
+    --local-font-color: rgba(235, 235, 245, 0.8)
+    --local-title-color: rgba(255, 255, 255, 1)
+    --local-primary-color: rgba(9, 132, 255, 1)
+    --local-filter: brightness(1.1)
+
+.wrapper, .overlay
+  position: absolute
+  right: 0
+  bottom: 0
+  left: 0
+
+.wrapper
+  top: 0
+  z-index: 20
+
+.base
+  position: absolute
+  right: calc(safe(right) + 8px)
+  bottom: calc(safe(bottom) + 10px)
+  left: calc(safe(left) + 8px)
+  width: calc(100vw - safe(left) - safe(right) - 16px)
+  border-radius: 10px
+  overflow: hidden
+  color: var(--local-title-color)
+  background-color: var(--local-background-color)
+  backdrop-filter: blur(10px)
+  filter: var(--local-filter)
+  will-change: translate
+
+.overlay
+  top: 0
+  min-height: 100vh
+  min-height: -webkit-fill-available
+  background-color: var(--local-overlay-background-color)
+
+.header
+  display: flex
+  flex-flow: row nowrap
+  justify-content: space-between
+  align-items: center
+  padding: 13px 16px
+  border-bottom: 1px solid var(--local-border-color)
+  border-top: 0px
+
+.title
+  margin: 0
+  padding: 0
+  color: var(--local-title-color)
+  font-size: 18px
+  font-weight: 500
+  line-height: 1.125
+
+.cancel
+  margin: 0
+  padding: 0
+  border: 0
+  background: transparent
+  color: var(--local-primary-color)
+  font-size: 16px
+
+.body
+  display: flex
+  width: 100%
+
+.description
+  margin: 0 16px
+  width: 100%
+  padding: 16px
+  border-top: 1px solid var(--local-border-color)
+  border-bottom: 0px
+  color: inherit
+
+.header, .description
+  border-left: 0px
+  border-right: 0px
+  border-width: 0.5px
+
+.text
+  margin: 0
+  padding: 0
+  font-size: 13px
+  line-height: 17px
+  color: var(--local-font-color)
+
+  &._bold
+    font-weight: 600
+
+.instruction
+  margin: 0 16px
+  padding: 16px
+  color: inherit
+
+.instructionStep
+  margin-bottom: 16px
+  display: flex
+  flex-flow: row nowrap
+  justify-content: flex-start
+  align-items: center
+  text-align: left
+
+  &:last-of-type
+    margin-bottom: 0
+
+.safariIcon, .shareIcon, .homeScreenIcon
+  margin-right: 32px
+  flex: 0 0 auto
+  width: 25px
+  height: 30px
+
+.safariIcon, .shareIcon
+  color: var(--local-primary-color)
+  fill: var(--local-primary-color)
+
+.safariIcon
+  height: 25px

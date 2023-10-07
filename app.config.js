@@ -2,13 +2,13 @@ const pkg = require('./package.json')
 const utils = require('./app.utils')
 
 const APP_VERSION = pkg.version
+const APP_ISSUES_URL = 'https://github.com/sshrshnv/tgfeed/issues'
 
 const APP_TITLE = 'TgFeed'
 const APP_DESCRIPTION = 'Telegram channel feed'
 
 const APP_THEME_MODES = ['system', 'light', 'dark']
 const APP_DEFAULT_THEME_MODE = APP_THEME_MODES[0]
-//const APP_THEME_COLORS = { splash: '#3A4E7E', light: '#E3E9F7', dark: '#16191F' }
 const APP_THEME_COLORS = { splash: '#3A4E7E', light: '#E3E9F7', dark: '#1D2129' }
 const APP_DEFAULT_THEME_COLOR = APP_THEME_COLORS['splash']
 
@@ -17,6 +17,7 @@ const APP_DEFAULT_LOCALE_LANG = 'en'
 
 module.exports = {
   APP_VERSION,
+  APP_ISSUES_URL,
 
   APP_TITLE,
   APP_DESCRIPTION,
