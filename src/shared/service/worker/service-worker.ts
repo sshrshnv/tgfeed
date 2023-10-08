@@ -15,7 +15,7 @@ let loadStreamFilePart: Parameters<Service['handleStreams']>[0]
 workbox.setCacheNameDetails({ prefix: 'tgfeed' })
 workbox.clientsClaim()
 
-if (process.env.NODE_ENV === 'production' && self.__WB_MANIFEST) {
+if (process.env.DEPLOY_ENV === 'production') {
   workbox.precacheAndRoute(self.__WB_MANIFEST)
   workbox.cleanupOutdatedCaches()
 

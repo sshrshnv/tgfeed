@@ -4,5 +4,5 @@ import { setUpdateState } from '../update-state'
 
 export const loadUpdate = () => {
   setUpdateState('loading', true)
-  service.handleUpdate()
+  service.handleUpdate?.()
 }

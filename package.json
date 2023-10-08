@@ -15,7 +15,7 @@
   "scripts": {
     "dev": "npm run clean && NODE_ENV=development webpack serve --progress",
     "serve": "npm run clean && NODE_ENV=production webpack serve --progress",
-    "build": "NODE_ENV=production webpack && npm run inject-sw-manifest",
+    "build": "DEPLOY_ENV=production NODE_ENV=production webpack && npm run inject-sw-manifest",
     "clean": "rimraf build",
     "lint": "eslint src --ext .js,.ts,.tsx",
     "lint-fix": "eslint src --fix --ext .js,.ts,.tsx",

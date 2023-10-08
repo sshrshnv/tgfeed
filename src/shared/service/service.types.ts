@@ -20,5 +20,5 @@ export type Service = {
     limit: number
   ) => void
 
-  handleUpdate: () => void
+  handleUpdate?: () => void
 }
