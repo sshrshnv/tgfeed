@@ -183,7 +183,7 @@ module.exports = {
       authToken: appEnv.SENTRY_AUTH_TOKEN,
       include: './build',
       deploy: {
-        env: process.env.DEPLOY_ENV
+        env: appEnv.DEPLOY_ENV
       }
     }) : () => {},
 
