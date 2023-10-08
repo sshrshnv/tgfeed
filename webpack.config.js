@@ -197,26 +197,20 @@ module.exports = {
     nodeEnv: isDev() ? 'development' : 'production',
     splitChunks: {
       cacheGroups: {
-        'vendors.corejs': {
-          name: 'vendors.corejs',
+        'corejs': {
+          name: 'corejs',
           test: /[\\/]node_modules[\\/]core-js[\\/]/,
           chunks: 'all',
           reuseExistingChunk: true
         },
-        'vendors.workers': {
-          name: 'vendors.workers',
-          test: /[\\/]node_modules[\\/](comlink|idb|idb-keyval)[\\/]/,
-          chunks: 'all',
-          reuseExistingChunk: true
-        },
-        'vendors.workbox': {
-          name: 'vendors.workbox',
+        'workbox': {
+          name: 'workbox',
           test: /[\\/]node_modules[\\/]workbox/,
           chunks: 'all',
           reuseExistingChunk: true
         },
-        'vendors.solidjs': {
-          name: 'vendors.solidjs',
+        'solidjs': {
+          name: 'solidjs',
           test: /[\\/]node_modules[\\/]@?solid/,
           chunks: 'all',
           reuseExistingChunk: true
