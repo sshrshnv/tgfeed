@@ -178,6 +178,7 @@ module.exports = {
       project: appEnv.SENTRY_PROJECT,
       authToken: appEnv.SENTRY_AUTH_TOKEN,
       include: './build',
+      telemetry: false,
       deploy: {
         env: process.env.DEPLOY_ENV
       }

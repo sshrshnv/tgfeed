@@ -11,6 +11,6 @@ export const trackError = async (
     !process.env.SENTRY_DSN
   ) return
 
-  const { errorTracker } = await loadErrorTracker()
+  const errorTracker = await loadErrorTracker()
   errorTracker.captureException(error)
 }
