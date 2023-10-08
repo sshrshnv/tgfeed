@@ -20,7 +20,7 @@
     "lint": "eslint src --ext .js,.ts,.tsx",
     "lint-fix": "eslint src --fix --ext .js,.ts,.tsx",
     "analyze": "npm run clean && BUNDLE_ANALYZER=true NODE_ENV=production webpack",
-    "generate-pwa-images": "npx pwa-asset-generator ./src/shared/ui/icons/app.svg ./src/shared/images --bg '#0082C8' --opaque false --type png --splash-only",
+    "generate-pwa-images": "npx pwa-asset-generator ./src/shared/ui/icons/manifest/maskable.svg ./src/shared/ui/icons/manifest/ios --bg '#3A4E7E' --opaque false --type png --splash-only",
     "inject-sw-manifest": "workbox injectManifest workbox.config.js"
   },
   "engines": {
@@ -90,6 +90,7 @@
     "postcss-preset-env": "9.1.4",
     "postcss-simple-vars": "7.0.1",
     "postcss-variable-compress": "3.0.0",
+    "pwa-asset-generator": "6.3.1",
     "rimraf": "5.0.5",
     "solid-refresh": "0.5.3",
     "style-loader": "3.3.3",
