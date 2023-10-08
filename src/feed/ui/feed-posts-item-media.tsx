@@ -52,7 +52,7 @@ export const FeedPostsItemMedia: Component<FeedPostsItemMediaProps> = (props) =>
 
   const handleActiveIndexChange = (k: number) => {
     batch(() => {
-      isPlaying() && setPlaying(false)
+      untrack(isPlaying) && setPlaying(false)
       setActiveIndex(index => Math.max(0, Math.min(getItems().length - 1, index + k)))
     })
   }
@@ -85,15 +85,15 @@ export const FeedPostsItemMedia: Component<FeedPostsItemMediaProps> = (props) =>
       onClick={handleClick}
     >
       <For each={getItems()}>{(item, getIndex) => {
-        const isItemVisible = () => (
+        const isItemVisible = createMemo(() => (
           props.visible &&
           (getIndex() >= getActiveIndex() - 1) &&
           (getIndex() <= getActiveIndex() + 1)
-        )
+        ))
 
-        const isItemPlaying = () => (
+        const isItemPlaying = createMemo(() => (
           isPlaying() && getIndex() === getActiveIndex()
-        )
+        ))
 
         return (
           <Switch>

@@ -14,6 +14,7 @@ import { getPostImageUrls } from '../utils/get-post-image-urls'
 import { getPostStreamUrl } from '../utils/get-post-stream-url'
 import { FeedMediaControls } from './feed-media-controls'
 
+import * as animationsCSS from '../../shared/ui/animations/animations.sss'
 import * as feedMediaPlayerCSS from './feed-media-player.sss'
 
 export type FeedMediaPlayerProps = {
@@ -94,6 +95,7 @@ export const FeedMadiaPlayer: Component<FeedMediaPlayerProps> = (props) => {
 
       <Show when={isMediaVideo(props.media)}>
         <video
+          class={animationsCSS.forcedPerformance}
           ref={playerEl as HTMLVideoElement}
           src={isPlayerReady() ? getStreamUrl() : ''}
           width={getVideoSize()?.w}
