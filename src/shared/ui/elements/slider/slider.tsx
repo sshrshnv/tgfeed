@@ -56,23 +56,23 @@ export const Slider: ParentComponent<SliderProps> = (props) => {
   onMount(() => {
     const pointerTracker = new PointerTracker(sliderEl, {
       start: (_pointer, ev) => {
+        ev.stopImmediatePropagation()
         if (pointerTracker.currentPointers.length !== 0) {
           return false
         }
-        ev.stopPropagation()
         return true
       },
 
       move: ([prevPointer], _changedPointers, ev) => {
+        ev.stopImmediatePropagation()
+        ev.preventDefault()
+
         const [currentPointer] = pointerTracker.currentPointers
         const x = currentPointer.clientX - prevPointer.clientX
         const y = currentPointer.clientY - prevPointer.clientY
         translateY += y
 
         if ((Math.abs(y) > Math.abs(x)) && !getTranslateX()) return
-
-        ev.stopPropagation()
-        ev.preventDefault()
         setTranslateX(value => value + x)
       },
 
