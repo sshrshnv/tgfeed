@@ -6,7 +6,7 @@ export const preventDragAndDrop = () => {
     if (!ev.dataTransfer) return
     try {
       ev.dataTransfer.dropEffect = 'none'
-    } catch (_) {}
+    } catch {}
   }
 
   const handleDrop = ev => {

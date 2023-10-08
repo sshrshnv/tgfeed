@@ -28,10 +28,11 @@ export const api: API = {
     return apiWorker.exec(...args)
   },
 
-  listenUpdates: async (...args) => {
+  listenUpdates: async (cb) => {
+    if (!cb) return
     const apiWorker = await getApiWorker()
     return apiWorker.listenUpdates(
-      comlink.proxy(...args)
+      comlink.proxy(cb)
     )
   }
 }

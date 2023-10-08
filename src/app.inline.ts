@@ -1,5 +1,5 @@
 import { captureGlobalErrors } from '~/shared/errors/actions/capture-global-errors'
-//captureGlobalErrors()
+captureGlobalErrors()
 
 import { presetTheme } from '~/core/theme/actions/preset-theme'
 presetTheme()

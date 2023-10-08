@@ -10,14 +10,12 @@ const MiniClExtractPlugin = require('mini-css-extract-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const ClMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const SentryPlugin = require('@sentry/webpack-plugin')
 
 const appConfig = require('./app.config')
-const {
-  isDev,
-  isProd,
-  templateParameters
-} = require('./webpack.utils')
+const { isDev, isProd, templateParameters } = require('./webpack.utils')
 const isBundleAnalyzer = () => !!process.env.BUNDLE_ANALYZER
+const isSentryAvailable = () => process.env.BUILD_ENV === 'production'
 
 let appEnv
 try {
@@ -178,6 +176,16 @@ module.exports = {
         to: './manifest-splash-icon-512.[contenthash].png'
       }]
     }) : () => {},*/
+
+    isSentryAvailable() ? new SentryPlugin({
+      org: appEnv.SENTRY_ORG,
+      project: appEnv.SENTRY_PROJECT,
+      authToken: appEnv.SENTRY_AUTH_TOKEN,
+      include: './build',
+      deploy: {
+        env: process.env.DEPLOY_ENV
+      }
+    }) : () => {},
 
     isBundleAnalyzer() ? new BundleAnalyzerPlugin({
       analyzerHost: '0.0.0.0',

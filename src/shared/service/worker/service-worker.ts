@@ -1,4 +1,6 @@
-declare const self: ServiceWorkerGlobalScope
+declare const self: ServiceWorkerGlobalScope & {
+  __WB_MANIFEST: any
+}
 
 import { comlink } from '~/shared/utils/comlink'
 import { createPromise } from '~/shared/utils/create-promise'
