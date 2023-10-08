@@ -15,7 +15,7 @@ const SentryPlugin = require('@sentry/webpack-plugin')
 const appConfig = require('./app.config')
 const { isDev, isProd, templateParameters } = require('./webpack.utils')
 const isBundleAnalyzer = () => !!process.env.BUNDLE_ANALYZER
-const isSentryAvailable = () => process.env.BUILD_ENV === 'production'
+const isSentryAvailable = () => process.env.DEPLOY_ENV === 'production'
 
 let appEnv
 try {
