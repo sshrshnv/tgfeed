@@ -13,16 +13,11 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const SentryPlugin = require('@sentry/webpack-plugin')
 
 const appConfig = require('./app.config')
+const appEnv = dotenv.config({ path: './.env' }).parsed || process.env
+
 const { isDev, isProd, templateParameters } = require('./webpack.utils')
 const isBundleAnalyzer = () => !!process.env.BUNDLE_ANALYZER
 const isSentryAvailable = () => process.env.DEPLOY_ENV === 'production'
-
-let appEnv
-try {
-  appEnv = dotenv.config({ path: './.env' }).parsed
-} catch {
-  appEnv = process.env
-}
 
 module.exports = {
   mode: isDev() ? 'development' : 'production',
@@ -119,6 +114,7 @@ module.exports = {
 
   plugins: [
     new webpack.DefinePlugin([
+      'DEPLOY_ENV',
       'NODE_ENV',
       ...Object.keys(appConfig),
       ...Object.keys(dotenv.config({ path: './.env.example' }).parsed)
@@ -183,7 +179,7 @@ module.exports = {
       authToken: appEnv.SENTRY_AUTH_TOKEN,
       include: './build',
       deploy: {
-        env: appEnv.DEPLOY_ENV
+        env: process.env.DEPLOY_ENV
       }
     }) : () => {},
 
