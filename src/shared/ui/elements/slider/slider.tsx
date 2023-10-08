@@ -3,8 +3,6 @@ import { Show, For, createSignal, createMemo, onMount, onCleanup, children, untr
 import PointerTracker from 'pointer-tracker'
 import { clsx } from 'clsx'
 
-import { isAndroid } from '~/shared/utils/detect-platform'
-
 import { SliderItem } from './slider-item'
 
 import * as layoutCSS from '../layout.sss'
@@ -20,6 +18,7 @@ export type SliderProps = {
 
 export const Slider: ParentComponent<SliderProps> = (props) => {
   let sliderEl!: HTMLDivElement
+  let translateY = 0
   const [getTranslateX, setTranslateX] = createSignal(0)
 
   const getItems = createMemo(() => (
@@ -57,36 +56,38 @@ export const Slider: ParentComponent<SliderProps> = (props) => {
   onMount(() => {
     const pointerTracker = new PointerTracker(sliderEl, {
       start: (_pointer, ev) => {
+        if (pointerTracker.currentPointers.length !== 0) {
+          return false
+        }
         ev.stopPropagation()
         return true
       },
 
-      move: (_prevPointers, _changedPointers, ev) => {
-        const { startPointers, currentPointers } = pointerTracker
-        if (startPointers?.length !== 1 && currentPointers?.length !== 1) return
+      move: ([prevPointer], _changedPointers, ev) => {
+        const [currentPointer] = pointerTracker.currentPointers
+        const x = currentPointer.clientX - prevPointer.clientX
+        const y = currentPointer.clientY - prevPointer.clientY
+        translateY += y
 
-        const x = currentPointers[0].clientX - startPointers[0].clientX
-        const y = currentPointers[0].clientY - startPointers[0].clientY
         if ((Math.abs(y) > Math.abs(x)) && !getTranslateX()) return
 
         ev.stopPropagation()
         ev.preventDefault()
-        setTranslateX(x)
+        setTranslateX(value => value + x)
       },
 
       end: () => {
         const translateX = untrack(getTranslateX)
-        if (!translateX) {
+        if (!translateX && !translateY) {
           props.onClick?.()
           return
         }
         if (Math.abs(translateX) >= 50) {
           props.onChange?.(translateX < 0 ? 1 : -1)
         }
+        translateY = 0
         setTranslateX(0)
-      },
-
-      avoidPointerEvents: isAndroid()
+      }
     })
 
     onCleanup(() => {
