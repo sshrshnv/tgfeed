@@ -10,9 +10,11 @@ preventScale()
 import { initApiWorker } from '~/shared/api/worker/init-api-worker'
 import { initUiWorker } from '~/shared/ui/worker/init-ui-worker'
 import { registerServiceWorker } from '~/shared/service/worker/register-service-worker'
+import { clearDbFileStorage } from '~/shared/storage/db-file-storage'
 initApiWorker()
 initUiWorker()
 registerServiceWorker()
+clearDbFileStorage()
 
 import { awaitInstallAvailability } from '~/core/install/actions/await-install-availability'
 awaitInstallAvailability()

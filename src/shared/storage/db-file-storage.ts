@@ -1,21 +1,31 @@
-import { set, getMany } from 'idb-keyval'
-
-const fileStorageCache: Record<string, ArrayBuffer> = {}
+import { DB_FILE_STORE_NAME, getDB } from './db'
 
 export const dbFileStorage = {
-  setBytes: (key: string, bytes: ArrayBuffer) => {
-    return set(generateFileKey(key), bytes).catch(() => {
-      fileStorageCache[key] = bytes
-    })
+  setBytes: async (key: string, bytes: ArrayBuffer) => {
+    try {
+      const db = await getDB()
+      db.put(DB_FILE_STORE_NAME, bytes, generateFileKey(key))
+    } catch {}
   },
 
-  getBytes: (keys: string[]) => {
+  getBytes: async (keys: string[]) => {
     keys = keys.map(generateFileKey)
-    if (keys.every(key => !!fileStorageCache[key])) {
-      return keys.map(key => fileStorageCache[key])
+    try {
+      const db = await getDB()
+      return Promise.all(keys.map(key => db.get(DB_FILE_STORE_NAME, key)))
+    } catch {
+      return []
     }
-    return getMany(keys) as Promise<ArrayBuffer[] | undefined>
+  },
+
+  clear: async () => {
+    try {
+      const db = await getDB()
+      return db.clear(DB_FILE_STORE_NAME)
+    } catch {}
   }
 }
+
+export const clearDbFileStorage = () => dbFileStorage.clear()
 
 const generateFileKey = (key: string) => `file-${key}`

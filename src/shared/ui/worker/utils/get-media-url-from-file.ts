@@ -15,14 +15,14 @@ export const getMediaUrlFromFile: UI['getMediaUrlFromFile'] = async ({
   })
 
   let bytes = await dbFileStorage.getBytes(keys)
-  if (!bytes?.length) return
+  if (!bytes?.length || bytes.some(value => !value)) return
 
-  let file = new Blob(bytes, { type }) as File | undefined
+  let file = new Blob(bytes as ArrayBuffer[], { type }) as File | undefined
   if (!file) return
 
   const url = self.URL.createObjectURL(file)
 
-  bytes = undefined
+  bytes = []
   file = undefined
 
   return url

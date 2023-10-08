@@ -3848,7 +3848,7 @@ const _dialogFilterChatlist = (): any => {
 const _inputChatlistDialogFilter: any = () => ({ _: 'inputChatlistDialogFilter', filter_id: i32() })
 const _exportedChatlistInvite = (): any => {
   const result: Record<string, unknown> = { _: 'exportedChatlistInvite' }
-  const flags = i32()
+  //const flags = i32()
   result.title = str()
   result.url = str()
   result.peers = vector(obj)

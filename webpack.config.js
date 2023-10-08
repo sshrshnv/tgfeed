@@ -125,6 +125,9 @@ module.exports = {
       ...Object.keys(appConfig),
       ...Object.keys(dotenv.config({ path: './.env.example' }).parsed)
     ].reduce((config, key) => {
+      console.log(0, 'appConfig', appConfig, appConfig[key])
+      console.log(1, 'appEnv', appEnv, appEnv[key])
+      console.log(2, 'process.env', process.env, process.env[key])
       config[`process.env.${key}`] = JSON.stringify(
         appConfig[key] ?? appEnv[key] ?? process.env[key]
       )

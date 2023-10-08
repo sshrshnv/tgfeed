@@ -1,7 +1,7 @@
-import { set, get, del, clear } from 'idb-keyval'
-
 import type { APIStorage } from '~/shared/api'
 import type { AccountStorage } from '~/core/account'
+
+import { DB_DATA_STORE_NAME, getDB } from './db'
 
 export type StorageKeyValueMap =
   APIStorage['meta'] &
@@ -10,32 +10,36 @@ export type StorageKeyValueMap =
 let storageCache: Record<string, any> = {}
 
 export const dbStorage = {
-  set: <T extends keyof StorageKeyValueMap>(key: T, value: StorageKeyValueMap[T]) => {
+  set: async <T extends keyof StorageKeyValueMap>(key: T, value: StorageKeyValueMap[T]) => {
     storageCache[key] = value
     try {
-      set(key, value)
+      const db = await getDB()
+      return db.put(DB_DATA_STORE_NAME, value, key)
     } catch {}
   },
 
   get: async <T extends keyof StorageKeyValueMap>(key: T): Promise<StorageKeyValueMap[T] | undefined> => {
     if (storageCache[key]) return storageCache[key]
     try {
-      storageCache[key] = await get(key)
+      const db = await getDB()
+      storageCache[key] = await db.get(DB_DATA_STORE_NAME, key)
       return storageCache[key]
     } catch {}
   },
 
-  del: <T extends keyof StorageKeyValueMap>(key: T) => {
+  del: async <T extends keyof StorageKeyValueMap>(key: T) => {
     delete storageCache[key]
     try {
-      del(key)
+      const db = await getDB()
+      return db.delete(DB_DATA_STORE_NAME, key)
     } catch {}
   },
 
-  clear: () => {
+  clear: async () => {
     storageCache = {}
     try {
-      clear()
+      const db = await getDB()
+      return db.clear(DB_DATA_STORE_NAME)
     } catch {}
   }
 }

@@ -9,7 +9,6 @@ const [
 
 export const captureInstallPrompt = () => {
   self.addEventListener('beforeinstallprompt', (ev) => {
-    console.log(0, 'BEFORE INSTALL PROMPT')
     ev.preventDefault()
     resolveCapturedInstallPromptPromise(ev)
   })
