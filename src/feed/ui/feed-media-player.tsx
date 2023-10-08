@@ -1,7 +1,8 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 import type { Component } from 'solid-js'
-import { Show, createSignal, createEffect, untrack } from 'solid-js'
+import { Show, createSignal, createEffect, untrack, batch } from 'solid-js'
 import { createStore } from 'solid-js/store'
+import { clsx } from 'clsx'
 
 import type { MessageMedia } from '~/shared/api/mtproto'
 import { BluredImage } from '~/shared/ui/elements/image'
@@ -14,7 +15,6 @@ import { getPostImageUrls } from '../utils/get-post-image-urls'
 import { getPostStreamUrl } from '../utils/get-post-stream-url'
 import { FeedMediaControls } from './feed-media-controls'
 
-import * as animationsCSS from '../../shared/ui/animations/animations.sss'
 import * as feedMediaPlayerCSS from './feed-media-player.sss'
 
 export type FeedMediaPlayerProps = {
@@ -35,8 +35,10 @@ const [loadingCache, setLoadingCache] = createStore<LoadingCache>({})
 
 export const FeedMadiaPlayer: Component<FeedMediaPlayerProps> = (props) => {
   let playerEl!: HTMLVideoElement | HTMLAudioElement
+  let posterEl!: HTMLCanvasElement
 
   const [isLoading, setLoading] = createSignal(false)
+  const [isPaused, setPaused] = createSignal(false)
 
   const getImageUrls = () => {
     if (!isLoadStarted()) {
@@ -70,22 +72,43 @@ export const FeedMadiaPlayer: Component<FeedMediaPlayerProps> = (props) => {
     props.onEnded()
 
   createEffect((prev) => {
-    const loading = untrack(isLoading)
     if (!playerEl) return
+    const loading = untrack(isLoading)
+    const paused = untrack(isPaused)
+
     if (prev && !props.playing) {
       playerEl.pause()
-      if (loading) setLoading(false)
+      batch(() => {
+        if (!paused) setPaused(true)
+        if (loading) setLoading(false)
+      })
     }
+
     if (!prev && props.playing && !loading) {
+      if (paused) setPaused(false)
       playerEl.play().catch(() => {})
     }
+
     return props.playing
+  })
+
+  createEffect((prev) => {
+    const paused = isPaused()
+    const size = getVideoSize()
+
+    if (!prev && paused && !!posterEl && !!size) {
+      const ctx = posterEl.getContext('2d', { alpha: true })
+      ctx?.drawImage(playerEl as HTMLVideoElement, 0, 0, size.w, size.h)
+    }
+
+    return paused
   })
 
   return (
     <div class={feedMediaPlayerCSS.base}>
       <Show when={hasThumbs(props.media)}>
         <BluredImage
+          class={feedMediaPlayerCSS.thumb}
           src={isImageReady() ? getImageUrls().thumbUrl : ''}
           width={100}
           height={100}
@@ -94,21 +117,36 @@ export const FeedMadiaPlayer: Component<FeedMediaPlayerProps> = (props) => {
       </Show>
 
       <Show when={isMediaVideo(props.media)}>
-        <video
-          class={animationsCSS.forcedPerformance}
-          ref={playerEl as HTMLVideoElement}
-          src={isPlayerReady() ? getStreamUrl() : ''}
-          width={getVideoSize()?.w}
-          height={getVideoSize()?.h}
-          poster={isImageReady() ? getImageUrls().imageUrl : ''}
-          onCanPlayThrough={handleCanPlay}
-          onWaiting={handleWaiting}
-          onEnded={handleEnded}
-          autoplay={false}
-          controls={false}
-          preload='none'
-          playsinline
-        />
+        <>
+          <video
+            class={clsx(
+              feedMediaPlayerCSS.video,
+              isPaused() && feedMediaPlayerCSS._hidden
+            )}
+            ref={playerEl as HTMLVideoElement}
+            src={isPlayerReady() ? getStreamUrl() : ''}
+            width={getVideoSize()?.w}
+            height={getVideoSize()?.h}
+            poster={isImageReady() ? getImageUrls().imageUrl : ''}
+            onCanPlayThrough={handleCanPlay}
+            onWaiting={handleWaiting}
+            onEnded={handleEnded}
+            autoplay={false}
+            controls={false}
+            preload='none'
+            playsinline
+          />
+
+          <canvas
+            class={clsx(
+              feedMediaPlayerCSS.poster,
+              !isPaused() && feedMediaPlayerCSS._hidden
+            )}
+            ref={posterEl}
+            width={getVideoSize()?.w}
+            height={getVideoSize()?.h}
+          />
+        </>
       </Show>
 
       <Show when={isMediaAudio(props.media)}>
