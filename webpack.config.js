@@ -10,7 +10,7 @@ const MiniClExtractPlugin = require('mini-css-extract-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const ClMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-const SentryPlugin = require('@sentry/webpack-plugin')
+const SentryPlugin = require('@sentry/webpack-plugin').sentryWebpackPlugin
 
 const appConfig = require('./app.config')
 const appEnv = dotenv.config({ path: './.env' }).parsed || process.env
@@ -173,7 +173,7 @@ module.exports = {
       }]
     }) : () => {},*/
 
-    isSentryAvailable() ? new SentryPlugin({
+    isSentryAvailable() ? SentryPlugin({
       org: appEnv.SENTRY_ORG,
       project: appEnv.SENTRY_PROJECT,
       authToken: appEnv.SENTRY_AUTH_TOKEN,
