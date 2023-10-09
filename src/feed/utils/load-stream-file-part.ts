@@ -5,7 +5,7 @@ import { loadFilePart } from '~/shared/api/utils/load-file-part'
 import { generateFilePartUuid } from '~/shared/api/utils/generate-file-part-uuid'
 
 import type { ChannelId, PostId } from '../feed.types'
-import { getFeedCache } from '../feed-cache'
+import { feedCache } from '../feed-cache'
 import { getMediaVideo, getMediaAudio } from './detect-post-media'
 
 export const loadStreamFilePart: Parameters<Service['handleStreams']>[0] = async (
@@ -13,13 +13,12 @@ export const loadStreamFilePart: Parameters<Service['handleStreams']>[0] = async
   offset,
   limit
 ) => {
-  const feedCache = getFeedCache()
-  const { media } = feedCache.posts[uuid]
+  const media = getMedia(uuid)
   const stream = getMediaVideo(media) || getMediaAudio(media)!
   const [channelId, postId] = uuid.split('-').map((value, index) =>
     index ? +value : value
   ) as [ChannelId, PostId]
-  const { access_hash: accessHash } = feedCache.channels[channelId]
+  const accessHash = getAccessHash(channelId)
   const { dc_id } = stream
   const location = getPostStreamLocation(media)
   const filePartUuid = generateFilePartUuid(location, offset, limit)
@@ -42,6 +41,12 @@ export const loadStreamFilePart: Parameters<Service['handleStreams']>[0] = async
     limit
   )
 }
+
+const getMedia = (uuid) =>
+  feedCache.posts[uuid].media as MessageMedia
+
+const getAccessHash = (channelId) =>
+  feedCache.channels[channelId].access_hash
 
 const getPostStreamLocation = (
   media: MessageMedia

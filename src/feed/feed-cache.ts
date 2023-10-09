@@ -22,5 +22,3 @@ export const setFeedCache = (data: Partial<FeedCache>) => {
     }
   })
 }
-
-export const getFeedCache = () => feedCache
