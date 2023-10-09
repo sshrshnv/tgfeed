@@ -5,6 +5,11 @@ import type { API } from './api.types'
 import { getApiWorker } from './worker/init-api-worker'
 
 export const api: API = {
+  check: async () => {
+    const apiWorker = await getApiWorker()
+    return apiWorker.check()
+  },
+
   req: async (...args) => {
     const apiWorker = await getApiWorker()
     return apiWorker

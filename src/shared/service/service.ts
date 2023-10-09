@@ -5,6 +5,11 @@ import { getService, endUpdate } from './worker/register-service-worker'
 import { reregisterServiceWorker } from './utils/reregister-service-worker'
 
 export const service: Service = {
+  check: async () => {
+    const serviceWorker = await getService()
+    return serviceWorker.check()
+  },
+
   handleStreams: async (...args) => {
     const serviceWorker = await getService()
     return serviceWorker.handleStreams(

@@ -19,6 +19,11 @@ clearDbFileStorage()
 import { awaitInstallAvailability } from '~/core/install/actions/await-install-availability'
 awaitInstallAvailability()
 
+import { checkWorkers } from '~/core/utils/check-workers'
+import { handleLifecycle } from '~/core/utils/handle-lifecycle'
+checkWorkers()
+handleLifecycle()
+
 import { View } from './app.view'
 render(
   () => <View/>,

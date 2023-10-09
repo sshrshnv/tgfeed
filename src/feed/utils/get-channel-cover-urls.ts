@@ -1,7 +1,7 @@
 import { createStore } from 'solid-js/store'
 
 import { InputFileLocation } from '~/shared/api/mtproto'
-import { getUiWorker } from '~/shared/ui/worker/init-ui-worker'
+import { ui } from '~/shared/ui'
 
 import type { ChannelData, ChannelId } from '../feed.types'
 import { loadFile } from './load-file'
@@ -35,8 +35,7 @@ export const getChannelCoverUrls = (
   const { dc_id, photo_id, stripped_thumb } = channel.photo
 
   if (stripped_thumb) {
-    getUiWorker().then(async uiWorker => {
-      const thumbUrl = await uiWorker.getThumbUrlFromBytes(stripped_thumb, { stripped: true })
+    ui.getThumbUrlFromBytes(stripped_thumb, { stripped: true }).then(thumbUrl => {
       setChannelCoverUrlsCache(channel.id, 'thumbUrl', thumbUrl)
     })
   }
@@ -49,8 +48,7 @@ export const getChannelCoverUrls = (
   ).then(async file => {
     if (!file) return
 
-    const uiWorker = await getUiWorker()
-    const coverUrl = await uiWorker.getMediaUrlFromFile(file)
+    const coverUrl = await ui.getMediaUrlFromFile(file)
     if (!coverUrl) return
 
     setChannelCoverUrlsCache(channel.id, 'coverUrl', coverUrl)

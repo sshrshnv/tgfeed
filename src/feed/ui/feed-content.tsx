@@ -2,7 +2,6 @@ import type { Component } from 'solid-js'
 import { Show, Index, createSignal, createResource, createEffect, createMemo } from 'solid-js'
 import { clsx } from 'clsx'
 
-import { service } from '~/shared/service'
 import { Icon } from '~/shared/ui/elements/icon'
 
 import type { Folder, ScrollingValue } from '../feed.types'
@@ -11,13 +10,10 @@ import { feedState, setFeedState } from '../feed-state'
 import { fetchPosts } from '../actions/fetch-posts'
 import { listenUpdates } from '../actions/listen-updates'
 import { applyUpdates } from '../actions/apply-updates'
-import { loadStreamFilePart } from '../utils/load-stream-file-part'
 import { FeedPosts } from './feed-posts'
 
 import * as animationsCSS from '../../shared/ui/animations/animations.sss'
 import * as feedContentCSS from './feed-content.sss'
-
-let streamsHandlerActivated = false
 
 export const FeedContent: Component = () => {
   const [getPageNumber, setPageNumber] = createSignal(0)
@@ -36,13 +32,6 @@ export const FeedContent: Component = () => {
   const handleScrollEnd = () => {
     if (feedState.initialLoading || postsRes.loading) return
     setPageNumber(value => value + 1)
-  }
-
-  if (!streamsHandlerActivated) {
-    service.handleStreams(loadStreamFilePart).then(() => {
-      streamsHandlerActivated = true
-      setFeedState('streamsHandlerActivated', true)
-    })
   }
 
   createEffect((prev) => {

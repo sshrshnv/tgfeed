@@ -5,6 +5,8 @@ export type StreamParams = {
 }
 
 export type Service = {
+  check: () => Promise<boolean>
+
   handleStreams: (
     loadStreamFilePart: (
       uuid: string,

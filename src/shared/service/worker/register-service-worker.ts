@@ -3,6 +3,8 @@ import { createPromise } from '~/shared/utils/create-promise'
 import { setDelay } from '~/shared/utils/set-delay'
 import { postMessage } from '~/shared/utils/post-message'
 import { showUpdate } from '~/core/update/actions/show-update'
+import { setFeedState } from '~/feed/feed-state'
+import { loadStreamFilePart } from '~/feed/utils/load-stream-file-part'
 
 import type { Service } from '../service.types'
 import { SERVICE_WORKER_SKIP_WAITING_MESSAGE } from '../service.const'
@@ -65,9 +67,14 @@ export const registerServiceWorker = async () => {
     port: port1
   }, [port1])
 
-  resolveServicePromise(
-    comlink.wrap(port2) as Service
-  )
+  const service = comlink.wrap(port2) as Service
+  resolveServicePromise(service)
+
+  service.handleStreams?.(
+    comlink.proxy(loadStreamFilePart)
+  ).then(() => {
+    setFeedState('streamsHandlerActivated', true)
+  })
 }
 
 export const isServiceWorkerRegistered = () =>

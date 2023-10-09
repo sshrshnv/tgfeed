@@ -50,6 +50,8 @@ workbox.registerRoute(
 )
 
 const service: Service = {
+  check: async () => true,
+
   handleStreams: async (load) => {
     loadStreamFilePart = load
     resolveStreamsStatePromise()

@@ -21,7 +21,7 @@ const saveMeta = (meta: ClientMetaData) =>
 const deleteMeta = () =>
   dbStorage.del(API_META_STORAGE_KEY)
 
-const apiPromise = new Promise<API>(async resolve => {
+const apiPromise = new Promise<Omit<API, 'check'>>(async resolve => {
   let migratedDC: number
 
   const meta: ClientMetaData = await getMeta()
@@ -43,7 +43,7 @@ const apiPromise = new Promise<API>(async resolve => {
 
   client.on('metaChanged', saveMeta)
 
-  const api: API = {
+  const api: Omit<API, 'check'> = {
     req: async (method, data = {}, params = {}) => {
       const { thread, timeout } = params
       let { dc, attempt = 0 } = params
@@ -116,6 +116,8 @@ const apiPromise = new Promise<API>(async resolve => {
 })
 
 const apiWorker: API = {
+  check: async () => true,
+
   req: async (method, ...args) => {
     const api = await apiPromise
     const res = await api.req(method, ...args)

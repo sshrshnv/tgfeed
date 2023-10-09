@@ -1,7 +1,7 @@
 import { comlink } from '~/shared/utils/comlink'
 import { createPromise } from '~/shared/utils/create-promise'
 
-import type { UI } from './ui.types'
+import type { UI } from '../ui.types'
 
 let uiWorkerInstance: Worker
 let [uiWorkerPromise, resolveUiWorkerPromise] = createPromise<UI>()

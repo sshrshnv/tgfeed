@@ -2,7 +2,7 @@ import { createStore } from 'solid-js/store'
 
 import { InputFileLocation, MessageMedia, Photo, PhotoSize, Document } from '~/shared/api/mtproto'
 import { generateFileUuid } from '~/shared/api/utils/generate-file-uuid'
-import { getUiWorker } from '~/shared/ui/worker/init-ui-worker'
+import { ui } from '~/shared/ui'
 
 import type { PostUuid, ChannelId, PostId } from '../feed.types'
 import { feedCache } from '../feed-cache'
@@ -53,8 +53,7 @@ export const getPostImageUrls = (
   }
 
   if (!imageUrlsCache[fileUuid].thumbUrl && strippedThumb) {
-    getUiWorker().then(async uiWorker => {
-      const thumbUrl = await uiWorker.getThumbUrlFromBytes(strippedThumb.bytes, { stripped: true })
+    ui.getThumbUrlFromBytes(strippedThumb.bytes, { stripped: true }).then(thumbUrl => {
       setImageUrlsCache(fileUuid, 'thumbUrl', thumbUrl)
     })
   }
@@ -73,8 +72,7 @@ export const getPostImageUrls = (
   ).then(async file => {
     if (!file) return
 
-    const uiWorker = await getUiWorker()
-    const imageUrl = await uiWorker.getMediaUrlFromFile(file)
+    const imageUrl = await ui.getMediaUrlFromFile(file)
     if (!imageUrl) return
 
     setImageUrlsCache(fileUuid, 'imageUrl', imageUrl)

@@ -1,12 +1,14 @@
 import type { InputFileLocation } from '~/shared/api/mtproto'
 
 export type UI = {
+  check: () => Promise<boolean>
+
   getThumbUrlFromBytes: (
     bytes: ArrayBuffer,
     params?: {
       stripped?: boolean
     }
-  ) => string | Promise<string>
+  ) => Promise<string>
 
   getBluredImageBytes: (
     bytes: ArrayBuffer,
@@ -15,7 +17,7 @@ export type UI = {
     width: number,
     height: number,
     radius: number
-  ) => ArrayBuffer | Promise<ArrayBuffer>
+  ) => Promise<ArrayBuffer>
 
   getMediaUrlFromFile: (
     file: {
@@ -24,7 +26,7 @@ export type UI = {
       limit: number
       partsCount: number
     }
-  ) => string | undefined | Promise<string | undefined>
+  ) => Promise<string | undefined>
 }
 
 export type UIWorkerMessage = {

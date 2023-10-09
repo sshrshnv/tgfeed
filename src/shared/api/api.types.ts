@@ -4,6 +4,8 @@ import type {
 } from './mtproto'
 
 export type API = {
+  check: () => Promise<boolean>
+
   req: <T extends keyof MethodDeclMap>(
     method: T,
     data?: MethodDeclMap[T]['req'],
