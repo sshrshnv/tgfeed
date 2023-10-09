@@ -19,7 +19,7 @@ const generateIOSSplashScreens = () => {
     path.resolve('./src/shared/ui/icons/manifest/maskable.svg'),
     path.resolve('./src/shared/ui/icons/manifest/splash'),
     {
-      index: path.resolve('./src/app.html'),
+      // index: path.resolve('./src/app.html'),
       background: appConfig.APP_DEFAULT_THEME_COLOR,
       padding: `calc(50vh - 48px) calc(50vw - 48px)`,
       splashOnly: true,

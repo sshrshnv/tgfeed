@@ -1,8 +1,9 @@
 import type { Component } from 'solid-js'
-import { Index, createSignal, createResource, createEffect, createMemo, onMount } from 'solid-js'
+import { Show, Index, createSignal, createResource, createEffect, createMemo, onMount } from 'solid-js'
+import { clsx } from 'clsx'
 
 import { service } from '~/shared/service'
-import { Progress } from '~/shared/ui/elements/progress'
+import { Icon } from '~/shared/ui/elements/icon'
 
 import type { Folder, ScrollingValue } from '../feed.types'
 import { DEFAULT_FOLDER_ID } from '../feed.const'
@@ -13,6 +14,7 @@ import { applyUpdates } from '../actions/apply-updates'
 import { loadStreamFilePart } from '../utils/load-stream-file-part'
 import { FeedPosts } from './feed-posts'
 
+import * as animationsCSS from '../../shared/ui/animations/animations.sss'
 import * as feedContentCSS from './feed-content.sss'
 
 export const FeedContent: Component = () => {
@@ -50,10 +52,6 @@ export const FeedContent: Component = () => {
 
   return (
     <>
-      <Progress
-        class={feedContentCSS.progress}
-        active={feedState.initialLoading}
-      />
       <Index each={getFolderIds()}>{folderId => (
         <FeedPosts
           folderId={folderId()}
@@ -64,6 +62,17 @@ export const FeedContent: Component = () => {
           onApplyUpdates={applyUpdates}
         />
       )}</Index>
+
+      <Show when={feedState.initialLoading}>
+        <Icon
+          class={clsx(
+            feedContentCSS.loader,
+            animationsCSS.rotate
+          )}
+          name='loader'
+          size='large'
+        />
+      </Show>
     </>
   )
 }

@@ -21,6 +21,7 @@ export const UpdateButton: Component = () => {
     <Button
       class={updateButtonCSS.base}
       onClick={handleUpdate}
+      stopImmediatePropagation
     >
       <Show when={!updateState.loading}>
         <Text variant='label' size='large'>

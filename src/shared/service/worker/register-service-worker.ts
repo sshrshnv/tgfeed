@@ -6,6 +6,7 @@ import { showUpdate } from '~/core/update/actions/show-update'
 
 import type { Service } from '../service.types'
 import { SERVICE_WORKER_SKIP_WAITING_MESSAGE } from '../service.const'
+import { reregisterServiceWorker } from '../utils/reregister-service-worker'
 
 const WAITING_TIMEOUT_DURATION = 200
 
@@ -23,6 +24,7 @@ export const registerServiceWorker = async () => {
   if (process.env.NODE_ENV !== 'production' && registrationStarted) return
 
   registrationStarted = true
+  const registrationTimeoutId = reregisterServiceWorker()
 
   if (document.readyState !== 'complete') {
     await new Promise(resolve => self.addEventListener('load', resolve))
@@ -50,6 +52,7 @@ export const registerServiceWorker = async () => {
 
   if (serviceWorker) {
     resolveServiceWorkerPromise(serviceWorker)
+    self.clearTimeout(registrationTimeoutId)
   }
 
   registration!.addEventListener('updatefound', handleUpdateFound)
@@ -66,9 +69,6 @@ export const registerServiceWorker = async () => {
     comlink.wrap(port2) as Service
   )
 }
-
-export const unregisterServiceWorker = () =>
-  registration?.unregister()
 
 export const isServiceWorkerRegistered = () =>
   !!registration
