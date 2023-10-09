@@ -4,9 +4,10 @@
   },
 
   "account": {
-    "title": "Account",
+    "title": "Telegram",
     "signIn": "Sign In",
-    "signOut": "Log Out"
+    "signOut": "Log Out",
+    "reconnect": "Reconnect"
   },
 
   "theme": {
