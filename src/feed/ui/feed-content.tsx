@@ -1,5 +1,5 @@
 import type { Component } from 'solid-js'
-import { Show, Index, createSignal, createResource, createEffect, createMemo, onMount } from 'solid-js'
+import { Show, Index, createSignal, createResource, createEffect, createMemo } from 'solid-js'
 import { clsx } from 'clsx'
 
 import { service } from '~/shared/service'
@@ -16,6 +16,8 @@ import { FeedPosts } from './feed-posts'
 
 import * as animationsCSS from '../../shared/ui/animations/animations.sss'
 import * as feedContentCSS from './feed-content.sss'
+
+let streamsHandlerActivated = false
 
 export const FeedContent: Component = () => {
   const [getPageNumber, setPageNumber] = createSignal(0)
@@ -36,19 +38,19 @@ export const FeedContent: Component = () => {
     setPageNumber(value => value + 1)
   }
 
+  if (!streamsHandlerActivated) {
+    service.handleStreams(loadStreamFilePart).then(() => {
+      streamsHandlerActivated = true
+      setFeedState('streamsHandlerActivated', true)
+    })
+  }
+
   createEffect((prev) => {
     if (prev && !feedState.initialLoading) {
       listenUpdates()
     }
     return feedState.initialLoading
   }, true)
-
-  onMount(() => {
-    if (feedState.streamsHandlerActivated) return
-    service.handleStreams(loadStreamFilePart).then(() => {
-      setFeedState('streamsHandlerActivated', true)
-    })
-  })
 
   return (
     <>

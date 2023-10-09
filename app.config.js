@@ -5,7 +5,7 @@ const APP_VERSION = pkg.version
 const APP_ISSUES_URL = 'https://github.com/sshrshnv/tgfeed/issues'
 
 const APP_TITLE = 'TgFeed'
-const APP_DESCRIPTION = 'Telegram channel feed'
+const APP_DESCRIPTION = 'Read your Telegram channels like a news feed.'
 
 const APP_THEME_MODES = ['system', 'light', 'dark']
 const APP_DEFAULT_THEME_MODE = APP_THEME_MODES[0]

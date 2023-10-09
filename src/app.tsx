@@ -24,7 +24,3 @@ render(
   () => <View/>,
   self.document.body
 )
-
-self.onfocus = () => {
-  console.log(0, 'WINDOW FOCUS')
-}

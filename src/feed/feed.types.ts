@@ -14,8 +14,10 @@ export type FeedState = Config & {
 }
 
 export type FeedCache = {
-  channels: Channels
-  posts: Posts
+  _channels: Channels
+  _posts: Posts
+  get channels(): Channels
+  get posts(): Posts
 }
 
 export type Config = {
