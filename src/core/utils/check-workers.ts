@@ -48,13 +48,14 @@ const checkWorker = (
     }, CHECK_INTERVAL)
   })
 
-  rerunTimeoutId = self.setTimeout(() => {
+  rerunTimeoutId = self.setTimeout(async () => {
     if (attempts[key] === MAX_ATTEMPTS_COUNT) {
       self.location.reload()
       return
     }
 
     attempts[key] += 1
-    run()
+    await run()
+    checkWorker(key, worker, run)
   }, CHECK_TIMEOUT)
 }
