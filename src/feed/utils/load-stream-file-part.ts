@@ -1,3 +1,4 @@
+import { trackError } from '~/shared/errors/actions/track-error'
 import type { Service } from '~/shared/service'
 import { service } from '~/shared/service'
 import { MessageMedia, Document, InputFileLocation } from '~/shared/api/mtproto'
@@ -13,33 +14,37 @@ export const loadStreamFilePart: Parameters<Service['handleStreams']>[0] = async
   offset,
   limit
 ) => {
-  const media = getMedia(uuid)
-  const stream = getMediaVideo(media) || getMediaAudio(media)!
-  const [channelId, postId] = uuid.split('-').map((value, index) =>
-    index ? +value : value
-  ) as [ChannelId, PostId]
-  const accessHash = getAccessHash(channelId)
-  const { dc_id } = stream
-  const location = getPostStreamLocation(media)
-  const filePartUuid = generateFilePartUuid(location, offset, limit)
+  try {
+    const media = getMedia(uuid)
+    const stream = getMediaVideo(media) || getMediaAudio(media)!
+    const [channelId, postId] = uuid.split('-').map((value, index) =>
+      index ? +value : value
+    ) as [ChannelId, PostId]
+    const accessHash = getAccessHash(channelId)
+    const { dc_id } = stream
+    const location = getPostStreamLocation(media)
+    const filePartUuid = generateFilePartUuid(location, offset, limit)
 
-  await loadFilePart(
-    channelId,
-    accessHash,
-    postId,
-    location,
-    dc_id,
-    2,
-    offset,
-    limit
-  )
+    await loadFilePart(
+      channelId,
+      accessHash,
+      postId,
+      location,
+      dc_id,
+      2,
+      offset,
+      limit
+    )
 
-  service.handleStreamFilePartLoad(
-    filePartUuid,
-    uuid,
-    offset,
-    limit
-  )
+    service.handleStreamFilePartLoad(
+      filePartUuid,
+      uuid,
+      offset,
+      limit
+    )
+  } catch (err) {
+    trackError(err)
+  }
 }
 
 const getMedia = (uuid) =>

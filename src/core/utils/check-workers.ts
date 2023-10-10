@@ -7,7 +7,7 @@ import { initUiWorker } from '~/shared/ui/worker/init-ui-worker'
 
 type Key = 'service' | 'api' | 'ui'
 
-const CHECK_TIMEOUT = 1000
+const CHECK_TIMEOUT = 2000
 const CHECK_INTERVAL = 4000
 const MAX_ATTEMPTS_COUNT = 2
 
@@ -41,7 +41,11 @@ const checkWorker = (
 ) => {
   let rerunTimeoutId = 0
 
+  console.warn(`CHECK ${key}: ${attempts[key]}`)
+
   worker.check().then(() => {
+    console.warn(`CHECK ${key}: ${attempts[key]} SUCCESS`)
+
     self.clearTimeout(rerunTimeoutId)
     checkTimeoutIds[key] = self.setTimeout(() => {
       checkWorker(key, worker, run)
@@ -49,9 +53,11 @@ const checkWorker = (
   })
 
   rerunTimeoutId = self.setTimeout(() => {
+    console.error(`FREEZE ${key}: ${attempts[key]}`)
+
     if (attempts[key] === MAX_ATTEMPTS_COUNT) {
-      self.location.reload()
-      return
+      // self.location.reload()
+      // return
     }
 
     attempts[key] += 1
