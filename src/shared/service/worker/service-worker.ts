@@ -63,6 +63,10 @@ const service: Service = {
 }
 
 self.onmessage = (ev) => {
+  if (ev.data?.check) {
+    ev.source?.postMessage(true)
+    return
+  }
   if (ev.data?.port) {
     comlink.expose(service, ev.data.port)
     return
