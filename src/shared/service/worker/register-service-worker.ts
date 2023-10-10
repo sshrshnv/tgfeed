@@ -25,6 +25,10 @@ export const registerServiceWorker = async () => {
   if (!('serviceWorker' in navigator)) return
   if (process.env.NODE_ENV !== 'production' && registrationStarted) return
 
+  if (registration) {
+    await registration.unregister()
+  }
+
   registrationStarted = true
   const registrationTimeoutId = reregisterServiceWorker()
 
