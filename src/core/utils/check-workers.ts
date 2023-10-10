@@ -50,7 +50,7 @@ const checkWorker = (
 
   rerunTimeoutId = self.setTimeout(async () => {
     if (attempts[key] === MAX_ATTEMPTS_COUNT) {
-      self.location.reload()
+      // self.location.reload()
       return
     }
 
