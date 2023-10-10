@@ -20,9 +20,9 @@ import { awaitInstallAvailability } from '~/core/install/actions/await-install-a
 awaitInstallAvailability()
 
 import { checkWorkers } from '~/core/utils/check-workers'
-import { handleLifecycle } from '~/core/utils/handle-lifecycle'
+import { listenPageState } from '~/core/utils/listen-page-state'
 checkWorkers()
-handleLifecycle()
+listenPageState()
 
 import { View } from './app.view'
 render(

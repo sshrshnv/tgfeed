@@ -16,11 +16,11 @@ const onFreeze = () =>
 const onHide = (ev) =>
   handleStateChange(ev.persisted ? 'frozen' : 'terminated')
 
-export const handleLifecycle = () => {
+export const listenPageState = () => {
   ['pageshow', 'focus', 'blur', 'visibilitychange', 'resume'].forEach(type => {
     self.addEventListener(type, onFocus, { capture: true })
   })
-  self.addEventListener('freeze', onFreeze, {capture: true})
+  self.addEventListener('freeze', onFreeze, { capture: true })
   self.addEventListener('pagehide', onHide, { capture: true })
 }
 
@@ -29,8 +29,6 @@ let state: State = detectState()
 const handleStateChange = (newState: State) => {
   if (newState === state) return
   state = newState
-
-  if (newState === 'focused') {
-    recheckWorkers()
-  }
+  recheckWorkers()
+  self.document.dispatchEvent(new CustomEvent('pagestate', { detail: state }))
 }

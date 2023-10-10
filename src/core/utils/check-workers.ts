@@ -55,7 +55,6 @@ const checkWorker = (
     }
 
     attempts[key] += 1
-    await run()
     checkWorker(key, worker, run)
   }, CHECK_TIMEOUT)
 }
