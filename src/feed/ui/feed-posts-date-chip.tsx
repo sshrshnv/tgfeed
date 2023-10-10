@@ -25,7 +25,7 @@ export const FeedPostsDateChip: Component<FeedPostsItemDateChipProps> = (props) 
     formatPostsDate(getPost(props.uuid).date, { lang: localeState.lang })
 
   const getStyles = () => ((props.sticky || typeof props.offset !== 'number') ? {} : {
-    translate: `var(--local-forced-translate, 0 ${props.offset}px)`
+    translate: `var(--js-local-forced-translate, 0 ${props.offset}px)`
   })
 
   createEffect((prevOffset) => {
