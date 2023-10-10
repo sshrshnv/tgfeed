@@ -1,23 +1,32 @@
-import type { FeedCache } from './feed.types'
+import type { FeedCache, Channels, Posts } from './feed.types'
+
+declare const self: Window & typeof globalThis & {
+  _cache: {
+    _channels: Channels
+    _posts: Posts
+  }
+}
+
+self._cache = {
+  _channels: {},
+  _posts: {}
+}
 
 export const feedCache: FeedCache = {
-  _channels: {},
-  _posts: {},
-
   get channels() {
-    return this._channels
+    return self._cache._channels
   },
 
   get posts() {
-    return this._posts
+    return self._cache._posts
   }
 }
 
 export const setFeedCache = (data: Partial<FeedCache>) => {
   Object.entries(data).forEach(([key, values]) => {
     key = `_${key}`
-    feedCache[key] = {
-      ...feedCache[key],
+    self._cache[key] = {
+      ...self._cache[key],
       ...values
     }
   })
