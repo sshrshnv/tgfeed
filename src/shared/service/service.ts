@@ -7,7 +7,7 @@ import { reregisterServiceWorker } from './utils/reregister-service-worker'
 
 export const service: Service = {
   check: async () => {
-    if (navigator.serviceWorker.controller) {
+    if (navigator.serviceWorker?.controller) {
       postMessage(navigator.serviceWorker.controller, { check: true })
     }
     const serviceWorker = await getService()

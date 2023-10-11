@@ -16,10 +16,12 @@
     right: safe(right)
 
 ._uniform
-  .main
-    padding-top: safe(top)
+  .header
+    &::before
+      background: none
 
-    border-radius: 0
+  .main
+    padding-top: calc(safe(top) + var(--layout-float-top-bar-size))
     background: none
 
     &::before
@@ -27,4 +29,4 @@
       background: linear-gradient(to bottom, var(--theme-color-surface-0), var(--theme-color-background))
 
   .menu
-    background: var(--theme-color-surface-2)
+    background-color: var(--theme-color-surface-2)

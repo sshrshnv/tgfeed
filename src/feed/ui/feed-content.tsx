@@ -30,7 +30,7 @@ export const FeedContent: Component = () => {
   }
 
   const handleScrollEnd = () => {
-    if (feedState.initialLoading || postsRes.loading) return
+    if (feedState.initialLoading || postsRes.loading || !postsRes.latest?.next) return
     setPageNumber(value => value + 1)
   }
 
@@ -48,6 +48,7 @@ export const FeedContent: Component = () => {
           folderId={folderId()}
           active={!feedState.initialLoading && folderId() === feedState.currentFolderId}
           loading={!feedState.initialLoading && postsRes.loading}
+          end={!feedState.initialLoading && !postsRes.loading && !postsRes.latest?.next}
           onScrolling={handleScrolling}
           onScrollEnd={handleScrollEnd}
           onApplyUpdates={applyUpdates}

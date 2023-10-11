@@ -45,7 +45,10 @@ export const View = () => {
 
   return (
     <>
-      <Header hidden={isHeaderHidden()}>
+      <Header
+        class={appViewCSS.header}
+        hidden={isHeaderHidden()}
+      >
         <CoreMenuButton/>
         <Show when={isFeed()}>
           <FeedTabs/>

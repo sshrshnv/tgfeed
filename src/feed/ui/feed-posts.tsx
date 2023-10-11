@@ -14,7 +14,7 @@ import { filterFolderPostUuids } from '../utils/filter-folder-post-uuids'
 import { getFolderUpdatesCount } from '../utils/get-folder-updates-count'
 import { isPostGroupUuid } from '../utils/generate-post-uuid'
 import { FeedPostsItem } from './feed-posts-item'
-import { FeedPostsLoader } from './feed-posts-loader'
+import { FeedPostsStatus } from './feed-posts-status'
 import { FeedPostsDateChip } from './feed-posts-date-chip'
 import { FeedPostsControls } from './feed-posts-controls'
 
@@ -26,6 +26,7 @@ export type FeedPostsProps = {
   defaultActive?: boolean
   active?: boolean
   loading?: boolean
+  end?: boolean
   onScrolling: (folderId: Folder['id'], value: ScrollingValue) => void
   onScrollEnd: () => void
   onApplyUpdates: () => void
@@ -40,7 +41,7 @@ type OffsetState = {
 }
 
 const FEED_POSTS_GAP = 12
-const FEED_POSTS_COUNT = 20
+const FEED_PAGE_POSTS_COUNT = 20
 let firtsActiveFolderRendered = false
 
 export const FeedPosts: Component<FeedPostsProps> = (props) => {
@@ -73,11 +74,15 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
   })
 
   const getPostsCount = createMemo(() =>
-    (getPage() + 1) * FEED_POSTS_COUNT
+    getPostUuids().length
   )
 
-  const getLoaderOffset = createMemo(() => {
-    const lastPostUuid = getPostUuids()[Math.min(getPostsCount() - 1, getPostUuids().length - 1)]
+  const getPagePostsCount = createMemo(() =>
+    (getPage() + 1) * FEED_PAGE_POSTS_COUNT
+  )
+
+  const getStatusOffset = createMemo(() => {
+    const lastPostUuid = getPostUuids()[Math.min(getPagePostsCount() - 1, getPostsCount() - 1)]
     const lastPostOffset = offsetState[lastPostUuid]
     const lastPostHeight = heightState[lastPostUuid]
     if (lastPostUuid && (!lastPostOffset || !lastPostHeight)) return
@@ -100,8 +105,8 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
 
   const isScrollEnd = () => (
     props.active &&
-    typeof getLoaderOffset() !== 'undefined' &&
-    getLoaderOffset()! <= getRoughScroll() + (heightState[SCROLL_EL_ID] || 0) * 2
+    typeof getStatusOffset() !== 'undefined' &&
+    getStatusOffset()! <= getRoughScroll() + (heightState[SCROLL_EL_ID] || 0) * 2
   )
 
   const updatePosition = (uuid: UncertainPostUuid, height: number) => {
@@ -168,7 +173,7 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
 
   const handleScrollEnd = () => {
     setPage(value => value + 1)
-    if (getPostUuids().length > getPostsCount()) return
+    if (getPostsCount() > getPagePostsCount()) return
     props.onScrollEnd()
   }
 
@@ -254,14 +259,16 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
         update={applyUpdates}
       />
 
-      <FeedPostsLoader
-        offset={getLoaderOffset()}
+      <FeedPostsStatus
+        offset={getStatusOffset()}
         active={isScrollEnd() || isUpdating()}
         loading={props.loading || isUpdating()}
+        empty={props.end && !getPostsCount()}
+        end={props.end && !!getPostsCount()}
         onScrollEnd={handleScrollEnd}
       />
 
-      <Index each={getPostUuids().slice(0, getPostsCount())}>{(getUuid, index) => {
+      <Index each={getPostUuids().slice(0, getPagePostsCount())}>{(getUuid, index) => {
         const getPostUuid = createMemo<PostUuid>(() => (
           isPostGroupUuid(getUuid()) ? feedState.postGroups[getUuid()][0] : getUuid() as PostUuid
         ))

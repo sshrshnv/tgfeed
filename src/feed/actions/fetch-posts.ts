@@ -17,6 +17,8 @@ type Data = {
   next: boolean
 }
 
+const DAYS_COUNT = +(process.env.APP_FEED_MAX_DAYS_COUNT || 30)
+
 let offset_rate: number | undefined = 0
 let initialLoading = true
 
@@ -70,6 +72,8 @@ const loadPosts = async ({ next = false } = {}): Promise<Data> => {
     return parsePostMessages()
   }
 
+  const min_date = Math.ceil(Date.now() / 1000) - DAYS_COUNT * 24 * 60 * 60
+
   const res = await api.req('messages.searchGlobal', {
     q: '',
     filter: {
@@ -78,7 +82,7 @@ const loadPosts = async ({ next = false } = {}): Promise<Data> => {
     offset_peer: {
       _: 'inputPeerEmpty'
     },
-    min_date: 0,
+    min_date,
     max_date: 0,
     offset_id: 0,
     limit: 100,

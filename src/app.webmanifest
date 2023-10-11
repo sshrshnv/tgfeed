@@ -1,7 +1,7 @@
 {
   "name": "TgFeed",
   "short_name": "TgFeed",
-  "description": "Telegram channel feed",
+  "description": "Read your Telegram channels like a news feed.",
   "categories": ["telegram", "channel", "feed"],
   "display": "standalone",
   "start_url": "/me",

@@ -11,4 +11,5 @@ export const logOut = () =>
       data: null
     })
     pushRoute(authRoutes.page)
+    setTimeout(() => self.location.reload, 0)
   })

@@ -56,6 +56,11 @@ declare module '*.aac' {
   export default url
 }
 
+declare module '*.svg' {
+  const url: string
+  export default url
+}
+
 declare module '*.svg?sprite' {
   const svg: {
     id: string

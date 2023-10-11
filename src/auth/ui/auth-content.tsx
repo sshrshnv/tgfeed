@@ -2,8 +2,8 @@ import type { Component } from 'solid-js'
 import { Switch, Match } from 'solid-js'
 
 import { localeState } from '~/core/locale/locale-state'
+import { CoreLogo } from '~/core/ui/core-logo'
 import { Text } from '~/shared/ui/elements/text'
-import { Icon } from '~/shared/ui/elements/icon'
 
 import { authState } from '../auth-state'
 import { AuthPhoneNumberStep } from './auth-phone-number-step'
@@ -21,11 +21,7 @@ export const AuthContent: Component = () => {
 
   return (
     <>
-      <Icon
-        class={authContentCSS.logo}
-        name='logoSquircle'
-        size='large'
-      />
+      <CoreLogo/>
 
       <Text
         class={authContentCSS.title}

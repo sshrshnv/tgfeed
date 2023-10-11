@@ -1,0 +1,17 @@
+.base
+  --local-height: 56px
+  --local-padding-bottom: 0px
+  --js-local-min-top-offset: 0px
+  height: calc(var(--local-height) + var(--local-padding-bottom))
+  padding-bottom: var(--local-padding-bottom)
+  padding-left: var(--local-scroll-offset)
+  text-transform: uppercase
+  opacity: 0.5
+  will-change: translate
+
+  @media (--max-width-m)
+    --js-local-min-top-offset: var(--layout-float-top-bar-size)
+    --local-padding-bottom: calc(var(--layout-float-bottom-bar-size) + max(var(--layout-float-button-y-offset), safe(bottom)))
+
+._transparent
+  visibility: hidden
