@@ -11,6 +11,7 @@ import * as installButtonCSS from './install-button.sss'
 
 export type InstallButtonProps = {
   class?: string
+  disabled?: boolean
 }
 
 export const InstallButton: Component<InstallButtonProps> = (props) => {
@@ -24,6 +25,7 @@ export const InstallButton: Component<InstallButtonProps> = (props) => {
         props.class,
         installButtonCSS.base
       )}
+      disabled={props.disabled}
       onClick={handleInstall}
     >
       <Text variant='label' size='large'>

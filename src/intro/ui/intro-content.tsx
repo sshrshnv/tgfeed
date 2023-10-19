@@ -3,11 +3,12 @@ import { Index } from 'solid-js'
 import { clsx } from 'clsx'
 
 import { localeState } from '~/core/locale/locale-state'
+import { installState } from '~/core/install/install-state'
+import { InstallButton } from '~/core/install/ui/install-button'
 import { accountState } from '~/core/account/account-state'
 import { authRoutes } from '~/auth/auth-routes'
 import { feedRoutes } from '~/feed/feed-routes'
 import { CoreLogo } from '~/core/ui/core-logo'
-import { InstallButton } from '~/core/install/ui/install-button'
 import { Button } from '~/shared/ui/elements/button'
 import { Text } from '~/shared/ui/elements/text'
 import { Icon } from '~/shared/ui/elements/icon'
@@ -100,6 +101,7 @@ export const IntroContent: Component = () => {
 
       <InstallButton
         class={introContentCSS.button}
+        disabled={!installState.available || installState.completed}
       />
 
       <Button
