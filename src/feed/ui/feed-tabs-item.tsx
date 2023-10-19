@@ -10,7 +10,7 @@ import type { Folder } from '../feed.types'
 import { feedState } from '../feed-state'
 import { selectFolder } from '../actions/select-folder'
 
-import * as layoutCSS from '../../shared/ui/elements/layout.sss'
+import * as layoutCSS from '~/shared/ui/elements/layout.sss'
 import * as feedTabsItemCSS from './feed-tabs-item.sss'
 
 export type FeedTabsItemProps = ButtonProps & {

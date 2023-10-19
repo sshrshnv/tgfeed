@@ -1,4 +1,5 @@
 import type { Component } from 'solid-js'
+import { clsx } from 'clsx'
 
 import { localeState } from '~/core/locale/locale-state'
 import { Button } from '~/shared/ui/elements/button'
@@ -8,14 +9,21 @@ import { showInstallPrompt } from '../actions/show-install-prompt'
 
 import * as installButtonCSS from './install-button.sss'
 
-export const InstallButton: Component = () => {
+export type InstallButtonProps = {
+  class?: string
+}
+
+export const InstallButton: Component<InstallButtonProps> = (props) => {
   const handleInstall = () => {
     showInstallPrompt()
   }
 
   return (
     <Button
-      class={installButtonCSS.base}
+      class={clsx(
+        props.class,
+        installButtonCSS.base
+      )}
       onClick={handleInstall}
     >
       <Text variant='label' size='large'>

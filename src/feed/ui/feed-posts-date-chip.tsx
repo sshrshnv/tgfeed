@@ -9,7 +9,7 @@ import type { PostUuid } from '../feed.types'
 import { getPost } from '../utils/get-cache-data'
 import { formatPostsDate } from '../utils/format-posts-date'
 
-import * as layoutCSS from '../../shared/ui/elements/layout.sss'
+import * as layoutCSS from '~/shared/ui/elements/layout.sss'
 import * as feedPostsDateChipCSS from './feed-posts-date-chip.sss'
 
 export type FeedPostsItemDateChipProps = {

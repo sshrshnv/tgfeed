@@ -3,7 +3,7 @@
   --local-border-radius: 12px
   position: absolute
   top: 0
-  width: min(100%, calc(var(--layout-article-max-width) + var(--layout-article-x-offset) * 2))
+  width: min(100%, calc(var(--layout-article-max-width) + var(--layout-article-x-offset) * 2 - var(--local-scroll-offset)))
   padding: 0 calc(var(--layout-article-x-offset) - var(--local-scroll-offset)) 0 var(--layout-article-x-offset)
   will-change: translate
 

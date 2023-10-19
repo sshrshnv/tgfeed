@@ -8,9 +8,8 @@ import { DEFAULT_FOLDER_ID } from '../feed.const'
 import { feedState } from '../feed-state'
 import { FeedTabsItem } from './feed-tabs-item'
 
-import * as layoutCSS from '../../shared/ui/elements/layout.sss'
-import * as animationCSS from '../../shared/ui/animations/animations.sss'
-
+import * as layoutCSS from '~/shared/ui/elements/layout.sss'
+import * as animationCSS from '~/shared/ui/animations/animations.sss'
 import * as feedTabsCSS from './feed-tabs.sss'
 
 export type FeedTabsProps = {

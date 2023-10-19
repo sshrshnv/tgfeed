@@ -22,11 +22,7 @@
 
   .main
     padding-top: calc(safe(top) + var(--layout-float-top-bar-size))
-    background: none
-
-    &::before
-      inset: 0
-      background: linear-gradient(to bottom, var(--theme-color-surface-0), var(--theme-color-background))
+    background-image: linear-gradient(to bottom, var(--theme-color-system), var(--theme-color-surface-0))
 
   .menu
     background-color: var(--theme-color-surface-2)

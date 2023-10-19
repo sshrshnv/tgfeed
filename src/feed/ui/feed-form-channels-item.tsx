@@ -8,7 +8,7 @@ import type { ChannelId } from '../feed.types'
 import { feedCache } from '../feed-cache'
 import { FeedChannelCover } from './feed-channel-cover'
 
-import * as layoutCSS from '../../shared/ui/elements/layout.sss'
+import * as layoutCSS from '~/shared/ui/elements/layout.sss'
 import * as feedFormChannelsItemCSS from './feed-form-channels-item.sss'
 
 export type FeedFormChannelProps = {

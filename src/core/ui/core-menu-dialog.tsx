@@ -25,7 +25,7 @@ import { Text } from '~/shared/ui/elements/text'
 
 import { coreRoutes } from '../core-routes'
 
-import * as layoutCSS from '../../shared/ui/elements/layout.sss'
+import * as layoutCSS from '~/shared/ui/elements/layout.sss'
 import * as coreMenuDialogCSS from './core-menu-dialog.sss'
 
 export type CoreMenuDialogProps = {
@@ -85,7 +85,7 @@ export const CoreMenuDialog: Component<CoreMenuDialogProps> = (props) => {
             layoutCSS.flex
           )}>
             <a
-              href={process.env.APP_ISSUES_URL}
+              href={process.env.APP_FEEDBACK_URL}
               target="_blank"
               rel="noopener noreferrer"
             >

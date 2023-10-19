@@ -16,7 +16,7 @@ import { FeedDialogFolders } from './feed-menu-folders'
 import { FeedFormDialog } from './feed-form-dialog'
 import { FeedMenuFontSize } from './feed-menu-font-size'
 
-import * as layoutCSS from '../../shared/ui/elements/layout.sss'
+import * as layoutCSS from '~/shared/ui/elements/layout.sss'
 import * as feedMenuDialogCSS from './feed-menu-dialog.sss'
 
 export type FeedMenuDialogProps = {

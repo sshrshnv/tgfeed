@@ -12,7 +12,7 @@ import { listenUpdates } from '../actions/listen-updates'
 import { applyUpdates } from '../actions/apply-updates'
 import { FeedPosts } from './feed-posts'
 
-import * as animationsCSS from '../../shared/ui/animations/animations.sss'
+import * as animationsCSS from '~/shared/ui/animations/animations.sss'
 import * as feedContentCSS from './feed-content.sss'
 
 export const FeedContent: Component = () => {

@@ -1,35 +1,36 @@
 {
   "core": {
-    "help": "Help"
+    "help": "Помощь"
   },
 
   "account": {
     "title": "Telegram",
-    "signIn": "Sign In",
-    "signOut": "Log Out",
-    "reconnect": "Reconnect"
+    "signIn": "Войти",
+    "signOut": "Выйти",
+    "reconnect": "Переподключиться"
   },
 
   "theme": {
-    "title": "Color theme",
-    "system": "System",
-    "dark": "Dark",
-    "light": "Light"
+    "title": "Цветовая тема",
+    "system": "Системная",
+    "dark": "Тёмная",
+    "light": "Светлая"
   },
 
   "locale": {
-    "title": "Language"
+    "title": "Язык"
   },
 
   "update": {
-    "button": "Update application"
+    "button": "Обновить приложение"
   },
 
   "install": {
-    "button": "Install application",
+    "button": "Установить приложение",
+    "link": "Открыть в браузере",
     "ios": {
       "title": "Установка",
-      "cancel": "Cancel",
+      "cancel": "Отмена",
       "safariStep": "Откройте ссылку в основном браузере Safari, если вы открыли ее из другого приложения.",
       "shareStep": "Нажмите кнопку \"Поделиться\" в строке меню.",
       "homeScreenStep": "Нажмите \"На экран «Домой»\"."
@@ -37,75 +38,84 @@
   },
 
   "auth": {
-    "title": "Sign In",
+    "title": "Вход",
     "phone": {
-      "description": "Please enter your Telegram\n phone number"
+      "description": "Введите ваш номер\n в Telegram"
     },
     "code": {
-      "description": "Please enter the code that was sent\n to you in the Telegram app"
+      "description": "Введите код, отправленный\n вам в Telegram"
     },
     "password": {
-      "description": "Please enter your two-factor\n authentication password"
+      "description": "Введите пароль\n двухфакторной аутентификации"
     },
     "button": {
-      "change": "Change phone number",
-      "resend": "Resend code",
-      "recover": "Recover account"
+      "change": "Изменить номер",
+      "resend": "Отправить заново",
+      "recover": "Восстановить аккаунт"
     },
     "error": {
-      "unknown": "Something went wrong",
-      "PHONE_NUMBER_BANNED": "Telegram's automatic protection has been triggered and your account has been banned. This is a one-time error, it will not happen again after recovering.",
-      "PHONE_NUMBER_INVALID": "Invalid phone number",
-      "PHONE_NUMBER_FLOOD": "Too many requests",
-      "PHONE_CODE_EMPTY": "Empty code",
-      "PHONE_CODE_EXPIRED": "Expired code, enter the new one",
-      "PHONE_CODE_INVALID": "Invalid code",
-      "PHONE_NUMBER_UNOCCUPIED": "User doesn't exist on Telegram",
-      "PASSWORD_HASH_INVALID": "Invalid password"
+      "unknown": "Что-то пошло не так",
+      "PHONE_NUMBER_BANNED": "Сработала автоматическая защита Telegram и ваш аккаунт был заблокирован. Это разовое ложное срабатывание, после разблокировки оно не повторится.",
+      "PHONE_NUMBER_INVALID": "Невалидный номер",
+      "PHONE_NUMBER_FLOOD": "Превышен лимит",
+      "PHONE_CODE_EMPTY": "Пустой код",
+      "PHONE_CODE_EXPIRED": "Истекший код, введите новый",
+      "PHONE_CODE_INVALID": "Невалидный код",
+      "PHONE_NUMBER_UNOCCUPIED": "Несуществующий аккаунт в Telegram",
+      "PASSWORD_HASH_INVALID": "Невалидный пароль"
     }
   },
 
   "feed": {
-    "routeTitle": "Feed",
-    "menuTitle": "Feed",
-    "newFolderTitle": "New folder",
-    "editFolderTitle": "Edit folder",
-    "foldersTitle": "Folders",
-    "folderNamePlaceholder": "Enter folder name",
-    "folderChannelsTitle": "Select channels",
-    "defaultFolderName": "All channels",
-    "emptyFoldersList": "No folders created",
-    "emptyChannelsList": "No channels found",
-    "emptyFeed": "No posts found",
-    "endOfFeed": "End of feed",
+    "routeTitle": "Лента",
+    "menuTitle": "Лента",
+    "newFolderTitle": "Новая папка",
+    "editFolderTitle": "Изменить папку",
+    "foldersTitle": "Папки",
+    "folderNamePlaceholder": "Введите название папки",
+    "folderChannelsTitle": "Выберите каналы",
+    "defaultFolderName": "Все каналы",
+    "emptyFoldersList": "Нет созданных папок",
+    "emptyChannelsList": "Каналы не найдены",
+    "emptyFeed": "Посты не найдены",
+    "endOfFeed": "Конец ленты",
     "fontSize": {
-      "title": "Font size",
-      "large": "Large",
-      "medium": "Medium",
-      "small": "Small"
+      "title": "Размер шрифта",
+      "large": "Большой",
+      "medium": "Средний",
+      "small": "Маленький"
     },
     "buttons": {
-      "newFolder": "Create new folder",
-      "save": "Save",
-      "saving": "Saving..",
-      "savePost": "Save post",
-      "edit": "Edit",
-      "moveUp": "Move up",
-      "moveDown": "Move down",
-      "delete": "Delete",
-      "confirm": "Confirm",
-      "openTelegram": "Open in Telegram",
-      "loadUpdates": "Load new posts"
+      "newFolder": "Создать новую папку",
+      "save": "Сохранить",
+      "saving": "Сохранение..",
+      "savePost": "Сохранить пост",
+      "edit": "Изменить",
+      "moveUp": "Поднять вверх",
+      "moveDown": "Опустить вниз",
+      "delete": "Удалить",
+      "confirm": "Подтвердить",
+      "openTelegram": "Открыть в Telegram",
+      "loadUpdates": "Загрузить новые посты"
     },
     "errors": {
-      "FOLDER_NAME_EMPTY": "You should enter the folder name",
-      "FOLDER_NAME_EXISTS": "This folder name already exists",
-      "FOLDER_CHANNELS_EMPTY": "You should select channels"
+      "FOLDER_NAME_EMPTY": "Необходимо ввести назание папки",
+      "FOLDER_NAME_EXISTS": "Папка с таким названием уже существует",
+      "FOLDER_CHANNELS_EMPTY": "Необходимо выбрать каналы"
     }
   },
 
   "intro": {
-    "title": "Telegram Feed Application",
-    "description": "Read your Telegram channels like a news feed."
+    "title": "Читайте Telegram каналы в виде\n новостной ленты",
+    "pros": [
+      "Новые посты всегда в начале списка",
+      "Отключены сторисы, реакции и комментарии",
+      "Чтение заархивированных каналов",
+      "Возможность создания нескольких лент",
+      "Без привязки к папкам в основном приложении",
+      "Без сторонних ботов"
+    ],
+    "install": "Данное web-приложение можно установить на Android, iOS, macOS и Windows из Google Chrome, Safari и Microsoft Edge.",
+    "server": "Приложение работает только у вас на устройстве и напрямую связывается с серверами Telegram. Ваши данные нигде больше не сохраняются и никуда не передаются."
   }
 }

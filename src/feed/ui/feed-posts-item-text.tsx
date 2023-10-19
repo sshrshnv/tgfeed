@@ -12,7 +12,7 @@ import { feedState } from '../feed-state'
 import { getPost } from '../utils/get-cache-data'
 import { formatPostText } from '../utils/format-post-text'
 
-import * as layoutCSS from '../../shared/ui/elements/layout.sss'
+import * as layoutCSS from '~/shared/ui/elements/layout.sss'
 import * as feedPostsItemTextCSS from './feed-posts-item-text.sss'
 
 export type FeedPostsItemTextProps = {

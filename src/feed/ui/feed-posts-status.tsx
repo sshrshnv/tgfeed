@@ -6,8 +6,8 @@ import { localeState } from '~/core/locale/locale-state'
 import { Text } from '~/shared/ui/elements/text'
 import { Icon } from '~/shared/ui/elements/icon'
 
-import * as layoutCSS from '../../shared/ui/elements/layout.sss'
-import * as animationsCSS from '../../shared/ui/animations/animations.sss'
+import * as layoutCSS from '~/shared/ui/elements/layout.sss'
+import * as animationsCSS from '~/shared/ui/animations/animations.sss'
 import * as feedPostsStatusCSS from './feed-posts-status.sss'
 
 export type FeedPostsStatusProps = {

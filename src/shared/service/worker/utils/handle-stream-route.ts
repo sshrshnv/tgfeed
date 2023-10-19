@@ -1,6 +1,6 @@
 import type { RouteHandlerCallbackOptions } from 'workbox-core'
 
-import type { Service } from '../../service.types'
+import type { Service } from '~/service.types'
 import type { ResponseParams } from './generate-response'
 import { generateResponse } from './generate-response'
 import { parseRequest } from './parse-request'

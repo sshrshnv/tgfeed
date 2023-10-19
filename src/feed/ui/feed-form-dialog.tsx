@@ -20,8 +20,8 @@ import { createFolder } from '../actions/create-folder'
 import { editFolder } from '../actions/edit-folder'
 import { FeedFormChannels } from './feed-form-channels'
 
-import * as layoutCSS from '../../shared/ui/elements/layout.sss'
-import * as animationsCSS from '../../shared/ui/animations/animations.sss'
+import * as layoutCSS from '~/shared/ui/elements/layout.sss'
+import * as animationsCSS from '~/shared/ui/animations/animations.sss'
 import * as feedFormDialogCSS from './feed-form-dialog.sss'
 
 export type FeedFormDialogProps = {

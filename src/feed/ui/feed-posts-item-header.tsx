@@ -8,7 +8,7 @@ import { getPost, getPostChannel } from '../utils/get-cache-data'
 import { formatPostDate } from '../utils/format-post-date'
 import { FeedChannelCover } from './feed-channel-cover'
 
-import * as layoutCSS from '../../shared/ui/elements/layout.sss'
+import * as layoutCSS from '~/shared/ui/elements/layout.sss'
 import * as feedPostsItemHeaderCSS from './feed-posts-item-header.sss'
 
 export type FeedPostsItemHeaderProps = {

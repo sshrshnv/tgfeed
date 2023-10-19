@@ -18,7 +18,7 @@ import { FeedPostsStatus } from './feed-posts-status'
 import { FeedPostsDateChip } from './feed-posts-date-chip'
 import { FeedPostsControls } from './feed-posts-controls'
 
-import * as layoutCSS from '../../shared/ui/elements/layout.sss'
+import * as layoutCSS from '~/shared/ui/elements/layout.sss'
 import * as feedPostsCSS from './feed-posts.sss'
 
 export type FeedPostsProps = {

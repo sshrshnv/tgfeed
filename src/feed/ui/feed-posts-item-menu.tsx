@@ -15,7 +15,7 @@ import { feedRoutes } from '../feed-routes'
 import { savePost } from '../actions/save-post'
 import { getPost, getPostChannel } from '../utils/get-cache-data'
 
-import * as layoutCSS from '../../shared/ui/elements/layout.sss'
+import * as layoutCSS from '~/shared/ui/elements/layout.sss'
 import * as feedPostsItemMenuCSS from './feed-posts-item-menu.sss'
 
 export type FeedPostsItemMenuProps = {

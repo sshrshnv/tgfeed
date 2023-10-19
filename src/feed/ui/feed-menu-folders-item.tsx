@@ -16,7 +16,7 @@ import { feedRoutes } from '../feed-routes'
 import type { FeedMenuFoldersItemMenuProps } from './feed-menu-folders-item-menu'
 import { FeedMenuFoldersItemMenu } from './feed-menu-folders-item-menu'
 
-import * as layoutCSS from '../../shared/ui/elements/layout.sss'
+import * as layoutCSS from '~/shared/ui/elements/layout.sss'
 import * as feedMenuFoldersItemCSS from './feed-menu-folders-item.sss'
 
 export type FeedMenuFoldersItemProps = FeedMenuFoldersItemMenuProps & {

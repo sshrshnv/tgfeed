@@ -5,8 +5,8 @@ import { clsx } from 'clsx'
 import type { IconProps } from '~/shared/ui/elements/icon'
 import { Icon } from '~/shared/ui/elements/icon'
 
-import * as layoutCSS from '../../shared/ui/elements/layout.sss'
-import * as animationsCSS from '../../shared/ui/animations/animations.sss'
+import * as layoutCSS from '~/shared/ui/elements/layout.sss'
+import * as animationsCSS from '~/shared/ui/animations/animations.sss'
 import * as feedMediaControlsCSS from './feed-media-controls.sss'
 
 export type FeedMediaControlsProps = {

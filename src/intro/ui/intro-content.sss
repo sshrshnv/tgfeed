@@ -1,11 +1,103 @@
 .title
+  margin: 0 auto
   display: block
-  padding: var(--layout-float-top-bar-size) 0 16px
+  padding: var(--layout-float-top-bar-size) 16px
+  white-space: pre-line
   text-align: center
 
 .description
+  width: 100%
+  padding: 8px 0 var(--layout-float-top-bar-size) 16px
+  scroll-snap-type: x proximity
+  will-change: scroll-position
+
+.screenshot, .pros
+  scroll-snap-align: center
+  scroll-snap-stop: always
+
+.screenshot
+  position: relative
+  z-index: 1
+  margin-left: auto
+  width: 280px
+  height: 592px
+
+  @media (--min-width-l)
+    width: 336px
+    height: 710px
+
+  &._dark
+    display: none
+
+  @media (prefers-color-scheme: dark)
+    &._dark
+      display: block
+
+    &._light
+      display: none
+
+.pros
+  margin: 32px auto 32px 0
+  flex-direction: column
+  align-items: center
+  justify-content: space-evenly
+  width: 320px
+  padding: 0 16px
+  border-radius: 0 32px 32px 0
+  background-image: linear-gradient(to bottom, var(--theme-color-surface-0), var(--theme-color-background))
+
+  @media (--min-width-l)
+    width: 336px
+
+  & > .item
+    display: flex
+    align-items: center
+    gap: 8px
+    width: 100%
+    padding: 12px
+    border-radius: 16px
+    background-color: var(--theme-color-surface-0)
+    white-space: pre-line
+    background-color: var(--theme-color-tertiary-container)
+    color: var(--theme-color-on-tertiary-container)
+
+.logos
   margin: 0 auto
-  display: block
-  //max-width: 320px
-  white-space: pre-line
+  width: 100%
+  max-width: 320px
+  justify-content: space-between
+  padding: 8px 16px 32px
+
+  & > svg
+    width: 48px
+    height: 48px
+
+.install
+  margin: 0 auto
+  max-width: 640px
+  padding: 0 16px 32px
   text-align: center
+
+.button
+  width: 280px
+  height: 48px
+
+  & + .button
+    margin: 0 auto
+    border: 2px solid var(--theme-color-primary)
+    background-color: transparent
+    color: var(--theme-color-primary)
+
+.server
+  margin: 0 auto
+  max-width: 640px
+  padding: 56px 16px 32px
+  text-align: center
+
+.links
+  margin: 0 auto
+  gap: 16px
+  padding: 0 16px 32px
+
+  a
+    color: var(--theme-color-primary)

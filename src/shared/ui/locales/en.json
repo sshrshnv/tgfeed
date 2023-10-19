@@ -27,6 +27,7 @@
 
   "install": {
     "button": "Install application",
+    "link": "Open in browser",
     "ios": {
       "title": "Installation",
       "cancel": "Cancel",
@@ -105,7 +106,16 @@
   },
 
   "intro": {
-    "title": "Telegram Feed Application",
-    "description": "Read your Telegram channels like a news feed."
+    "title": "Read Telegram channels\n like a news feed",
+    "pros": [
+      "New posts are always at the top of the list",
+      "Stories, reactions and comments are disabled",
+      "Reading archived channels",
+      "Creating multiple feeds",
+      "No binding to folders in the main application",
+      "No third-party bots"
+    ],
+    "install": "This web-application can be installed on Android, iOS, macOS and Windows from Google Chrome, Safari and Microsoft Edge.",
+    "server": "Application only works on your device and communicates directly with Telegram servers. Your data is not stored anywhere else and is not transferred anywhere."
   }
 }

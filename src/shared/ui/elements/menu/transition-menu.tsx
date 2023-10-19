@@ -10,7 +10,7 @@ import { getTranslateInParams, getTranslateOutParams } from '~/shared/ui/animati
 import type { MenuProps } from './menu'
 import { Menu } from './menu'
 
-import * as animationsCSS from '../../animations/animations.sss'
+import * as animationsCSS from '~/shared/ui/animations/animations.sss'
 import * as transitionMenuCSS from './transition-menu.sss'
 
 export type TransitionMenuProps = MenuProps & {

@@ -16,8 +16,8 @@ import { Icon } from '~/shared/ui/elements/icon'
 import { authState, setAuthState } from '../auth-state'
 import { generateRecoverLink } from '../utils/generate-recover-link'
 
-import * as layoutCSS from '../../shared/ui/elements/layout.sss'
-import * as animationsCSS from '../../shared/ui/animations/animations.sss'
+import * as layoutCSS from '~/shared/ui/elements/layout.sss'
+import * as animationsCSS from '~/shared/ui/animations/animations.sss'
 import * as authStepCSS from './auth-step.sss'
 
 export type AuthFormProps = {

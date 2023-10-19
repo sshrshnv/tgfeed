@@ -9,8 +9,8 @@ import { Icon } from '~/shared/ui/elements/icon'
 import { updateState } from '../update-state'
 import { loadUpdate } from '../actions/load-update'
 
+import * as animationsCSS from '~/shared/ui/animations/animations.sss'
 import * as updateButtonCSS from './update-button.sss'
-import * as animationsCSS from '../../../shared/ui/animations/animations.sss'
 
 export const UpdateButton: Component = () => {
   const handleUpdate = () => {

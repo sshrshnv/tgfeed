@@ -1,7 +1,7 @@
 import { generateFilePartUuid } from '~/shared/api/utils/generate-file-part-uuid'
 import { dbFileStorage } from '~/shared/storage/db-file-storage'
 
-import type { UI } from '../../ui.types'
+import type { UI } from '~/ui.types'
 
 export const getMediaUrlFromFile: UI['getMediaUrlFromFile'] = async ({
   location,

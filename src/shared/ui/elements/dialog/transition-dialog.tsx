@@ -10,7 +10,7 @@ import { getTranslateScaleInParams, getTranslateScaleOutParams } from '~/shared/
 
 import { Dialog } from './dialog'
 
-import * as animationsCSS from '../../animations/animations.sss'
+import * as animationsCSS from '~/shared/ui/animations/animations.sss'
 import * as transitionDialogCSS from './transition-dialog.sss'
 
 const ANIMATION_PARAMS = {
