@@ -31,7 +31,7 @@ const apiPromise = new Promise<Omit<API, 'check'>>(async resolve => {
     APIHash: process.env.API_HASH || '',
     APILayer: 158,
     test: false,
-    debug: true,
+    debug: process.env.DEPLOY_ENV !== 'production',
     dc: meta.baseDC,
     ssl: true,
     autoConnect: true,
