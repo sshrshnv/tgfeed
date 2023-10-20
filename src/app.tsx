@@ -25,7 +25,13 @@ checkWorkers()
 listenPageState()
 
 import { View } from './app.view'
+import { AnalyticsScript } from './shared/scripts/analytics-script'
 render(
-  () => <View/>,
+  () => (
+    <>
+      <View/>
+      <AnalyticsScript/>
+    </>
+  ),
   self.document.body
 )
