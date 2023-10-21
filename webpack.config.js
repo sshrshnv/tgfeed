@@ -169,7 +169,7 @@ module.exports = {
     isProd() ? new CopyPlugin({
       patterns: [{
         from: './src/shared/scripts/_redirects',
-        to: './_redirects'
+        to: './'
       }]
     }) : () => {},
 
