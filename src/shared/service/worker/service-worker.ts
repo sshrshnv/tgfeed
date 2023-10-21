@@ -36,7 +36,7 @@ if (process.env.DEPLOY_ENV === 'production') {
   workbox.registerRoute(
     new workbox.NavigationRoute(
       workbox.createHandlerBoundToURL('/index.html'),
-      { allowlist: [/^(?!\/__)/] }
+      { allowlist: [/^(?!\/__)/], denylist: [/proxy\//] }
     )
   )
 }
