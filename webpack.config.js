@@ -166,12 +166,12 @@ module.exports = {
       filename: isDev() ? 'icons.svg' : 'icons.[contenthash].svg',
     }),
 
-    /*isProd() ? new CopyPlugin({
+    isProd() ? new CopyPlugin({
       patterns: [{
-        from: './src/shared/images/manifest-splash-icon-512.png',
-        to: './manifest-splash-icon-512.[contenthash].png'
+        from: './src/shared/scripts/_redirects',
+        to: './_redirects'
       }]
-    }) : () => {},*/
+    }) : () => {},
 
     isSentryAvailable() ? SentryPlugin({
       org: appEnv.SENTRY_ORG,
