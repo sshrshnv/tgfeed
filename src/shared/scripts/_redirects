@@ -1,2 +1,2 @@
-/proxy/tag/* https://www.googletagmanager.com/gtag/js/:splat
+/proxy/tag/* https://www.googletagmanager.com/gtag/:splat
 /proxy/event/* https://www.google-analytics.com/:splat

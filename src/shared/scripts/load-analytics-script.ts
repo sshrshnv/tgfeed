@@ -24,7 +24,7 @@ const createTagScript = ({ proxy = false } = {}) => {
   }
   tagScript.async = true
   tagScript.fetchPriority = 'low'
-  tagScript.src = proxy ? `/proxy/tag?id=${process.env.GOOGLE_ANALYTICS_ID}` : `https://www.googletagmanager.com/gtag/js?id=${process.env.GOOGLE_ANALYTICS_ID}`
+  tagScript.src = proxy ? `/proxy/tag/js?id=${process.env.GOOGLE_ANALYTICS_ID}` : `https://www.googletagmanager.com/gtag/js?id=${process.env.GOOGLE_ANALYTICS_ID}`
   if (!proxy) {
     tagScript.onerror = () => createTagScript({ proxy: true })
   }
@@ -38,7 +38,7 @@ const createEventScript = ({ proxy = false } = {}) => {
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', '${process.env.GOOGLE_ANALYTICS_ID}', {
-      ${proxy ? `transport_url: 'https://${self.location.hostname}/proxy/event',` : ''}
+      ${proxy ? `transport_url: 'https://${self.location.hostname}/proxy/event/',` : ''}
       anonymize_ip: true,
       lang: '${self.navigator.language}',
       device: '${self.navigator.userAgent}',
