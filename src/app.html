@@ -76,12 +76,14 @@
     <noscript class="warning">You need to enable JavaScript to run this app.</noscript>
     <script>
       (() => {
-        const features = [
-          Proxy, MessageChannel, BigInt, TransformStream, ResizeObserver, IntersectionObserver, HTMLDialogElement, DecompressionStream
-        ]
-        const unsupported = typeof [].some !== 'function' || features.some(function(feature) {
-          return typeof feature !== 'function'
-        })
+        const array = []
+        const arrayFeatures = ['toSpliced', 'toReversed']
+        const selfFeatures = ['Proxy', 'MessageChannel', 'BigInt', 'TransformStream', 'ResizeObserver', 'IntersectionObserver', 'HTMLDialogElement', 'DecompressionStream']
+        const unsupported = (
+          typeof array.some !== 'function' ||
+          arrayFeatures.some(function(feature) { return typeof array[feature] !== 'function' }) ||
+          selfFeatures.some(function(feature) { return typeof self[feature] !== 'function' })
+        )
         if (unsupported) {
           const warningEl = self.document.querySelector('.warning[data-browser]')
           warningEl.textContent = warningEl.getAttribute('data-browser')
