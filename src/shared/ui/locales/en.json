@@ -69,13 +69,13 @@
   "feed": {
     "routeTitle": "Feed",
     "menuTitle": "Feed",
-    "newFolderTitle": "New folder",
-    "editFolderTitle": "Edit folder",
-    "foldersTitle": "Folders",
-    "folderNamePlaceholder": "Enter folder name",
+    "newFolderTitle": "New feed",
+    "editFolderTitle": "Edit feed",
+    "foldersTitle": "Feeds",
+    "folderNamePlaceholder": "Enter feed name",
     "folderChannelsTitle": "Select channels",
     "defaultFolderName": "All channels",
-    "emptyFoldersList": "No folders created",
+    "emptyFoldersList": "No feeds created",
     "emptyChannelsList": "No channels found",
     "emptyFeed": "No posts found",
     "endOfFeed": "End of feed",
@@ -86,7 +86,7 @@
       "small": "Small"
     },
     "buttons": {
-      "newFolder": "Create new folder",
+      "newFolder": "Create new feed",
       "save": "Save",
       "saving": "Saving..",
       "savePost": "Save post",
@@ -99,8 +99,8 @@
       "loadUpdates": "Load new posts"
     },
     "errors": {
-      "FOLDER_NAME_EMPTY": "You should enter the folder name",
-      "FOLDER_NAME_EXISTS": "This folder name already exists",
+      "FOLDER_NAME_EMPTY": "You should enter the feed name",
+      "FOLDER_NAME_EXISTS": "This feed name already exists",
       "FOLDER_CHANNELS_EMPTY": "You should select channels"
     }
   },
