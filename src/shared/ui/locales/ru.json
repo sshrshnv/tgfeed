@@ -69,13 +69,13 @@
   "feed": {
     "routeTitle": "Лента",
     "menuTitle": "Лента",
-    "newFolderTitle": "Новая лента",
-    "editFolderTitle": "Изменить ленту",
-    "foldersTitle": "Ленты",
-    "folderNamePlaceholder": "Введите название ленты",
+    "newFolderTitle": "Новая папка",
+    "editFolderTitle": "Изменить папку",
+    "foldersTitle": "Папки",
+    "folderNamePlaceholder": "Введите название папки",
     "folderChannelsTitle": "Выберите каналы",
     "defaultFolderName": "Все каналы",
-    "emptyFoldersList": "Нет созданных лент",
+    "emptyFoldersList": "Нет созданных папок",
     "emptyChannelsList": "Каналы не найдены",
     "emptyFeed": "Посты не найдены",
     "endOfFeed": "Конец ленты",
@@ -86,7 +86,7 @@
       "small": "Маленький"
     },
     "buttons": {
-      "newFolder": "Создать новую ленту",
+      "newFolder": "Создать новую папку",
       "save": "Сохранить",
       "saving": "Сохранение..",
       "savePost": "Сохранить пост",
@@ -99,8 +99,8 @@
       "loadUpdates": "Загрузить новые посты"
     },
     "errors": {
-      "FOLDER_NAME_EMPTY": "Необходимо ввести назание ленты",
-      "FOLDER_NAME_EXISTS": "Лента с таким названием уже существует",
+      "FOLDER_NAME_EMPTY": "Необходимо ввести назание папки",
+      "FOLDER_NAME_EXISTS": "Папка с таким названием уже существует",
       "FOLDER_CHANNELS_EMPTY": "Необходимо выбрать каналы"
     }
   },
