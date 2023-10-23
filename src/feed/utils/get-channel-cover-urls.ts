@@ -1,6 +1,6 @@
 import { createStore } from 'solid-js/store'
 
-import { InputFileLocation } from '~/shared/api/mtproto'
+import type { InputFileLocation } from '~/shared/api/mtproto'
 import { ui } from '~/shared/ui'
 
 import type { ChannelData, ChannelId } from '../feed.types'

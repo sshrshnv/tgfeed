@@ -1,4 +1,4 @@
-import { MessageMedia, DocumentAttribute, InputFileLocation } from '~/shared/api/mtproto'
+import type { MessageMedia, DocumentAttribute, InputFileLocation } from '~/shared/api/mtproto'
 
 import type { FeedState, FeedStorage, FontSize } from './feed.types'
 

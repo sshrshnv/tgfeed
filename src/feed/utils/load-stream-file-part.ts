@@ -1,7 +1,7 @@
 import { trackError } from '~/shared/errors/actions/track-error'
 import type { Service } from '~/shared/service'
 import { service } from '~/shared/service'
-import { MessageMedia, Document, InputFileLocation } from '~/shared/api/mtproto'
+import type { MessageMedia, Document, InputFileLocation } from '~/shared/api/mtproto'
 import { loadFilePart } from '~/shared/api/utils/load-file-part'
 import { generateFilePartUuid } from '~/shared/api/utils/generate-file-part-uuid'
 

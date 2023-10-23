@@ -2,7 +2,7 @@ import { imageDataRGB } from 'stackblur-canvas'
 
 import { comlink } from '~/shared/utils/comlink'
 
-import type { UI } from '~/ui.types'
+import type { UI } from '../../ui.types'
 
 export const getBluredImageBytes: UI['getBluredImageBytes'] = async (
   bytes, topX, topY, width, height, radius

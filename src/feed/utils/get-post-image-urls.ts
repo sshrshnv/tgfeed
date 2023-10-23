@@ -1,6 +1,6 @@
 import { createStore } from 'solid-js/store'
 
-import { InputFileLocation, MessageMedia, Photo, PhotoSize, Document } from '~/shared/api/mtproto'
+import type { InputFileLocation, MessageMedia, Photo, PhotoSize, Document } from '~/shared/api/mtproto'
 import { generateFileUuid } from '~/shared/api/utils/generate-file-uuid'
 import { ui } from '~/shared/ui'
 

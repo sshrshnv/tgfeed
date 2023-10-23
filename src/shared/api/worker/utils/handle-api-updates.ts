@@ -1,4 +1,4 @@
-import type { Updates, MessagesMessages, Message } from '~/mtproto'
+import type { Updates, MessagesMessages, Message } from '../../mtproto'
 
 export const handleApiUpdates = (updates: Updates): Partial<MessagesMessages> | undefined => {
   if (updates._ !== 'updates') return
