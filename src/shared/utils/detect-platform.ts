@@ -28,9 +28,7 @@ export const isAndroid = () =>
 
 let MicrosoftEdge
 export const isMicrosoftEdge = () =>
-  MicrosoftEdge ??= brands ?
-    brands.some(({ brand }) => brand.toLocaleLowerCase() === 'microsoft edge') :
-    /edg/i.test(userAgent)
+  MicrosoftEdge ??= brands ? hasBrand('microsoft edge') : /edg/i.test(userAgent)
 
 let Yandex
 export const isYandex = () =>
@@ -48,7 +46,7 @@ export const isChromium = () =>
 
 let Chrome
 export const isChrome = () =>
-  Chrome ??= !isMicrosoftEdge() && !isYandex() && !isSamsung() && isChromium()
+  Chrome ??= !isMicrosoftEdge() && !isYandex() && !isSamsung() && hasBrand('google chrome')
 
 let Firefox
 export const isFirefox = () =>
@@ -83,7 +81,7 @@ export const detectIOSVersion = () =>
 
 let chromiumVersion
 export const detectChromiumVersion = () =>
-  chromiumVersion ??= +(brands?.find(({ brand }) => brand.toLocaleLowerCase() === 'chromium')?.version || '')
+  chromiumVersion ??= +(findBrand('chromium')?.version || '')
 
 let standalone: boolean
 export const isStandalone = () =>
@@ -130,3 +128,8 @@ export const detectBrowser = () => {
   }
   return browser
 }
+
+const findBrand = (value: string) =>
+  brands?.find(({ brand }) => brand.toLocaleLowerCase() === value.toLocaleLowerCase())
+
+const hasBrand = (value: string) => !!findBrand(value)

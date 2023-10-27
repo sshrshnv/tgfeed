@@ -27,6 +27,7 @@ export const InstallButton: Component<InstallButtonProps> = (props) => {
       )}
       disabled={props.disabled}
       onClick={handleInstall}
+      opacity
     >
       <Text variant='label' size='large'>
         {localeState.texts?.install.button}

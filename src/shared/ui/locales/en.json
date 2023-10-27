@@ -31,7 +31,6 @@
     "ios": {
       "title": "Installation",
       "cancel": "Cancel",
-      "safariStep": "Open the link in your main Safari browser if you opened it from another application.",
       "shareStep": "Press the 'Share' button on the menu bar.",
       "homeScreenStep": "Press 'Add to Home Screen'."
     }
@@ -115,7 +114,8 @@
       "No binding to folders in the main application",
       "No third-party bots"
     ],
-    "install": "This web-application can be installed on Android, iOS, macOS and Windows from Google Chrome, Safari and Microsoft Edge.",
+    "install": "This web-application can be installed on\n Android, iOS, macOS and Windows.",
+    "installBrowserWarning": "Installation is available from the browser:\n Google Chrome",
     "server": "Application only works on your device and communicates directly with Telegram servers. Your data is not stored anywhere else and is not transferred anywhere."
   }
 }

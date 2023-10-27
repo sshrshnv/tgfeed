@@ -83,19 +83,6 @@ export const InstallIOSPrompt: Component = () => {
             <div class={installIOSPromptCSS.instruction}>
               <div class={installIOSPromptCSS.instructionStep}>
                 <Icon
-                  name='iosSafari'
-                  class={installIOSPromptCSS.safariIcon}
-                />
-                <p class={clsx(
-                  installIOSPromptCSS.text,
-                  installIOSPromptCSS._bold
-                )}>
-                  {localeState.texts?.install.ios.safariStep}
-                </p>
-              </div>
-
-              <div class={installIOSPromptCSS.instructionStep}>
-                <Icon
                   name='iosShare'
                   class={installIOSPromptCSS.shareIcon}
                 />

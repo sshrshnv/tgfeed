@@ -1,14 +1,16 @@
-import { isIOSSafari } from '~/shared/utils/detect-platform'
+import { isIOSSafari, isIOSChrome, isChrome, isMicrosoftEdge, isWindows, isSamsung } from '~/shared/utils/detect-platform'
 
 import { setInstallState } from '../install-state'
 import { getCapturedInstallPrompt } from './capture-install-prompt'
 
 export const awaitInstallAvailability = async () => {
-  if (isIOSSafari()) {
+  if (isIOSSafari() || isIOSChrome()) {
     setInstallState('available', true)
     return
   }
 
-  await getCapturedInstallPrompt()
-  setInstallState('available', true)
+  if (isChrome() || isSamsung() || (isWindows() && isMicrosoftEdge())) {
+    await getCapturedInstallPrompt()
+    setInstallState('available', true)
+  }
 }

@@ -2,6 +2,8 @@ import { accountState } from '~/core/account/account-state'
 import { detectOS, detectBrowser, isStandalone } from '~/shared/utils/detect-platform'
 
 export const loadAnalyticsScript = () => {
+  if (!process.env.GOOGLE_ANALYTICS_ID) return
+
   createTagScript()
 
   self.fetch?.('https://www.google-analytics.com/g/collect', {

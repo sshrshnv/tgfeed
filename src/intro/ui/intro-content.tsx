@@ -1,5 +1,5 @@
 import type { Component } from 'solid-js'
-import { Index } from 'solid-js'
+import { Index, createMemo } from 'solid-js'
 import { clsx } from 'clsx'
 
 import { localeState } from '~/core/locale/locale-state'
@@ -20,6 +20,7 @@ import introScreenshotLightUrl from './intro-screenshot-light.png'
 import introScreenshotDarkUrl from './intro-screenshot-dark.png'
 
 const OS = ['apple', 'android', 'windows'] as const
+
 const LINKS = [
   { title: 'Telegram', url: process.env.APP_CHANNEL_URL },
   { title: 'GitHub', url: process.env.APP_SOURCE_URL },
@@ -27,6 +28,10 @@ const LINKS = [
 ] as const
 
 export const IntroContent: Component = () => {
+  const isInstallButtonDisabled = createMemo(() =>
+    !installState.available || installState.completed
+  )
+
   return (
     <>
       <CoreLogo/>
@@ -99,9 +104,20 @@ export const IntroContent: Component = () => {
         {localeState.texts?.intro.install}
       </Text>
 
+      <Text
+        class={clsx(
+          introContentCSS.installWarning,
+          !isInstallButtonDisabled() && introContentCSS._hidden
+        )}
+        variant='body'
+        size='small'
+      >
+        {localeState.texts?.intro.installBrowserWarning}
+      </Text>
+
       <InstallButton
         class={introContentCSS.button}
-        disabled={!installState.available || installState.completed}
+        disabled={isInstallButtonDisabled()}
       />
 
       <Button
