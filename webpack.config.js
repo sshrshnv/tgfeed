@@ -166,12 +166,12 @@ module.exports = {
       filename: isDev() ? 'icons.svg' : 'icons.[contenthash].svg',
     }),
 
-    isProd() ? new CopyPlugin({
+    /*isProd() ? new CopyPlugin({
       patterns: [{
         from: './src/shared/scripts/_redirects',
         to: './'
       }]
-    }) : () => {},
+    }) : () => {},*/
 
     isSentryAvailable() ? SentryPlugin({
       org: appEnv.SENTRY_ORG,
