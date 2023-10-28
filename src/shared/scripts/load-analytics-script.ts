@@ -53,7 +53,7 @@ const createEventScript = ({ proxy = false } = {}) => {
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', '${G_ID}', {
-      ${proxy ? `transport_url: ${G_PROXY_EVENT},` : ''}
+      ${proxy ? `transport_url: '${G_PROXY_EVENT}',` : ''}
       anonymize_ip: true,
       lang: '${self.navigator.language}',
       device: '${self.navigator.userAgent}',

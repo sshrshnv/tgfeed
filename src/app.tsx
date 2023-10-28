@@ -31,4 +31,4 @@ render(
 )
 
 import { loadAnalyticsScript } from '~/shared/scripts/load-analytics-script'
-loadAnalyticsScript()
+self.setTimeout(loadAnalyticsScript, 2500)
