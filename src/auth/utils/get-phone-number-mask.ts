@@ -14,6 +14,9 @@ export const getPhoneNumberMask = (
   const code = countryCodesCache.find(({ country_code }) =>
     value.startsWith(country_code.slice(0, Math.min(value.length, country_code.length)))
   )
+
   if (!code?.patterns?.length) return ''
-  return `${code.country_code.replaceAll(/\d/g, '9')} ${code.patterns[0].replaceAll('X', '9')}`
+  const pattern = code.patterns.reduce((a, b) => a.length > b.length ? a : b)
+
+  return `${code.country_code.replaceAll(/\d/g, '9')} ${pattern.replaceAll('X', '9')}`
 }
