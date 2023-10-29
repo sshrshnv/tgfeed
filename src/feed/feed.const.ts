@@ -1,4 +1,4 @@
-import type { MessageMedia, DocumentAttribute, InputFileLocation } from '~/shared/api/mtproto'
+import type { MessageMedia, InputFileLocation } from '~/shared/api/mtproto'
 
 import type { FeedState, FeedStorage, FontSize } from './feed.types'
 
@@ -32,12 +32,6 @@ export const SUPPORTED_MEDIA_TYPES: Partial<MessageMedia['_'][]> = [
 export const SUPPORTED_MEDIA_LOCATION_TYPES: Partial<InputFileLocation['_'][]> = [
   'inputPhotoFileLocation',
   'inputDocumentFileLocation'
-]
-
-export const SUPPORTED_MEDIA_DOCUMENT_TYPES: Partial<DocumentAttribute['_'][]> = [
-  'documentAttributeImageSize',
-  'documentAttributeVideo',
-  'documentAttributeAudio'
 ]
 
 export const FONT_SIZE_LINE_HEIGHT_VALUES: Record<FontSize, number> = {

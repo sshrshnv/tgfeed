@@ -3,15 +3,15 @@
   "version": "1.0.2",
   "description": "Telegram Feed",
   "author": "Aleksandr Shershnev",
-  "license": "UNLICENSED",
+  "license": "GPL-3.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sh-a-v/tgfeed.git"
+    "url": "git+https://github.com/sshrshnv/tgfeed.git"
   },
   "bugs": {
-    "url": "https://github.com/sh-a-v/tgfeed/issues"
+    "url": "https://github.com/sshrshnv/tgfeed/issues"
   },
-  "homepage": "https://github.com/sh-a-v/tgfeed#readme",
+  "homepage": "https://github.com/sshrshnv/tgfeed#readme",
   "scripts": {
     "dev": "npm run clean && NODE_ENV=development webpack serve --progress",
     "serve": "npm run clean && NODE_ENV=production webpack serve --progress",

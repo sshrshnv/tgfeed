@@ -1,7 +1,5 @@
 import type { MessageMedia, PhotoSize, DocumentAttribute } from '~/shared/api/mtproto'
 
-import { SUPPORTED_MEDIA_DOCUMENT_TYPES } from '../feed.const'
-
 const getMediaPhoto = (media: MessageMedia) => (
   media._ === 'messageMediaPhoto' &&
   media.photo?._ === 'photo' &&
@@ -76,12 +74,3 @@ export const getMediaAspectRatio = (media: MessageMedia) => {
   const size = getMediaImageSize(media)
   return size ? (size.w / size.h) : 0
 }
-
-export const isSupportedMedia = (media?: MessageMedia) => media && ((
-  media._ === 'messageMediaPhoto' &&
-  media.photo?._ === 'photo'
-) || (
-  media._ === 'messageMediaDocument' &&
-  media.document?._ === 'document' &&
-  SUPPORTED_MEDIA_DOCUMENT_TYPES.includes(media.document.attributes[0]._)
-))

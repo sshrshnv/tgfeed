@@ -1,11 +1,10 @@
-import type { MessagesMessages, Message } from '~/shared/api/mtproto'
+import type { MessagesMessages } from '~/shared/api/mtproto'
 
 import type {
   FeedCache, FeedState, ChannelData, ChannelId,
   PostData, PostUuid
 } from '../feed.types'
 import { generatePostUuid, generatePostGroupUuid } from './generate-post-uuid'
-import { isSupportedMedia } from './detect-post-media'
 
 export const parsePostMessages = (
   res?: Partial<MessagesMessages>
@@ -26,8 +25,6 @@ export const parsePostMessages = (
     const post = res.messages![i] as PostData
     const postUuid: PostUuid = generatePostUuid(post)
     const channelId: ChannelId = post.peer_id.channel_id
-
-    if (!isValidPost(post)) continue
 
     if (post.grouped_id) {
       const postGroupUuid = generatePostGroupUuid(post)
@@ -51,13 +48,3 @@ export const parsePostMessages = (
 
   return data
 }
-
-const isValidPost = (message: Message) => !!(
-  message._ === 'message' &&
-  message.peer_id._ === 'peerChannel' &&
-  message.post &&
-  !message.out && (
-    message.message ||
-    isSupportedMedia(message.media)
-  )
-)
