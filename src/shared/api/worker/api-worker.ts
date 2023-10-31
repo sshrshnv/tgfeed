@@ -80,6 +80,14 @@ const apiPromise = new Promise<Omit<API, 'check'>>(async resolve => {
           return
         }
 
+        if (code === 420) {
+          const [, delay] = message.split('FLOOD_WAIT_')
+          resolve(api.req(method, data, {
+            dc, thread, timeout: +delay * 1000
+          }))
+          return
+        }
+
         if (code >= 500) {
           resolve(api.req(method, data, {
             dc, thread, timeout: attempt * 100, attempt: ++attempt
