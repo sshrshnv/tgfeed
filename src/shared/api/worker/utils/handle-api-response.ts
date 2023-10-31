@@ -4,6 +4,7 @@ import { dbFileStorage } from '~/shared/storage/db-file-storage'
 import { MethodDeclMap } from '../../mtproto'
 import { generateFilePartUuid } from '../../utils/generate-file-part-uuid'
 import { isValidPost } from '../../utils/is-valid-post'
+import { isUniquePost } from '../../utils/is-unique-post'
 
 type Handlers = {
   [T in keyof MethodDeclMap]?: (
@@ -34,15 +35,20 @@ const handlers = {
       return res
     }
 
-    const posts = [] as typeof res.messages
+    const messages = [] as typeof res.messages
 
     for (let i = 0; i < res.messages.length; i++) {
-      const post = res.messages![i]
-      if (!isValidPost(post)) continue
-      posts.push(post)
+      const message = res.messages[i]
+
+      if (
+        !isValidPost(message) ||
+        !isUniquePost(message)
+      ) continue
+
+      messages.push(message)
     }
 
-    res.messages = posts
+    res.messages = messages
     return res
   },
 
