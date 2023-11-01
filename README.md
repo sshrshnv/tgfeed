@@ -34,7 +34,7 @@ You should add files in the `./src/shared/ui/locales/${lang}/` directory.
 
 ###### MTProto
 Based on https://github.com/spalt08/mtproto-js
-- Updated layer (158)
+- Updated layer (166)
 - Fixed server time offset
 - Fixed writer buffer size
 - BigInteger replaced with native BigInt

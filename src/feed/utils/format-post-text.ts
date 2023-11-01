@@ -14,6 +14,7 @@ const ENTITY_TYPES = {
   messageEntityItalic: { startTag: '<i>', endTag: '</i>' },
   messageEntityUnderline: { startTag: '<u>', endTag: '</u>' },
   messageEntityStrike: { startTag: '<s>', endTag: '</s>' },
+  messageEntityBlockquote: { startTag: '<blockquote>', endTag: '</blockquote>' },
 }
 
 export const formatPostText = (text: string, entities?: MessageEntity[]) => {
@@ -34,7 +35,7 @@ export const formatPostText = (text: string, entities?: MessageEntity[]) => {
         }
       }
     }, {
-      index: entity.offset + entity.length,
+      index: entity.offset + entity.length + calcAdditionalOffset(text, entity),
       getTag: () => {
         return ENTITY_TYPES[entity._].endTag
       },
@@ -59,7 +60,7 @@ export const formatPostText = (text: string, entities?: MessageEntity[]) => {
 }
 
 const sanitezeText = (text: string) => sanitize(text, {
-  allowedTags: ['a', 'pre', 'code', 'b', 'i', 'u', 's'],
+  allowedTags: ['a', 'pre', 'code', 'b', 'i', 'u', 's', 'blockquote'],
   allowedAttributes: {
     a: ['href', 'target', 'rel']
   }
@@ -67,3 +68,11 @@ const sanitezeText = (text: string) => sanitize(text, {
 
 const normalizeUrl = (url: string) =>
   `https://${url.replaceAll(/https?:\/\/?/ig, '')}`
+
+const calcAdditionalOffset = (text: string, entity: MessageEntity) => {
+  if (!['messageEntityCode', 'messageEntityBlockquote'].includes(entity._)) {
+    return 0
+  }
+  const offset = entity.offset + entity.length
+  return text.slice(offset, offset + 2) === '\n\n' ? 1 : 0
+}

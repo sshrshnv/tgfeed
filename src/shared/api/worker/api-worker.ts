@@ -29,7 +29,7 @@ const apiPromise = new Promise<Omit<API, 'check'>>(async resolve => {
   const client = new Client({
     APIID: +(process.env.API_ID || ''),
     APIHash: process.env.API_HASH || '',
-    APILayer: 158,
+    APILayer: 166,
     test: false,
     debug: process.env.DEPLOY_ENV !== 'production',
     dc: meta.baseDC,
