@@ -5,6 +5,7 @@ export type FeedState = Config & {
   streamsHandlerActivated: boolean
   postUuids: PostUuids
   newPostUuids: PostUuids
+  markedAsReadPosts: MarkedAsReadPosts
   channelIds: ChannelId[]
   folders: Folder[]
   filters: Filter[]
@@ -58,6 +59,8 @@ export type PostUuids = UncertainPostUuid[]
 export type PostGroups = {
   [postGroupUuid in PostGroupUuid]: PostUuid[]
 }
+
+export type MarkedAsReadPosts = Record<PostUuid, true>
 
 export type Folder = {
   id: Message.message['id']

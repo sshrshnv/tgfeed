@@ -15,6 +15,7 @@ export const DEFAULT_FEED_STATE: FeedState = {
   defaultFolderVisibility: true,
   postUuids: [],
   newPostUuids: [],
+  markedAsReadPosts: {},
   channelIds: [],
   folders: [],
   filters: [],

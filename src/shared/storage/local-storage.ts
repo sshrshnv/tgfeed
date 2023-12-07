@@ -18,9 +18,9 @@ const getStorageCache = () => {
   if (!storageCache) {
     try {
       const storageJSON = self.localStorage?.getItem(STORAGE_KEY)
-      storageCache = storageJSON && JSON.parse(storageJSON)
-    } finally {
-      storageCache ??= {}
+      storageCache = (storageJSON && JSON.parse(storageJSON)) || {}
+    } catch {
+      storageCache = {}
     }
   }
   return storageCache
