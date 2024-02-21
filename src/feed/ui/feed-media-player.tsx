@@ -170,7 +170,7 @@ export const FeedMadiaPlayer: Component<FeedMediaPlayerProps> = (props) => {
       </Show>
 
       <FeedMediaControls
-        icon={props.playing ? 'pause' : 'play'}
+        icon={isPlayerReady() && !props.playing ? 'play' : undefined}
         loading={isLoading()}
       />
     </div>

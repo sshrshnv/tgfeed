@@ -116,6 +116,21 @@ export const Slider: ParentComponent<SliderProps> = (props) => {
           </SliderItem>
         )}</For>
 
+        <Show when={getItems().length > 1}>
+          <div class={clsx(
+            sliderCSS.dots,
+            layoutCSS.flex,
+            layoutCSS.flexCenter
+          )}>
+            <For each={[...Array(getItems().length).keys()]}>{index => (
+              <div class={clsx(
+                sliderCSS.dotsItem,
+                index === props.activeIndex && sliderCSS._active
+              )}/>
+            )}</For>
+          </div>
+        </Show>
+
         <div
           class={clsx(
             sliderCSS.overlay,
@@ -128,21 +143,6 @@ export const Slider: ParentComponent<SliderProps> = (props) => {
           onKeyDown={handleKey}
         />
       </div>
-
-      <Show when={getItems().length > 1}>
-        <div class={clsx(
-          sliderCSS.dots,
-          layoutCSS.flex,
-          layoutCSS.flexCenter
-        )}>
-          <For each={[...Array(getItems().length).keys()]}>{index => (
-            <div class={clsx(
-              sliderCSS.dotsItem,
-              index === props.activeIndex && sliderCSS._active
-            )}/>
-          )}</For>
-        </div>
-      </Show>
     </>
   )
 }
