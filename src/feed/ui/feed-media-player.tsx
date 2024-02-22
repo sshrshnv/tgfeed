@@ -35,7 +35,6 @@ const [loadingCache, setLoadingCache] = createStore<LoadingCache>({})
 
 export const FeedMadiaPlayer: Component<FeedMediaPlayerProps> = (props) => {
   let playerEl!: HTMLVideoElement | HTMLAudioElement
-  let posterEl!: HTMLCanvasElement
 
   const [isLoading, setLoading] = createSignal(false)
   const [isPaused, setPaused] = createSignal(false)
@@ -95,18 +94,6 @@ export const FeedMadiaPlayer: Component<FeedMediaPlayerProps> = (props) => {
     return props.playing
   })
 
-  createEffect((prev) => {
-    const paused = isPaused()
-    const size = getVideoSize()
-
-    if (!prev && paused && !!posterEl && !!size) {
-      const ctx = posterEl.getContext('2d', { alpha: true })
-      ctx?.drawImage(playerEl as HTMLVideoElement, 0, 0, size.w, size.h)
-    }
-
-    return paused
-  })
-
   return (
     <div class={feedMediaPlayerCSS.base}>
       <Show when={hasThumbs(props.media)}>
@@ -124,18 +111,13 @@ export const FeedMadiaPlayer: Component<FeedMediaPlayerProps> = (props) => {
 
       <Show when={isMediaVideo(props.media)}>
         <div class={clsx(
-          feedMediaPlayerCSS.wrapper,
+          feedMediaPlayerCSS.videoWrapper,
           isRoundVideo() && feedMediaPlayerCSS._round
         )}>
           <video
-            class={clsx(
-              feedMediaPlayerCSS.video,
-              isPaused() && feedMediaPlayerCSS._hidden
-            )}
+            class={feedMediaPlayerCSS.video}
             ref={playerEl as HTMLVideoElement}
             src={isPlayerReady() ? getStreamUrl() : ''}
-            width={getVideoSize()?.w}
-            height={getVideoSize()?.h}
             poster={isImageReady() ? getImageUrls().imageUrl : ''}
             onCanPlayThrough={handleCanPlay}
             onWaiting={handleWaiting}
@@ -144,16 +126,6 @@ export const FeedMadiaPlayer: Component<FeedMediaPlayerProps> = (props) => {
             controls={false}
             preload='none'
             playsinline
-          />
-
-          <canvas
-            class={clsx(
-              feedMediaPlayerCSS.poster,
-              !isPaused() && feedMediaPlayerCSS._hidden
-            )}
-            ref={posterEl}
-            width={getVideoSize()?.w}
-            height={getVideoSize()?.h}
           />
         </div>
       </Show>
