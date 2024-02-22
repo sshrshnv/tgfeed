@@ -53,6 +53,9 @@ export const FeedMadiaPlayer: Component<FeedMediaPlayerProps> = (props) => {
   const getVideoSize = () =>
     getMediaVideoSize(props.media)
 
+  const isRoundVideo = () =>
+    getVideoSize()?.round_message
+
   const isLoadStarted = () =>
     loadingCache[props.uuid]?.started
 
@@ -108,7 +111,10 @@ export const FeedMadiaPlayer: Component<FeedMediaPlayerProps> = (props) => {
     <div class={feedMediaPlayerCSS.base}>
       <Show when={hasThumbs(props.media)}>
         <BluredImage
-          class={feedMediaPlayerCSS.thumb}
+          class={clsx(
+            feedMediaPlayerCSS.thumb,
+            isRoundVideo() && feedMediaPlayerCSS._large
+          )}
           src={isImageReady() ? getImageUrls().thumbUrl : ''}
           width={100}
           height={100}
@@ -117,7 +123,10 @@ export const FeedMadiaPlayer: Component<FeedMediaPlayerProps> = (props) => {
       </Show>
 
       <Show when={isMediaVideo(props.media)}>
-        <>
+        <div class={clsx(
+          feedMediaPlayerCSS.wrapper,
+          isRoundVideo() && feedMediaPlayerCSS._round
+        )}>
           <video
             class={clsx(
               feedMediaPlayerCSS.video,
@@ -146,7 +155,7 @@ export const FeedMadiaPlayer: Component<FeedMediaPlayerProps> = (props) => {
             width={getVideoSize()?.w}
             height={getVideoSize()?.h}
           />
-        </>
+        </div>
       </Show>
 
       <Show when={isMediaAudio(props.media)}>
@@ -172,6 +181,7 @@ export const FeedMadiaPlayer: Component<FeedMediaPlayerProps> = (props) => {
       <FeedMediaControls
         icon={isPlayerReady() && !props.playing ? 'play' : undefined}
         loading={isLoading()}
+        center={!isMediaAudio(props.media)}
       />
     </div>
   )

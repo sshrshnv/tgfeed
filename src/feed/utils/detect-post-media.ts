@@ -65,7 +65,7 @@ export const getMediaVideoSize = (media: MessageMedia) => {
 
   const size = document?.attributes?.find(attribute =>
     ['documentAttributeVideo', 'documentAttributeImageSize'].includes(attribute._)
-  ) as DocumentAttribute.documentAttributeImageSize | DocumentAttribute.documentAttributeVideo | undefined
+  ) as DocumentAttribute.documentAttributeVideo | undefined
 
   return size
 }

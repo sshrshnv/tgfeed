@@ -78,6 +78,7 @@ export const FeedMediaImage: Component<FeedMediaItemProps> = (props) => {
       />
       <FeedMediaControls
         loading={isLoading()}
+        center
       />
     </div>
   )

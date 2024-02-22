@@ -12,12 +12,14 @@ import * as feedMediaControlsCSS from './feed-media-controls.sss'
 export type FeedMediaControlsProps = {
   icon?: IconProps['name']
   loading: boolean
+  center?: boolean
 }
 
 export const FeedMediaControls: Component<FeedMediaControlsProps> = (props) => {
   return (
     <div class={clsx(
       feedMediaControlsCSS.base,
+      props.center && feedMediaControlsCSS._center,
       layoutCSS.flex,
       layoutCSS.flexCenter
     )}>
