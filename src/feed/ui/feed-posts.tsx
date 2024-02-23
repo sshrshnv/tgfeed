@@ -4,8 +4,6 @@ import { createStore } from 'solid-js/store'
 import { createResizeObserver } from '@solid-primitives/resize-observer'
 import { clsx } from 'clsx'
 
-import { isIOS } from '~/shared/utils/detect-platform'
-
 import type { Folder, UncertainPostUuid, PostUuid, PostGroupUuid, ScrollingValue } from '../feed.types'
 import { DEFAULT_FOLDER_ID } from '../feed.const'
 import { feedCache } from '../feed-cache'
@@ -242,10 +240,10 @@ export const FeedPosts: Component<FeedPostsProps> = (props) => {
         feedPostsCSS.base,
         !props.active && feedPostsCSS._hidden,
         isBeforeHeaderHidden() && feedPostsCSS._beforeHidden,
-        !isIOS() && feedPostsCSS._scrollOffset,
         layoutCSS.flex,
         layoutCSS.scroll,
         layoutCSS.scrollCustom,
+        layoutCSS.scrollCenter,
         layoutCSS.before
       )}
       id={SCROLL_EL_ID}

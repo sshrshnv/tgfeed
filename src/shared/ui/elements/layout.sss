@@ -32,6 +32,13 @@
   &::-webkit-scrollbar-button
     display: none
 
+  @media (--min-width-l)
+    &::-webkit-scrollbar
+      width: 6px
+
+.scrollCenter
+  scrollbar-gutter: stable both-edges
+
 .scrollHidden
   overflow: auto
   scrollbar-width: none
